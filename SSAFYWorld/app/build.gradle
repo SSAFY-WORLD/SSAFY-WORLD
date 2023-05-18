@@ -89,4 +89,6 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
 
 
+    //kakao login
+//    implementation "com.kakao.sdk:v2-all:2.13.0"
 }
