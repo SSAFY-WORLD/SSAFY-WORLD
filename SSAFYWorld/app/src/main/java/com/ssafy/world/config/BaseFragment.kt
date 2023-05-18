@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.ssafy.world.utils.LoadingDialog
 
@@ -20,6 +21,9 @@ abstract class BaseFragment<B : ViewBinding>(
     lateinit var mLoadingDialog: LoadingDialog
 
     protected val binding get() = _binding!!
+
+    private val _navController by lazy { findNavController() }
+    protected val navController get() = _navController
 
     override fun onCreateView(
         inflater: LayoutInflater,
