@@ -1,3 +1,36 @@
 <resources>
-    <string name="app_name">SSAFYWorld</string>
+    <string name="app_name">싸피월드</string>
+
+    <!-- Naming Rules -->
+    <!-- 도메인명_컴포넌트함축어_용도(=목적) -->
+
+    <!-- Login & Register -->
+    <string name="login_tv_title">SSAFY WORLD</string>
+    <string name="login_et_id">아이디</string>
+    <string name="login_et_pwd">비밀번호</string>
+    <string name="register_et_pwd_check">비밀번호 확인</string>
+    <string name="login_btn_login">로그인</string>
+    <string name="login_btn_register">회원가입</string>
+    <string name="login_tv_or">OR</string>
+    <string name="login_tv_copyright">Copyright ssafy Corp All Rights reserved.</string>
+    <string name="register_et_name">이름</string>
+    <string name="register_et_nickname">닉네임</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Bottom Nav -->
+    <string name="nav_home_title">홈</string>
+    <string name="nav_community_title">커뮤니티</string>
+    <string name="nav_chat_title">채팅</string>
+    <string name="nav_mypage_title">마이페이지</string>
+    <string name="title_activity_auth">AuthActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 </resources>
