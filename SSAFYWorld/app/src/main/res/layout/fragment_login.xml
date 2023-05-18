@@ -5,11 +5,12 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:id="@+id/login_ll_title"
+        android:id="@+id/register_ll_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_96sdp"
+        android:layout_marginVertical="@dimen/_56sdp"
         android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@id/register_ll_inform"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -28,22 +29,28 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/register_ll_inform"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="96dp"
         android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/login_ll_bottom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_ll_title">
+        app:layout_constraintTop_toBottomOf="@+id/register_ll_title">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/idTextField"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/login_et_id"
             app:boxBackgroundColor="@color/light_gray"
-            app:hintTextColor="@color/dark_gray">
+            app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+            app:boxCornerRadiusBottomStart="@dimen/_10sdp"
+            app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+            app:boxCornerRadiusTopStart="@dimen/_10sdp"
+            app:boxStrokeWidth="0dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/idEditTextView"
@@ -53,12 +60,17 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/pwdTextField"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:hint="@string/login_et_pwd"
             app:boxBackgroundColor="@color/light_gray"
-            app:hintTextColor="@color/dark_gray">
+            app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
+            app:boxCornerRadiusBottomStart="@dimen/_10sdp"
+            app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+            app:boxCornerRadiusTopStart="@dimen/_10sdp"
+            app:boxStrokeWidth="0dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/pwdEditTextView"
@@ -69,17 +81,18 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/login_btn_login"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="56dp"
             android:layout_marginTop="32dp"
-            android:src="@drawable/btn_login_filled"
             android:text="@string/login_btn_login"
-            app:cornerRadius="4dp" />
+            app:cornerRadius="@dimen/_10sdp" />
 
         <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/login_btn_register"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:padding="8dp"
+            android:layout_marginHorizontal="@dimen/_12sdp"
+            android:padding="@dimen/_12sdp"
             android:text="@string/login_btn_register" />
 
         <ImageView
@@ -111,13 +124,15 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/login_ll_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginTop="@dimen/_24sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/register_ll_inform">
 
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="match_parent"
