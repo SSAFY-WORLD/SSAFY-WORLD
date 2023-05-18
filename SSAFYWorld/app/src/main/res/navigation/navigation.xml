@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.ssafy.world.src.main.chat.ChatFragment"
+        android:label="fragment_chat"
+        tools:layout="@layout/fragment_chat" />
+
+    <fragment
+        android:id="@+id/communityFragment"
+        android:name="com.ssafy.world.src.main.community.CommunityFragment"
+        android:label="fragment_community"
+        tools:layout="@layout/fragment_community" />
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.ssafy.world.src.main.home.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main" />
+
+    <fragment
+        android:id="@+id/mypageFragment"
+        android:name="com.ssafy.world.src.main.mypage.MypageFragment"
+        android:label="fragment_mypage"
+        tools:layout="@layout/fragment_mypage" />
+</navigation>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/mainFragment"
+        android:checkable="true"
+        android:enabled="true"
+        android:icon="@drawable/ic_bottom_nav_home"
+        android:title="@string/nav_home_title"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/communityFragment"
+        android:checkable="true"
+        android:enabled="true"
+        android:icon="@drawable/ic_bottom_nav_community"
+        android:title="@string/nav_community_title"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/chatFragment"
+        android:checkable="true"
+        android:enabled="true"
+        android:icon="@drawable/ic_bottom_nav_chat"
+        android:title="@string/nav_chat_title"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/mypageFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_bottom_nav_mypage"
+        android:title="@string/nav_mypage_title"
+        app:showAsAction="always" />
+</menu>
