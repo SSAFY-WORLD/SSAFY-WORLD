@@ -9,7 +9,7 @@
         android:id="@+id/chatting_recyclerview"
         android:layout_width="0dp"
          android:layout_height="0dp"
-        android:background="#F8F8F8"
+        android:background="@color/message_background_color"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/item_received_message"
         app:layout_constraintBottom_toTopOf="@+id/chatting_bottom"
@@ -28,8 +28,17 @@
         app:layout_constraintStart_toStartOf="parent"
         android:orientation="horizontal">
 
+        <ImageButton
+            android:id="@+id/addImage"
+            android:layout_width="@dimen/_48sdp"
+            android:layout_height="@dimen/_48sdp"
+            android:background="@drawable/ic_image"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <EditText
-            android:layout_width="@dimen/_250sdp"
+            android:layout_width="0dp"
             android:layout_height="@dimen/_32sdp"
             android:background="@drawable/message_input_background"
             android:hint="@string/message_hint"
@@ -38,6 +47,7 @@
             android:textSize="@dimen/_12sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/imageButton"
+            app:layout_constraintStart_toEndOf="@+id/addImage"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
