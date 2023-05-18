@@ -4,6 +4,9 @@ import android.app.Application
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.kakao.sdk.common.KakaoSdk
+import com.kakao.sdk.common.util.Utility
+import com.ssafy.world.R
 import com.ssafy.world.utils.SharedPreferencesUtil
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -12,6 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 // 앱이 실행될때 1번만 실행이 됩니다.
+private const val TAG = "ApplicationClass"
 class ApplicationClass : Application() {
     //ends with '/'
     val API_URL = "http://192.168.33.118:9999/vue/"
@@ -41,7 +45,7 @@ class ApplicationClass : Application() {
         super.onCreate()
 
         sharedPreferences = SharedPreferencesUtil(applicationContext)
-
+        KakaoSdk.init(this, getString(R.string.kakao_native_app_key))
         // 레트로핏 인스턴스 생성
         initRetrofitInstance()
     }

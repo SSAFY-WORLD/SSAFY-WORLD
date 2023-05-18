@@ -91,5 +91,5 @@ dependencies {
 
 
     //kakao login
-//    implementation "com.kakao.sdk:v2-all:2.13.0"
+    implementation "com.kakao.sdk:v2-all:2.13.0"
 }
