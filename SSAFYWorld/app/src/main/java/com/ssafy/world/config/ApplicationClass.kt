@@ -2,6 +2,7 @@ package com.ssafy.world.config
 
 import android.app.Application
 import android.util.Log
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.kakao.sdk.common.KakaoSdk

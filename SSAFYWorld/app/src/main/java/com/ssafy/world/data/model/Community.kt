@@ -1,4 +1,4 @@
-package com.ssafy.world.dto
+package com.ssafy.world.data.model
 
 data class Community(
     var id: String,
