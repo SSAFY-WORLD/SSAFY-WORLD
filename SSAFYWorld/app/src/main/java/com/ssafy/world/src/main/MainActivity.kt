@@ -24,17 +24,27 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     private fun setToolbarWithNavcontroller() {
+        //toolbar
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
+        //bottom nav
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
         setupWithNavController(binding.mainBtmNav, navController)
 
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
-            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
             hideKeyboard()
+            showBottomNav()
             when (destination.id) {
                 R.id.loginFragment, R.id.registerFragment -> hideBottomNav()
-                else -> showBottomNav
+                R.id.mainFragment -> { setTitle(getString(R.string.nav_home_title)) }
+                R.id.communityFragment -> setTitle(getString(R.string.nav_community_title))
+                R.id.chatFragment -> setTitle(getString(R.string.nav_chat_title))
+                R.id.mypageFragment -> setTitle(getString(R.string.nav_mypage_title))
+                else -> hideBottomNav()
             }
         }
     }
@@ -42,8 +52,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     private val hideBottomNav = { binding.mainBtmNav.visibility = View.GONE }
     private val showBottomNav = { binding.mainBtmNav.visibility = View.VISIBLE }
     private fun hideKeyboard() {
-        val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputMethodManager =
+            getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         val currentFocusedView = this.currentFocus   // Check if no view has focus
         currentFocusedView?.let {
-            inputMethodManager.hideSoftInputFromWindow(currentFocusedView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS) } }
+            inputMethodManager.hideSoftInputFromWindow(
+                currentFocusedView.windowToken,
+                InputMethodManager.HIDE_NOT_ALWAYS
+            )
+        }
     }
+
+    private fun setTitle(title: String) {
+        binding.toolbarText.text = title
+    }
+}

@@ -18,7 +18,10 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::b
     private fun initButton() {
         with(binding) {
             loginBtnRegister.setOnClickListener {
-                findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+                navController.navigate(R.id.action_loginFragment_to_registerFragment)
+            }
+            loginBtnLogin.setOnClickListener {
+                navController.navigate(R.id.action_loginFragment_to_mainFragment)
             }
         }
     }
