@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.viewModels
 import com.kakao.sdk.user.UserApiClient
 import com.ssafy.world.R
 import com.ssafy.world.config.ApplicationClass
@@ -18,6 +19,10 @@ private const val TAG = "LoginFragment"
 class LoginFragment :
     BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::bind, R.layout.fragment_login) {
 
+    private val authViewModel: AuthViewModel by viewModels()
+
+    private lateinit var curUser: User
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -25,6 +30,7 @@ class LoginFragment :
         //checkLogin()
         initButton()
         initEditTextListener()
+        initObserver()
     }
 
     private fun checkLogin() {
@@ -78,13 +84,12 @@ class LoginFragment :
                 Toast.makeText(myContext, "로그인 실패", Toast.LENGTH_SHORT).show()
             } else if (token != null) {
                 //TODO: 서버 조회해서 계정없으면 바텀 시트로 닉네임 정보만 받아서 바로 메인으로 이동하기
-                getKAKAOAgreement()
-                navController.navigate(R.id.action_loginFragment_to_mainFragment)
+                getKAKAOInform()
             }
         }
     }
 
-    private fun getKAKAOAgreement() {
+    private fun getKAKAOInform() {
         // 사용 가능한 모든 동의 항목을 대상으로 추가 동의 필요 여부 확인 및 추가 동의를 요청하는 예제입니다.
         UserApiClient.instance.me { user, error ->
             if (error != null) {
@@ -122,28 +127,45 @@ class LoginFragment :
                         if (error != null) {
                             Log.e(TAG, "사용자 추가 동의 실패", error)
                         } else {
-                            geUserKAKAOInform()
+                            insertUser(user)
                         }
                     }
                 } else {
-                    geUserKAKAOInform()
+                    insertUser(user)
                 }
             }
         }
     }
 
-    private fun geUserKAKAOInform() {
-        UserApiClient.instance.me { user, error ->
-            if (error != null) {
-                Log.e(TAG, "사용자 정보 요청 실패", error)
-            } else if (user != null) {
-                val curUser = User().apply {
-                    id = user.id.toString()
-                    email = user.kakaoAccount?.email.toString()
-                    nickname = user.kakaoAccount?.profile?.nickname.toString()
-                    profilePhoto = user.kakaoAccount?.profile?.thumbnailImageUrl.toString()
-                }
-                ApplicationClass.sharedPreferences.saveUser(curUser)
+    private fun insertUser(user: com.kakao.sdk.user.model.User) {
+        curUser = User().apply {
+            email = user.kakaoAccount?.email.toString()
+            nickname = user.kakaoAccount?.profile?.nickname.toString()
+            profilePhoto = user.kakaoAccount?.profile?.thumbnailImageUrl.toString()
+            kakaoId = user.id.toString()
+        }
+        authViewModel.isEmailDuplicate(curUser.email)
+    }
+
+
+    private fun initObserver() = with(authViewModel) {
+        user.observe(viewLifecycleOwner) { user ->
+            if (user.id != "") {
+                Toast.makeText(myContext, "회원가입에 성공했습니다.", Toast.LENGTH_SHORT).show()
+                ApplicationClass.sharedPreferences.saveUser(user)
+                navController.navigate(R.id.action_loginFragment_to_mainFragment)
+            } else {
+                Toast.makeText(myContext, "회원가입에 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        isDuplicated.observe(viewLifecycleOwner) {
+            if(it) {
+                navController.navigate(R.id.action_loginFragment_to_mainFragment)
+            } else {
+                // TODO: 이름, 닉네임 받아서 회원가입 시키기
+                insertUser(curUser)
+                navController.navigate(R.id.action_loginFragment_to_mainFragment)
             }
         }
     }

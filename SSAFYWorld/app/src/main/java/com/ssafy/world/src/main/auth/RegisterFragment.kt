@@ -2,8 +2,10 @@ package com.ssafy.world.src.main.auth
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.viewModels
 import com.ssafy.world.R
 import com.ssafy.world.config.ApplicationClass
 import com.ssafy.world.config.BaseFragment
@@ -15,25 +17,26 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(
     R.layout.fragment_register
 ) {
 
+    private val authViewModel: AuthViewModel by viewModels()
+    private lateinit var curUser: User
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         initButton()
         initEditTextListener()
+        initObserver()
     }
 
     private fun initButton() = with(binding) {
         registerBtn.setOnClickListener {
-            // TODO: 서버 등록 + 아이디 중복 체크
-            val curUser = User().apply {
-                id = idEditTextView.text.toString()
+            curUser = User().apply {
+                id = ""
                 email = idEditTextView.text.toString()
                 pwd = pwdEditTextView.text.toString()
                 name = nameEditTextView.text.toString()
                 nickname = nicknameEditTextView.text.toString()
             }
-
-            ApplicationClass.sharedPreferences.saveUser(curUser)
+            authViewModel.isEmailDuplicate(curUser.email)
         }
     }
 
@@ -75,6 +78,26 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(
             registerBtn.setBackgroundColor(ContextCompat.getColor(myContext, R.color.light_blue))
             registerBtn.setTextColor(ContextCompat.getColor(myContext, R.color.white))
 
+        }
+    }
+
+    private fun initObserver() = with(authViewModel) {
+        user.observe(viewLifecycleOwner) { user ->
+            if (user.id != "") {
+                Toast.makeText(myContext, "회원가입에 성공했습니다.", Toast.LENGTH_SHORT).show()
+                ApplicationClass.sharedPreferences.saveUser(user)
+                navController.navigate(R.id.action_registerFragment_to_mainFragment)
+            } else {
+                Toast.makeText(myContext, "회원가입에 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        isDuplicated.observe(viewLifecycleOwner) {
+            if(it) {
+                Toast.makeText(myContext, "중복된 아이디 입니다.", Toast.LENGTH_SHORT).show()
+            } else {
+                authViewModel.insertUser(curUser)
+            }
         }
     }
 

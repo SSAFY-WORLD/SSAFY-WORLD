@@ -7,8 +7,9 @@ data class User(
     var pwd: String,
     var nickname: String,
     var profilePhoto: String,
+    var kakaoId: String,
     var token: String,
 ) {
-    constructor() : this("", "", "", "", "", "", "")
+    constructor() : this("", "", "", "", "", "", "", "")
 
 }
