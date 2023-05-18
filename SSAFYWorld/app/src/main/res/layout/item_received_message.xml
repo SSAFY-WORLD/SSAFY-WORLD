@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/_16sdp"
+    android:layout_marginTop="@dimen/_8sdp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:paddingHorizontal="@dimen/_16sdp">
@@ -12,6 +12,7 @@
         android:layout_width="@dimen/_36sdp"
         android:layout_height="@dimen/_36sdp"
         app:cardCornerRadius="@dimen/_36sdp"
+        app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -20,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            tools:srcCompat="@tools:sample/avatars" />
+            app:srcCompat="@drawable/default_profile_image" />
     </androidx.cardview.widget.CardView>
 
     <TextView
@@ -31,8 +32,9 @@
         android:background="@drawable/background_received_message"
         android:paddingStart="@dimen/_12sdp"
         android:paddingTop="@dimen/_8sdp"
-        android:paddingEnd="@dimen/_8sdp"
-        android:paddingBottom="@dimen/_12sdp"
+        android:paddingEnd="@dimen/_12sdp"
+        android:paddingBottom="@dimen/_8sdp"
+        android:layout_marginBottom="@dimen/_8sdp"
         android:textColor="@color/black"
         android:textSize="@dimen/_14sdp"
         app:layout_constraintBottom_toBottomOf="@+id/cardView"
