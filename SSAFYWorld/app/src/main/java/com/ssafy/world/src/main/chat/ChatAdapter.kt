@@ -13,25 +13,13 @@ import com.ssafy.world.databinding.ItemSentMessageBinding
 import com.ssafy.world.utils.getReadableDateTime
 
 class ChatAdapter(
-	private val chatList: MutableList<ChatMessage>,
+	private val chatList: List<ChatMessage>,
 	private val senderId: String
-) : ListAdapter<ChatMessage, RecyclerView.ViewHolder>(ChatDiffUtil) {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 	companion object {
 		private const val VIEW_TYPE_SENT = 1
 		private const val VIEW_TYPE_RECEIVED = 2
-	}
-
-	object ChatDiffUtil: DiffUtil.ItemCallback<ChatMessage>() {
-		override fun areItemsTheSame(oldItem: ChatMessage, newItem: ChatMessage): Boolean {
-			Log.d("싸피", "areItemsTheSame: ${oldItem.dateObject == newItem.dateObject}")
-			return oldItem.dateObject == newItem.dateObject
-		}
-
-		override fun areContentsTheSame(oldItem: ChatMessage, newItem: ChatMessage): Boolean {
-			return oldItem == newItem
-		}
-
 	}
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

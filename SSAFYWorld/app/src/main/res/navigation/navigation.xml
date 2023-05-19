@@ -10,7 +10,21 @@
         android:id="@+id/chatFragment"
         android:name="com.ssafy.world.src.main.chat.ChatFragment"
         android:label="fragment_chat"
-        tools:layout="@layout/fragment_chat" />
+        tools:layout="@layout/fragment_chat" >
+        <action
+            android:id="@+id/action_chatFragment_to_inChatFragment"
+            app:destination="@id/inChatFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/inChatFragment"
+        android:name="com.ssafy.world.src.main.chat.InChatFragment"
+        android:label="InChatFragment"
+        tools:layout="@layout/fragment_in_chat" >
+        <argument
+            android:name="user"
+            app:argType="com.ssafy.world.data.model.ConversationUser" />
+    </fragment>
 
     <!-- Community -->
     <fragment

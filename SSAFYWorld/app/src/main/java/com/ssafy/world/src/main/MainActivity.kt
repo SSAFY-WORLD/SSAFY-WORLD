@@ -69,7 +69,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         }
     }
 
-    private fun setTitle(title: String) {
+    fun setTitle(title: String) {
         binding.toolbarText.text = title
     }
 }
