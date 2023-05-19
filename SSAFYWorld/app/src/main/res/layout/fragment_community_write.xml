@@ -25,7 +25,7 @@
             app:hintTextColor="@color/transparent_dark_blue_10">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/idEditTextView"
+                android:id="@+id/titleEditTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -41,13 +41,14 @@
             app:hintTextColor="@color/transparent_dark_blue_10">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/pwdEditTextView"
+                android:id="@+id/contentEditTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/write_cv"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_100sdp"
         android:background="@color/light_gray"
@@ -56,7 +57,8 @@
         app:cardElevation="4dp"
         app:layout_constraintBottom_toTopOf="@id/write_bottom"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/write_rv_photo"
@@ -76,7 +78,7 @@
         android:padding="@dimen/_8sdp">
 
         <ImageButton
-            android:id="@+id/write_btn"
+            android:id="@+id/write_btn_image"
             android:layout_width="@dimen/_32sdp"
             android:layout_height="@dimen/_32sdp"
             android:background="@color/white"
@@ -88,6 +90,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"/>
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/write_btn_complete"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/_32sdp"
             android:background="@color/white"
