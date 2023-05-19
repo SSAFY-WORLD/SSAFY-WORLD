@@ -25,4 +25,9 @@
     <string name="nav_chat_title">채팅</string>
     <string name="nav_mypage_title">마이페이지</string>
     <string name="message_hint">메시지를 입력해주세요</string>
+
+    <!-- community -->
+    <string name="community_title">제목을 입력하세요</string>
+    <string name="community_content">싸피월드에 게시글을 작성해보세요</string>
+    <string name="community_complete">완료</string>
 </resources>

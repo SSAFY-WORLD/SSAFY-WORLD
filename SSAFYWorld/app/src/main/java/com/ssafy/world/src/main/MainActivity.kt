@@ -4,11 +4,11 @@ package com.ssafy.world.src.main
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.NavigationUI.setupWithNavController
+import com.gun0912.tedpermission.PermissionListener
+import com.gun0912.tedpermission.normal.TedPermission
 import com.ssafy.world.R
 import com.ssafy.world.config.BaseActivity
 import com.ssafy.world.databinding.ActivityMainBinding
@@ -21,6 +21,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         super.onCreate(savedInstanceState)
 
         setToolbarWithNavcontroller()
+        requestStoragePermission()
     }
 
     private fun setToolbarWithNavcontroller() {
@@ -39,7 +40,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             hideKeyboard()
             showBottomNav()
             showToolbar()
-            when (destination.id) {
+            when (destination.id)  {
                 R.id.loginFragment, R.id.registerFragment -> {
                     hideBottomNav()
                     hideToolbar()
@@ -48,6 +49,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 R.id.communityFragment -> setTitle(getString(R.string.nav_community_title))
                 R.id.chatFragment -> setTitle(getString(R.string.nav_chat_title))
                 R.id.mypageFragment -> setTitle(getString(R.string.nav_mypage_title))
+                R.id.communityWriteFragment -> {
+                    setTitle("글쓰기")
+                    hideBottomNav()
+                }
                 else -> hideBottomNav()
             }
         }
@@ -72,4 +77,21 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     fun setTitle(title: String) {
         binding.toolbarText.text = title
     }
+
+    private fun requestStoragePermission() {
+        TedPermission.create()
+            .setPermissionListener(object : PermissionListener {
+                override fun onPermissionGranted() {
+                    // 권한이 허용된 경우 다음 작업을 수행할 수 있습니다.
+                }
+
+                override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
+                    // 권한이 거부된 경우 사용자에게 알림을 표시하거나 다른 조치를 취해야 합니다.
+                }
+            })
+            .setDeniedMessage("권한을 허용해주세요.")
+            .setPermissions(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+            .check()
+    }
+
 }

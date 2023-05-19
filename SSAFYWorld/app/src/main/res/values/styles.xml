@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CustomTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="hintTextAppearance">@style/CustomHintTextAppearance</item>
+    </style>
+
+    <style name="CustomHintTextAppearance" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textSize">@dimen/_16sdp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+</resources>

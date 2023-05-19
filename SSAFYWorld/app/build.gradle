@@ -92,7 +92,12 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4'
 
-
     //kakao login
     implementation "com.kakao.sdk:v2-all:2.13.0"
+
+    // ted permisttion
+    implementation 'io.github.ParkSangGwon:tedpermission-normal:3.3.0'
+
+    //Glide
+    implementation 'com.github.bumptech.glide:glide:4.15.1'
 }
