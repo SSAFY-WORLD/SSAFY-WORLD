@@ -81,6 +81,7 @@ dependencies {
 
     // Firebase
     implementation 'com.google.firebase:firebase-firestore-ktx:24.1.2'
+    implementation 'com.google.firebase:firebase-database-ktx:20.0.4'
     implementation platform('com.google.firebase:firebase-bom:32.0.0')
     // Firebase messaging
     implementation 'com.google.firebase:firebase-messaging-ktx:23.0.5'
@@ -88,6 +89,7 @@ dependencies {
     // Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4'
 
 
     //kakao login

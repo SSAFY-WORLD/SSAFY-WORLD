@@ -1,22 +1,37 @@
 package com.ssafy.world.src.main.chat
 
 import android.graphics.Bitmap
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.world.data.model.ChatMessage
 import com.ssafy.world.databinding.ItemReceivedMessageBinding
 import com.ssafy.world.databinding.ItemSentMessageBinding
+import com.ssafy.world.utils.getReadableDateTime
 
 class ChatAdapter(
-	private val chatList: ArrayList<ChatMessage>,
-//	private val receiverImage: Bitmap,
+	private val chatList: MutableList<ChatMessage>,
 	private val senderId: String
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : ListAdapter<ChatMessage, RecyclerView.ViewHolder>(ChatDiffUtil) {
 
 	companion object {
 		private const val VIEW_TYPE_SENT = 1
 		private const val VIEW_TYPE_RECEIVED = 2
+	}
+
+	object ChatDiffUtil: DiffUtil.ItemCallback<ChatMessage>() {
+		override fun areItemsTheSame(oldItem: ChatMessage, newItem: ChatMessage): Boolean {
+			Log.d("싸피", "areItemsTheSame: ${oldItem.dateObject == newItem.dateObject}")
+			return oldItem.dateObject == newItem.dateObject
+		}
+
+		override fun areContentsTheSame(oldItem: ChatMessage, newItem: ChatMessage): Boolean {
+			return oldItem == newItem
+		}
+
 	}
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -64,7 +79,7 @@ class ChatAdapter(
 		fun setData(chatMessage: ChatMessage) {
 			with(binding) {
 				textMessage.text = chatMessage.message
-				textDateTime.text = chatMessage.dateTime
+				textDateTime.text = getReadableDateTime(chatMessage.dateObject)
 			}
 		}
 	}
@@ -75,7 +90,7 @@ class ChatAdapter(
 		fun setData(chatMessage: ChatMessage) {
 			with(binding) {
 				textMessage.text = chatMessage.message
-				textDateTime.text = chatMessage.dateTime
+				textDateTime.text = getReadableDateTime(chatMessage.dateObject)
 //				binding.profileImage.setImageBitmap(profile)
 			}
 		}
