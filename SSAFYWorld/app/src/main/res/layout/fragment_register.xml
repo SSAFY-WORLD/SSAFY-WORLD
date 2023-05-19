@@ -148,11 +148,13 @@
         </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/login_btn_login"
+            android:id="@+id/register_btn"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_48sdp"
             android:layout_marginTop="32dp"
+            android:backgroundTint="@color/light_gray"
             android:text="@string/login_btn_register"
+            android:textColor="@color/dark_gray"
             app:cornerRadius="@dimen/_10sdp" />
     </LinearLayout>
 

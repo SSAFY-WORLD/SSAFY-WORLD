@@ -25,6 +25,13 @@ abstract class BaseFragment<B : ViewBinding>(
     private val _navController by lazy { findNavController() }
     protected val navController get() = _navController
 
+    private var _myContext: Context? = null
+    protected val myContext get() = _myContext!!
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        _myContext = context
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
