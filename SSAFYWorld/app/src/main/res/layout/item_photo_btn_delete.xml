@@ -1,0 +1,24 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:src="@drawable/default_profile_image"
+        android:padding="@dimen/_8sdp"/>
+
+    <ImageButton
+        android:id="@+id/photo_btn_delete"
+        android:layout_width="@dimen/_16sdp"
+        android:layout_height="@dimen/_16sdp"
+        android:background="@drawable/ic_close_btn"
+        android:src="@drawable/ic_close_round"
+        android:padding="@dimen/_2sdp"
+        app:tint="@color/white"
+        android:layout_gravity="top|end"/>
+</FrameLayout>

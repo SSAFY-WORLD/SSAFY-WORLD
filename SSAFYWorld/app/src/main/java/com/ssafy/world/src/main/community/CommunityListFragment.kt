@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,10 +13,15 @@ import com.ssafy.world.R
 import com.ssafy.world.config.BaseFragment
 import com.ssafy.world.data.model.Community
 import com.ssafy.world.databinding.FragmentCommunityListBinding
+import com.ssafy.world.src.main.MainActivityViewModel
 
 private const val TAG = "CommunityListFragment_싸피"
 class CommunityListFragment : BaseFragment<FragmentCommunityListBinding>(FragmentCommunityListBinding::bind, R.layout.fragment_community_list) {
+    private val activityViewModel: MainActivityViewModel by activityViewModels()
+    private val communityViewModel: CommunityViewModel by viewModels()
     val args: CommunityListFragmentArgs by navArgs()
+
+    private var communityList: ArrayList<Community> = arrayListOf()
 
     private val myAdapter: CommunityListAdapter by lazy {
         CommunityListAdapter()
@@ -22,23 +29,20 @@ class CommunityListFragment : BaseFragment<FragmentCommunityListBinding>(Fragmen
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-    
-        val curBoard = args.communityName
+
 
         initRecyclerView()
         initButton()
+        initListener()
+
+        communityViewModel.getAllCommunities(activityViewModel.entryCommunityCollection)
     }
-    val test = Community().apply {
-        time = 0
-        title = "제목"
-        content = "내용"
-    }
-    val arr = arrayListOf<Community>().apply {
-        add(test)
-        add(test)
-    }
+
+
+
+
     private fun initRecyclerView() = with(binding) {
-        myAdapter.submitList(arr)
+        myAdapter.submitList(communityList.toMutableList())
         communityRv.apply {
             layoutManager = LinearLayoutManager(myContext, LinearLayoutManager.VERTICAL, false)
             adapter = myAdapter
@@ -56,7 +60,17 @@ class CommunityListFragment : BaseFragment<FragmentCommunityListBinding>(Fragmen
 
     private fun initButton() = with(binding) {
         communityFab.setOnClickListener {
-            navController.navigate(R.id.action_communityListFragment_to_communityWriteFragment)
+            val action = CommunityListFragmentDirections.actionCommunityListFragmentToCommunityWriteFragment("free")
+            navController.navigate(action)
+        }
+    }
+
+    private fun initListener() {
+        communityViewModel.communityList.observe(viewLifecycleOwner) {
+            if(!it.isEmpty()) {
+                communityList = it
+                myAdapter.submitList(communityList.toMutableList())
+            }
         }
     }
 }
