@@ -16,6 +16,7 @@
     <string name="login_tv_copyright">Copyright ssafy Corp All Rights reserved.</string>
     <string name="register_et_name">이름</string>
     <string name="register_et_nickname">닉네임</string>
+
     <string name="register_success_toast">회원가입에 성공했어요!</string>
     <string name="register_fail_toast">회원가입에 실패했어요.</string>
     <string name="login_success_toast">로그인에 성공했어요!</string>

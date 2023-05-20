@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center|top"
+    android:paddingHorizontal="@dimen/_16sdp"
+    android:paddingVertical="@dimen/_16sdp">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/pemission_check"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_14sdp"
+        android:padding="@dimen/_6sdp"
+        android:textStyle="bold"/>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_12sdp"
+        android:padding="@dimen/_6sdp"
+        android:text="@string/permission_text"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/register_complete"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_48sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:text="@string/community_cancel"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:backgroundTint="@color/light_gray"
+            android:textColor="@color/black"
+            app:cornerRadius="@dimen/_10sdp" />
+
+        <Button
+            android:id="@+id/permission_complete"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_48sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:text="@string/community_yes"
+            android:textStyle="bold"
+            android:backgroundTint="@color/light_blue"
+            android:textColor="@color/black"
+            app:cornerRadius="@dimen/_10sdp"
+            android:layout_marginLeft="@dimen/_4sdp"
+            android:layout_weight="1"/>
+
+
+
+    </LinearLayout>
+</LinearLayout>
