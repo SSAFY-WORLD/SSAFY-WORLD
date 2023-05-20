@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.world.data.model.Community
 import com.ssafy.world.databinding.ItemCommunityListBinding
+import com.ssafy.world.utils.getFormattedTime
 
 class CommunityListAdapter() :
     ListAdapter<Community, CommunityListAdapter.MyViewHolder>(ItemComparator) {
@@ -49,8 +50,8 @@ class CommunityListAdapter() :
             content.text = data.content
             nickname.text = data.userNickname
             photo.text = data.photoUrls.size.toString()
-            comment.text = data.comments.size.toString()
-
+            comment.text = data.commentCount.toString()
+            time.text = getFormattedTime(data.time)
             itemView.setOnClickListener {
                 itemClickListener.onClick(it, data, layoutPosition)
             }

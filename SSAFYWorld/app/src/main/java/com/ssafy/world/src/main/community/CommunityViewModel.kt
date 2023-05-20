@@ -11,6 +11,8 @@ import com.ssafy.world.data.model.Community
 import com.ssafy.world.data.model.User
 import kotlinx.coroutines.launch
 
+private const val TAG = "CommunityViewModel"
+
 class CommunityViewModel : ViewModel() {
     private val repository = ApplicationClass.communityRepository
 
@@ -22,7 +24,7 @@ class CommunityViewModel : ViewModel() {
     val comments: LiveData<ArrayList<Comment>>
         get() = _comments
 
-    fun insertCommunity(community: Community, collection: String)  = viewModelScope.launch {
+    fun insertCommunity(community: Community, collection: String) = viewModelScope.launch {
         try {
             _community.value = repository.insertCommunity(community, collection)
         } catch (e: Exception) {
@@ -44,20 +46,22 @@ class CommunityViewModel : ViewModel() {
         }
     }
 
-    fun insertComment(comment: Comment) = viewModelScope.launch {
-        val success = repository.insertComment(comment)
-        if (success) {
-            val communityId = comment.communityId
-            val comments = repository.getCommentsByCommunityId(communityId)
-            _comments.value = comments
-        } else {
-            _comments.value = ArrayList()
+    fun insertComment(collection: String, community: Community, comment: Comment) =
+        viewModelScope.launch {
+            val success = repository.insertComment(collection, community, comment)
+            if (success) {
+                val communityId = comment.communityId
+                val comments = repository.getCommentsByCommunityId(communityId)
+                _comments.value = comments
+            } else {
+                _comments.value = ArrayList()
+            }
         }
-    }
 
     fun getCommentsByCommunityId(communityId: String) = viewModelScope.launch {
         try {
             val comments = repository.getCommentsByCommunityId(communityId)
+            Log.d(TAG, "getCommentsByCommunityId: $comments")
             _comments.value = comments
         } catch (e: Exception) {
             _comments.value = ArrayList()

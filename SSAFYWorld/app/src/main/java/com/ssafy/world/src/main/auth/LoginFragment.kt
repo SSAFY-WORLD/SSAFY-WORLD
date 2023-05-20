@@ -86,7 +86,6 @@ class LoginFragment :
                 Log.e(TAG, "로그인 실패", error)
                 Toast.makeText(myContext, "로그인 실패", Toast.LENGTH_SHORT).show()
             } else if (token != null) {
-                //TODO: 서버 조회해서 계정없으면 바텀 시트로 닉네임 정보만 받아서 바로 메인으로 이동하기
                 getKAKAOInform()
             }
         }
@@ -159,6 +158,7 @@ class LoginFragment :
                 ApplicationClass.sharedPreferences.saveUser(user)
                 navController.navigate(R.id.action_loginFragment_to_mainFragment)
             } else {
+                showCustomToast("")
                 Toast.makeText(myContext, "회원가입에 실패했습니다.", Toast.LENGTH_SHORT).show()
             }
         }
@@ -166,15 +166,10 @@ class LoginFragment :
         isDuplicated.observe(viewLifecycleOwner) {
             dismissLoadingDialog()
             if(it) {
-                Log.d(TAG, "initObserver2: $curUser")
                 ApplicationClass.sharedPreferences.saveUser(curUser)
                 navController.navigate(R.id.action_loginFragment_to_mainFragment)
             } else {
-                // TODO: 이름, 닉네임 받아서 회원가입 시키기
-                Log.d(TAG, "initObserver: $curUser")
-                ApplicationClass.sharedPreferences.saveUser(curUser)
-                insertUser(curUser)
-                navController.navigate(R.id.action_loginFragment_to_mainFragment)
+                RegisterBottomSheetFragment(curUser).show(parentFragmentManager, "RegisterBottomSheet")
             }
         }
     }

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.ssafy.world.data.model.Comment
 import com.ssafy.world.data.model.Community
@@ -53,7 +54,7 @@ class CommunityDetailCommentAdapter(val mContext: Context) :
         fun bind(data: Comment) = with(binding) {
             Glide.with(mContext)
                 .load(data)
-                .transform(CenterCrop(), RoundedCorners(30))
+                .transform(FitCenter(), RoundedCorners(30))
                 .into(binding.profileImage)
 
             username.text = data.userId

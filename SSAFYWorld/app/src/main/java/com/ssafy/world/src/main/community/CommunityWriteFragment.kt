@@ -48,7 +48,6 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding>(
             navController.navigate(R.id.action_communityWriteFragment_to_photoFragment)
         }
         writeBtnComplete.setOnClickListener {
-            val curCollection = args.communityName
             val curUser = ApplicationClass.sharedPreferences.getUser()
             val curPost = Community().apply {
                 userId = curUser!!.email

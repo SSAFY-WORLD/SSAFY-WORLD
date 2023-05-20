@@ -193,5 +193,14 @@
         android:label="UserInfoBottomSheetFragment"
         tools:layout="@layout/bottom_user_info">
     </dialog>
+    <dialog
+        android:id="@+id/registerBottomSheetFragment"
+        android:name="com.ssafy.world.src.main.auth.RegisterBottomSheetFragment"
+        android:label="RegisterBottomSheetFragment" >
+
+        <action
+            android:id="@+id/action_registerBottomSheetFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </dialog>
 
 </navigation>

@@ -3,6 +3,7 @@ package com.ssafy.world.src.main.community
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,10 +14,12 @@ import com.ssafy.world.data.model.Comment
 import com.ssafy.world.data.model.Community
 import com.ssafy.world.databinding.FragmentCommunityDetailBinding
 import com.ssafy.world.src.main.MainActivity
+import com.ssafy.world.src.main.MainActivityViewModel
 
 private const val TAG = "CommunityDetailFragment"
 class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(FragmentCommunityDetailBinding::bind, R.layout.fragment_community_detail) {
     val args: CommunityDetailFragmentArgs by navArgs()
+    private val activityViewModel: MainActivityViewModel by activityViewModels()
     private val communityViewModel: CommunityViewModel by viewModels()
     private lateinit var community: Community
 
@@ -43,7 +46,7 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(Fra
         nickname.text = community.userNickname
         time.text = community.getFormattedTime()
         detailContent.text = community.content
-
+    
         myAdapter.submitList(community.photoUrls.toMutableList())
         photoRecyclerview.apply {
             layoutManager = LinearLayoutManager(myContext, LinearLayoutManager.VERTICAL, false)
@@ -59,21 +62,21 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(Fra
     }
 
 
-
     private fun initButton() = with(binding) {
         val curUser = ApplicationClass.sharedPreferences.getUser()
         commentBtnWrite.setOnClickListener {
             val cur = Comment().apply {
-                userId = curUser!!.email
+                userId = curUser!!.nickname
                 userProfile = curUser!!.profilePhoto
                 comment = commentInput.text.toString()
                 time = System.currentTimeMillis()
                 communityId = community.id
 
             }
-            communityViewModel.insertComment(cur)
+            communityViewModel.insertComment(activityViewModel.entryCommunityCollection, community, cur)
             (activity as MainActivity).hideKeyboard()
             commentInput.setText("")
+            showCustomToast("댓글이 등록됐어요.")
         }
     }
 
