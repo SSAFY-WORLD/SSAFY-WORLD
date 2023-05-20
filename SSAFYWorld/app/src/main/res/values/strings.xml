@@ -32,4 +32,5 @@
     <string name="community_title">제목을 입력하세요</string>
     <string name="community_content">싸피월드에 게시글을 작성해보세요</string>
     <string name="community_complete">완료</string>
+    <string name="comment_hint">댓글을 남겨주세요</string>
 </resources>

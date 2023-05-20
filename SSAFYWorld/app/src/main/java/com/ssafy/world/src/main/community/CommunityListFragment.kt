@@ -52,7 +52,11 @@ class CommunityListFragment : BaseFragment<FragmentCommunityListBinding>(Fragmen
 
             myAdapter.itemClickListener = object : CommunityListAdapter.ItemClickListener {
                 override fun onClick(view: View, data: Community, position: Int) {
-                    Toast.makeText(myContext, "item clicked...${data}", Toast.LENGTH_SHORT).show()
+                    val bundle = Bundle().apply {
+                        putParcelable("community", communityList[position])
+                    }
+                    val action = CommunityListFragmentDirections.actionCommunityListFragmentToCommunityDetailFragment(communityList[position])
+                    navController.navigate(action)
                 }
             }
         }

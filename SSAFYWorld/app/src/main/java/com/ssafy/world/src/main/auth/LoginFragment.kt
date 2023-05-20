@@ -36,6 +36,8 @@ class LoginFragment :
     private fun checkLogin() {
         var user = ApplicationClass.sharedPreferences.getUser()
         if (user != null) {
+            Log.d(TAG, "checkLogin: $user")
+
             navController.navigate(R.id.action_loginFragment_to_mainFragment)
         }
     }
@@ -48,6 +50,7 @@ class LoginFragment :
             navController.navigate(R.id.action_loginFragment_to_mainFragment)
         }
         loginBtnKakao.setOnClickListener {
+            showLoadingDialog(myContext)
             loginWithKAKAO()
         }
     }
@@ -150,6 +153,7 @@ class LoginFragment :
 
     private fun initObserver() = with(authViewModel) {
         user.observe(viewLifecycleOwner) { user ->
+            dismissLoadingDialog()
             if (user.id != "") {
                 Toast.makeText(myContext, "회원가입에 성공했습니다.", Toast.LENGTH_SHORT).show()
                 ApplicationClass.sharedPreferences.saveUser(user)
@@ -160,10 +164,15 @@ class LoginFragment :
         }
 
         isDuplicated.observe(viewLifecycleOwner) {
+            dismissLoadingDialog()
             if(it) {
+                Log.d(TAG, "initObserver2: $curUser")
+                ApplicationClass.sharedPreferences.saveUser(curUser)
                 navController.navigate(R.id.action_loginFragment_to_mainFragment)
             } else {
                 // TODO: 이름, 닉네임 받아서 회원가입 시키기
+                Log.d(TAG, "initObserver: $curUser")
+                ApplicationClass.sharedPreferences.saveUser(curUser)
                 insertUser(curUser)
                 navController.navigate(R.id.action_loginFragment_to_mainFragment)
             }

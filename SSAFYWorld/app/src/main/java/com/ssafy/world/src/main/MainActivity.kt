@@ -66,7 +66,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     private val showBottomNav = { binding.mainBtmNav.visibility = View.VISIBLE }
     private val hideToolbar = { binding.mainLlToolbar.visibility = View.GONE }
     private val showToolbar = { binding.mainLlToolbar.visibility = View.VISIBLE }
-    private fun hideKeyboard() {
+    fun hideKeyboard() {
         val inputMethodManager =
             getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         val currentFocusedView = this.currentFocus   // Check if no view has focus
@@ -97,5 +97,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             .setPermissions(android.Manifest.permission.READ_EXTERNAL_STORAGE)
             .check()
     }
+
+
 
 }

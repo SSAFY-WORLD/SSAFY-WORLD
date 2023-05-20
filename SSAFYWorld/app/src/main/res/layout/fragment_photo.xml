@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_48sdp"
         android:layout_marginTop="32dp"
-        android:text="@string/login_btn_login"
+        android:text="@string/community_complete"
         android:backgroundTint="@color/light_blue"
         app:cornerRadius="@dimen/_10sdp"
         app:layout_constraintBottom_toBottomOf="parent"

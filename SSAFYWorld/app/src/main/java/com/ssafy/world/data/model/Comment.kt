@@ -1,10 +1,20 @@
 package com.ssafy.world.data.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class Comment(
-    val id: String,
-    val userId: String,
-    val comment: String,
-    val time: Long,
-) {
+    var id: String,
+    var communityId: String,
+    var userId: String,
+    var userProfile: String,
+    var comment: String,
+    var time: Long,
+    var fcmToken: String,
+    var replies: ArrayList<Comment> = ArrayList()
+) : Parcelable {
+
+    constructor() : this("","","","","",0,"")
 
 }

@@ -59,6 +59,7 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding>(
                 photoUrls = photoUrlList
             }
             communityViewModel.insertCommunity(curPost, activityViewModel.entryCommunityCollection)
+            showLoadingDialog(myContext)
         }
     }
 
@@ -92,6 +93,7 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding>(
 
     private fun initListener() = with(communityViewModel) {
         communityViewModel.community.observe(viewLifecycleOwner) {
+            dismissLoadingDialog()
             if (it.id != "") {
                 Toast.makeText(myContext, "글이 등록되었습니다.", Toast.LENGTH_SHORT).show()
                 navController.navigate(R.id.action_communityWriteFragment_to_communityListFragment)

@@ -12,7 +12,7 @@
         android:background="@color/message_background_color"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/item_received_message"
-        app:layout_constraintBottom_toTopOf="@+id/chatting_bottom"
+        app:layout_constraintBottom_toTopOf="@+id/detail_bottom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:elevation="1dp"
@@ -20,7 +20,7 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/chatting_bottom"
+        android:id="@+id/detail_bottom"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_48sdp"
         app:layout_constraintBottom_toBottomOf="parent"
