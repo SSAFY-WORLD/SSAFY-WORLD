@@ -15,6 +15,8 @@ object Constants {
     const val KEY_RECEIVER_NAME = "receiverName"
     const val KEY_RECEIVER_IMAGE = "receiverImage"
     const val KEY_LAST_MESSAGE = "lastMessage"
+    const val KEY_SENDER_UNREAD = "senderUnRead"
+    const val KEY_RECEIVER_UNREAD = "receiverUnRead"
 
     // BASE URL
     const val BASE_URL = "https://fcm.googleapis.com/fcm/"
