@@ -13,18 +13,35 @@
         tools:layout="@layout/fragment_chat" >
         <action
             android:id="@+id/action_chatFragment_to_inChatFragment"
-            app:destination="@id/inChatFragment"/>
+            app:destination="@id/inChatFragment">
+            <argument
+                android:name="user"
+                app:argType="com.ssafy.world.data.model.ConversationUser"/>
+        </action>
+        <action
+            android:id="@+id/action_chatFragment_to_userFragment"
+            app:destination="@id/userFragment" />
     </fragment>
 
-    <fragment
+     <fragment
         android:id="@+id/inChatFragment"
         android:name="com.ssafy.world.src.main.chat.InChatFragment"
         android:label="InChatFragment"
-        tools:layout="@layout/fragment_in_chat" >
-        <argument
-            android:name="user"
-            app:argType="com.ssafy.world.data.model.ConversationUser" />
-    </fragment>
+         app:popUpTo="@id/chatFragment"
+         app:popUpToInclusive="true"
+        tools:layout="@layout/fragment_in_chat"
+         >
+         <argument
+             android:name="user"
+             app:argType="com.ssafy.world.data.model.ConversationUser"
+             app:nullable="true"
+             android:defaultValue="@null" />
+         <argument
+             android:name="UserFromProfile"
+             app:argType="com.ssafy.world.data.model.User"
+             app:nullable="true"
+             android:defaultValue="@null" />
+     </fragment>
 
     <!-- Community -->
     <fragment
@@ -143,5 +160,27 @@
             app:popUpTo="@id/communityWriteFragment"
             app:popUpToInclusive="true" />
     </fragment>
+    <fragment
+        android:id="@+id/userFragment"
+        android:name="com.ssafy.world.src.main.user.UserFragment"
+        android:label="UserFragment"
+        tools:layout="@layout/fragment_user"
+        app:popUpTo="@id/chatFragment"
+        app:popUpToInclusive="true" >
+        <action
+            android:id="@+id/action_userFragment_to_inChatFragment"
+            app:destination="@id/inChatFragment" >
+            <argument
+                android:name="UserFromProfile"
+                app:argType="com.ssafy.world.data.model.User"/>
+        </action>
+    </fragment>
+
+    <dialog
+        android:id="@+id/userInfoBottomSheetFragment"
+        android:name="com.ssafy.world.src.main.user.UserInfoBottomSheetFragment"
+        android:label="UserInfoBottomSheetFragment"
+        tools:layout="@layout/bottom_user_info">
+    </dialog>
 
 </navigation>

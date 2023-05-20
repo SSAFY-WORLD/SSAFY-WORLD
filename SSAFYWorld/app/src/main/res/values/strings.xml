@@ -11,6 +11,7 @@
     <string name="register_et_pwd_check">비밀번호 확인</string>
     <string name="login_btn_login">로그인</string>
     <string name="login_btn_register">회원가입</string>
+    <string name="btn_send_message">채팅 보내기</string>
     <string name="login_tv_or">OR</string>
     <string name="login_tv_copyright">Copyright ssafy Corp All Rights reserved.</string>
     <string name="register_et_name">이름</string>
@@ -22,6 +23,7 @@
     <!-- Bottom Nav -->
     <string name="nav_home_title">홈</string>
     <string name="nav_community_title">커뮤니티</string>
+    <string name="nav_user_title">유저 목록</string>
     <string name="nav_chat_title">채팅</string>
     <string name="nav_mypage_title">마이페이지</string>
     <string name="message_hint">메시지를 입력해주세요</string>

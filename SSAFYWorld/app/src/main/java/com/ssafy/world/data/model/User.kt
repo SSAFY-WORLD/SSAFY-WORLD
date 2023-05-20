@@ -1,5 +1,9 @@
 package com.ssafy.world.data.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class User(
     var id: String,
     var email: String,
@@ -9,7 +13,7 @@ data class User(
     var profilePhoto: String,
     var kakaoId: String,
     var token: String,
-) {
+): Parcelable {
     constructor() : this("", "", "", "", "", "", "", "")
 
 }

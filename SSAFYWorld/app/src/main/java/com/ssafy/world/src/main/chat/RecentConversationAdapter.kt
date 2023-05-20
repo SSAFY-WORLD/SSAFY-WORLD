@@ -1,14 +1,12 @@
 package com.ssafy.world.src.main.chat
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.util.Base64
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.ssafy.world.R
 import com.ssafy.world.data.model.ChatMessage
 import com.ssafy.world.data.model.ConversationUser
 import com.ssafy.world.databinding.ChatroomItemBinding
@@ -22,7 +20,6 @@ class RecentConversationAdapter(
     companion object {
         val diffUtil = object: DiffUtil.ItemCallback<ChatMessage>() {
             override fun areItemsTheSame(oldItem: ChatMessage, newItem: ChatMessage): Boolean {
-                Log.d("싸피", "areItemsTheSame: ${oldItem.dateObject == newItem.dateObject}")
                 return oldItem == newItem
             }
 
@@ -57,19 +54,17 @@ class RecentConversationAdapter(
 
         fun setData(chatMessage: ChatMessage) {
             with(binding) {
-//                profileImage.setImageBitmap(getConversionImage(chatMessage.conversionImage))
                 userName.text = chatMessage.conversionName
                 userCurrentMessage.text = chatMessage.message
                 messageTime.text = getReadableDateTime(chatMessage.dateObject)
+
+                Glide.with(binding.root)
+                    .load(chatMessage.conversionImage)
+                    .error(R.drawable.default_profile_image)
+                    .into(profileImage)
             }
         }
     }
-
-    private fun getConversionImage(encodedImage: String): Bitmap {
-        val bytes = Base64.decode(encodedImage, Base64.DEFAULT)
-        return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-    }
-
 }
 
 interface ConversionListener {

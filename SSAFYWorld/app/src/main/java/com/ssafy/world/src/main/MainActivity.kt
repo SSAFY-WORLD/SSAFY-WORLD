@@ -45,6 +45,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     hideBottomNav()
                     hideToolbar()
                 }
+                R.id.userFragment -> {
+                    hideBottomNav()
+                    setTitle(getString(R.string.nav_user_title))
+                }
                 R.id.mainFragment -> setTitle(getString(R.string.nav_home_title))
                 R.id.communityFragment -> setTitle(getString(R.string.nav_community_title))
                 R.id.chatFragment -> setTitle(getString(R.string.nav_chat_title))

@@ -25,7 +25,7 @@ import java.util.HashMap
 class InChatFragment :
 	BaseFragment<FragmentInChatBinding>(FragmentInChatBinding::bind, R.layout.fragment_in_chat) {
 	private val chatViewModel: ChatViewModel by viewModels()
-	private val conversion: InChatFragmentArgs by navArgs()
+	private val args: InChatFragmentArgs by navArgs()
 	private val chatMessages = ArrayList<ChatMessage>()
 	private lateinit var chatAdapter: ChatAdapter
 	private var conversionId: String? = null
@@ -93,7 +93,12 @@ class InChatFragment :
 	}
 
 	private fun loadReceiverDetails() {
-		activity.setTitle(conversion.user.name)
+		args.user?.let {
+			activity.setTitle(it.name)
+		}
+		args.UserFromProfile?.let {
+			activity.setTitle(it.name)
+		}
 	}
 
 	private fun initView() = with(binding) {
