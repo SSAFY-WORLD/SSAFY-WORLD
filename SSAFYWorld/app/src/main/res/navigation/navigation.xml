@@ -27,8 +27,6 @@
         android:id="@+id/inChatFragment"
         android:name="com.ssafy.world.src.main.chat.InChatFragment"
         android:label="InChatFragment"
-         app:popUpTo="@id/chatFragment"
-         app:popUpToInclusive="true"
         tools:layout="@layout/fragment_in_chat"
          >
          <argument
@@ -41,6 +39,9 @@
              app:argType="com.ssafy.world.data.model.User"
              app:nullable="true"
              android:defaultValue="@null" />
+         <action
+             android:id="@+id/action_inChatFragment_to_photoFragment"
+             app:destination="@id/photoFragment" />
      </fragment>
 
     <!-- Community -->
@@ -152,7 +153,8 @@
     <fragment
         android:id="@+id/photoFragment"
         android:name="com.ssafy.world.src.main.photo.PhotoFragment"
-        android:label="PhotoFragment" >
+        android:label="PhotoFragment"
+        tools:layout="@layout/fragment_photo">
 
         <action
             android:id="@+id/action_photoFragment_to_communityWriteFragment"
@@ -160,13 +162,11 @@
             app:popUpTo="@id/communityWriteFragment"
             app:popUpToInclusive="true" />
     </fragment>
-    <fragment
+     <fragment
         android:id="@+id/userFragment"
         android:name="com.ssafy.world.src.main.user.UserFragment"
         android:label="UserFragment"
-        tools:layout="@layout/fragment_user"
-        app:popUpTo="@id/chatFragment"
-        app:popUpToInclusive="true" >
+        tools:layout="@layout/fragment_user">
         <action
             android:id="@+id/action_userFragment_to_inChatFragment"
             app:destination="@id/inChatFragment" >

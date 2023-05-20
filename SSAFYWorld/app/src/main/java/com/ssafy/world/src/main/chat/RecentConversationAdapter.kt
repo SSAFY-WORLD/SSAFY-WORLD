@@ -1,33 +1,32 @@
 package com.ssafy.world.src.main.chat
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.ssafy.world.R
 import com.ssafy.world.data.model.ChatMessage
 import com.ssafy.world.data.model.ConversationUser
 import com.ssafy.world.databinding.ChatroomItemBinding
+import com.ssafy.world.utils.Constants
 import com.ssafy.world.utils.getReadableDateTime
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 
 class RecentConversationAdapter(
+    private val senderId: String,
+    private val chatRoomList: ArrayList<ChatMessage>,
     private val conversionListener: ConversionListener
-) : ListAdapter<ChatMessage, RecentConversationAdapter.ConversionViewHolder>(diffUtil) {
-
-    companion object {
-        val diffUtil = object: DiffUtil.ItemCallback<ChatMessage>() {
-            override fun areItemsTheSame(oldItem: ChatMessage, newItem: ChatMessage): Boolean {
-                return oldItem == newItem
-            }
-
-            override fun areContentsTheSame(oldItem: ChatMessage, newItem: ChatMessage): Boolean {
-                return oldItem == newItem
-            }
-        }
-    }
+) : RecyclerView.Adapter<RecentConversationAdapter.ConversionViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConversionViewHolder {
         val binding =
@@ -35,11 +34,13 @@ class RecentConversationAdapter(
         return ConversionViewHolder(binding)
     }
 
+    override fun getItemCount() = chatRoomList.size
+
     override fun onBindViewHolder(holder: ConversionViewHolder, position: Int) {
-        holder.setData(currentList[position])
+        holder.setData(chatRoomList[position])
         // 클릭시
         holder.itemView.setOnClickListener {
-            val chat = currentList[position]
+            val chat = chatRoomList[position]
             val user = ConversationUser(
                 id = chat.conversionId,
                 name = chat.conversionName,
@@ -57,11 +58,33 @@ class RecentConversationAdapter(
                 userName.text = chatMessage.conversionName
                 userCurrentMessage.text = chatMessage.message
                 messageTime.text = getReadableDateTime(chatMessage.dateObject)
+                // 새로운 메시지의 경우 badge를 보여줌
+                CoroutineScope(Dispatchers.IO).launch {
+                    val unread = Firebase.firestore.collection(Constants.KEY_COLLECTION_CHAT)
+                        .whereEqualTo(Constants.KEY_RECEIVER_ID, senderId)
+                        .whereEqualTo(Constants.KEY_IS_READ, false)
+                        .get().await().count()
+                    if (unread != 0) {
+                        withContext(Dispatchers.Main) {
+                            newBadge.visibility = View.VISIBLE
+                            unReadCount.text = unread.toString()
+                        }
+                    }
+                }
 
-                Glide.with(binding.root)
-                    .load(chatMessage.conversionImage)
-                    .error(R.drawable.default_profile_image)
-                    .into(profileImage)
+                if (chatMessage.conversionImage.isNotBlank()) {
+                    Glide.with(binding.root)
+                        .load(chatMessage.conversionImage)
+                        .thumbnail(
+                            Glide.with(binding.root).load(chatMessage.conversionImage)
+                                .override(100, 100)
+                        )
+                        .skipMemoryCache(true)
+                        .dontAnimate()
+                        .into(profileImage)
+                } else {
+                    profileImage.setImageResource(R.drawable.default_profile_image)
+                }
             }
         }
     }

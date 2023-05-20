@@ -13,6 +13,8 @@ data class ChatMessage(
     var conversionId: String = "",
     var conversionName: String = "",
     var conversionImage: String = "",
+    var senderUnRead: Long = 0,
+    var receiverUnRead: Long = 0
 ) : Serializable {
     override fun toString(): String {
         return "ChatMessage(senderId='$senderId', receiverId='$receiverId', message='$message', dateObject=$dateObject, isRead=$isRead)"
