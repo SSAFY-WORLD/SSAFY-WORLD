@@ -46,12 +46,12 @@
             android:layout_marginTop="@dimen/_2sdp"/>
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/icon"
+    <ImageButton
+        android:id="@+id/comment_more"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:src="@drawable/ic_more"
-        android:layout_marginTop="@dimen/_4sdp"
+        android:background="@color/white"
         android:layout_marginRight="@dimen/_4sdp"/>
 
 </LinearLayout>

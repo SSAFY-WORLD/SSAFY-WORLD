@@ -1,6 +1,7 @@
 package com.ssafy.world.data.model
 
 import android.os.Parcelable
+import android.provider.ContactsContract.CommonDataKinds.Nickname
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -8,6 +9,7 @@ data class Comment(
     var id: String,
     var communityId: String,
     var userId: String,
+    var userNickname: String,
     var userProfile: String,
     var comment: String,
     var time: Long,
@@ -15,6 +17,6 @@ data class Comment(
     var replies: ArrayList<Comment> = ArrayList()
 ) : Parcelable {
 
-    constructor() : this("","","","","",0,"")
+    constructor() : this("", "", "", "", "", "", 0, "")
 
 }

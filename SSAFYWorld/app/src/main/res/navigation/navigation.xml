@@ -63,8 +63,15 @@
         android:name="com.ssafy.world.src.main.community.CommunityDetailFragment"
         android:label="CommunityDetailFragment" >
         <argument
-            android:name="community"
-            app:argType="com.ssafy.world.data.model.Community" />
+            android:name="communityId"
+            android:defaultValue="" />
+        <action
+            android:id="@+id/action_communityDetailFragment_to_communityWriteFragment"
+            app:destination="@id/communityWriteFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/communityListFragment"
@@ -93,6 +100,10 @@
         android:name="com.ssafy.world.src.main.community.CommunityWriteFragment"
         android:label="CommunityWriteFragment" >
         <argument
+            android:name="communityId"
+            android:defaultValue="" />
+
+        <argument
             android:name="communityName"
             android:defaultValue="name" />
        <action
@@ -103,10 +114,24 @@
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
+            android:id="@+id/action_communityWriteFragment_to_communityDetailFragment"
+            app:destination="@id/communityDetailFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@animator/nav_default_pop_enter_anim"
+            app:popUpTo="@id/communityDetailFragment"
+            app:popUpToInclusive="true" />
+        <action
             android:id="@+id/action_communityWriteFragment_to_communityListFragment"
             app:destination="@id/communityListFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
             app:popUpTo="@id/communityListFragment"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="true"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@animator/nav_default_pop_enter_anim" />
+
     </fragment>
 
     <!-- Main -->
@@ -202,5 +227,10 @@
             android:id="@+id/action_registerBottomSheetFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
     </dialog>
+    <action
+        android:id="@+id/action_global_communityDetailFragment"
+        app:destination="@id/communityDetailFragment"
+        app:popUpTo="@id/communityDetailFragment"
+        app:popUpToInclusive="true" />
 
 </navigation>

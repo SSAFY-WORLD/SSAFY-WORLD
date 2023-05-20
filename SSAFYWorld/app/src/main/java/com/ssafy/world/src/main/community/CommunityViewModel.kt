@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.ssafy.world.config.ApplicationClass
 import com.ssafy.world.data.model.Comment
 import com.ssafy.world.data.model.Community
-import com.ssafy.world.data.model.User
+import com.ssafy.world.data.repository.CommunityRepository
 import kotlinx.coroutines.launch
 
 private const val TAG = "CommunityViewModel"
@@ -23,6 +23,14 @@ class CommunityViewModel : ViewModel() {
     private val _comments = MutableLiveData<ArrayList<Comment>>()
     val comments: LiveData<ArrayList<Comment>>
         get() = _comments
+
+    private val _updateSuccess = MutableLiveData<Boolean>()
+    val updateSuccess: LiveData<Boolean>
+        get() = _updateSuccess
+
+    private val _deleteSuccess = MutableLiveData<Boolean>()
+    val deleteSuccess: LiveData<Boolean>
+        get() = _deleteSuccess
 
     fun insertCommunity(community: Community, collection: String) = viewModelScope.launch {
         try {
@@ -67,5 +75,23 @@ class CommunityViewModel : ViewModel() {
             _comments.value = ArrayList()
         }
     }
+
+    fun updateCommunity(collection: String, community: Community) = viewModelScope.launch {
+        val success = repository.updateCommunity(collection, community)
+        _updateSuccess.value = success
+    }
+
+    fun deleteCommunity(collection: String, communityId: String) = viewModelScope.launch {
+        val success = repository.deleteCommunity(collection, communityId)
+        _deleteSuccess.value = success
+    }
+
+    fun fetchCommunityById(collection: String, communityId: String) {
+        viewModelScope.launch {
+            val community = CommunityRepository.getCommunityById(collection, communityId)
+            _community.value = community
+        }
+    }
+
 
 }

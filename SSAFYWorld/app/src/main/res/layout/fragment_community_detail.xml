@@ -70,12 +70,15 @@
                     android:layout_height="0dp"
                     android:layout_weight="1" />
 
-                <com.google.android.material.imageview.ShapeableImageView
+                <ImageButton
+                    android:id="@+id/detail_btn_more"
                     android:layout_width="@dimen/_12sdp"
                     android:layout_height="@dimen/_12sdp"
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_8sdp"
-                    android:src="@drawable/ic_more" />
+                    android:background="@color/white"
+                    android:src="@drawable/ic_more"
+                    android:visibility="gone"/>
 
             </LinearLayout>
 

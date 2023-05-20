@@ -60,6 +60,21 @@ object CommunityRepository {
         }
     }
 
+    suspend fun getCommunityById(collection: String, communityId: String): Community {
+        val communityRef = firestore.collection(collection).document(communityId)
+        return try {
+            val snapshot = communityRef.get().await()
+            if (snapshot.exists()) {
+                val community = snapshot.toObject(Community::class.java)
+                community?.id = snapshot.id
+                community ?: Community()
+            } else {
+                Community()
+            }
+        } catch (e: Exception) {
+            Community()
+        }
+    }
     private suspend fun uploadImageAsync(
         imageBytes: ByteArray,
         imageRef: StorageReference
@@ -73,6 +88,30 @@ object CommunityRepository {
             }
         }.addOnFailureListener { error ->
             continuation.resumeWithException(error)
+        }
+    }
+
+    suspend fun deleteCommunity(collection: String, communityId: String): Boolean {
+        val communityRef = firestore.collection(collection).document(communityId)
+        return try {
+            // 커뮤니티 삭제
+            communityRef.delete().await()
+            true // 삭제 성공
+        } catch (e: Exception) {
+            false // 삭제 실패
+        }
+    }
+
+    suspend fun updateCommunity(collection: String, community: Community): Boolean {
+        Log.d(TAG, "updateCommunity: $collection")
+        Log.d(TAG, "updateCommunity: $community")
+        val communityRef = firestore.collection(collection).document(community.id)
+        return try {
+            // 커뮤니티 업데이트
+            communityRef.set(community).await()
+            true // 업데이트 성공
+        } catch (e: Exception) {
+            false // 업데이트 실패
         }
     }
 

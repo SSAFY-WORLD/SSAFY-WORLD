@@ -52,10 +52,7 @@ class CommunityListFragment : BaseFragment<FragmentCommunityListBinding>(Fragmen
 
             myAdapter.itemClickListener = object : CommunityListAdapter.ItemClickListener {
                 override fun onClick(view: View, data: Community, position: Int) {
-                    val bundle = Bundle().apply {
-                        putParcelable("community", communityList[position])
-                    }
-                    val action = CommunityListFragmentDirections.actionCommunityListFragmentToCommunityDetailFragment(communityList[position])
+                    val action = CommunityListFragmentDirections.actionCommunityListFragmentToCommunityDetailFragment(communityList[position].id)
                     navController.navigate(action)
                 }
             }
@@ -64,7 +61,8 @@ class CommunityListFragment : BaseFragment<FragmentCommunityListBinding>(Fragmen
 
     private fun initButton() = with(binding) {
         communityFab.setOnClickListener {
-            val action = CommunityListFragmentDirections.actionCommunityListFragmentToCommunityWriteFragment("free")
+            val action = CommunityListFragmentDirections.actionCommunityListFragmentToCommunityWriteFragment(
+                communityId = "", communityName = "")
             navController.navigate(action)
         }
     }

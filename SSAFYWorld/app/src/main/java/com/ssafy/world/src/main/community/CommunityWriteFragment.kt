@@ -27,7 +27,7 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding>(
 ) {
     private val activityViewModel: MainActivityViewModel by activityViewModels()
     private val communityViewModel: CommunityViewModel by viewModels()
-    val args: CommunityListFragmentArgs by navArgs()
+    val args: CommunityWriteFragmentArgs by navArgs()
 
     private val myAdapter: CommunityWritePhotoAdapter by lazy {
         CommunityWritePhotoAdapter(myContext)
@@ -35,12 +35,31 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding>(
 
     private var photoUrlList: ArrayList<String> = arrayListOf()
 
+    private var isEdit : Boolean = false
+    private var communityId = ""
+    private lateinit var curCommunity: Community
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        communityId = args.communityId
+
+        if(communityId != "") {
+            isEdit = true
+            communityViewModel.fetchCommunityById(args.communityName, communityId)
+        }
+        initRecyclerView()
         initButton()
         initPhoto()
         initListener()
+    }
+
+    private fun initView() = with(binding) {
+        titleEditTextView.setText(curCommunity.title)
+        contentEditTextView.setText(curCommunity.content)
+        photoUrlList = curCommunity.photoUrls
+        initRecyclerView()
     }
 
     private fun initButton() = with(binding) {
@@ -48,6 +67,7 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding>(
             navController.navigate(R.id.action_communityWriteFragment_to_photoFragment)
         }
         writeBtnComplete.setOnClickListener {
+            showLoadingDialog(myContext)
             val curUser = ApplicationClass.sharedPreferences.getUser()
             val curPost = Community().apply {
                 userId = curUser!!.email
@@ -57,8 +77,12 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding>(
                 time = System.currentTimeMillis()
                 photoUrls = photoUrlList
             }
-            communityViewModel.insertCommunity(curPost, activityViewModel.entryCommunityCollection)
-            showLoadingDialog(myContext)
+            if(!isEdit) {
+                communityViewModel.insertCommunity(curPost, activityViewModel.entryCommunityCollection)
+            } else {
+                curPost.id = curCommunity.id
+                communityViewModel.updateCommunity(activityViewModel.entryCommunityCollection, curPost)
+            }
         }
     }
 
@@ -92,12 +116,31 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding>(
 
     private fun initListener() = with(communityViewModel) {
         communityViewModel.community.observe(viewLifecycleOwner) {
+            Log.d(TAG, "initListener: $it")
+            Log.d(TAG, "initListener: $isEdit")
+            if(isEdit) {
+                curCommunity = it
+                initView()
+                return@observe
+            }
+            else {
+                if (it.id != "") {
+                    Toast.makeText(myContext, "글이 등록되었습니다.", Toast.LENGTH_SHORT).show()
+                    navController.navigate(R.id.action_communityWriteFragment_to_communityListFragment)
+                } else {
+                    Toast.makeText(myContext, "글이 등록에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
+                dismissLoadingDialog()
+            }
+        }
+        communityViewModel.updateSuccess.observe(viewLifecycleOwner) {
             dismissLoadingDialog()
-            if (it.id != "") {
-                Toast.makeText(myContext, "글이 등록되었습니다.", Toast.LENGTH_SHORT).show()
-                navController.navigate(R.id.action_communityWriteFragment_to_communityListFragment)
+            if(it) {
+                showCustomToast("수정에 성공했습니다.")
+                val action = CommunityWriteFragmentDirections.actionCommunityWriteFragmentToCommunityDetailFragment(communityId)
+                navController.navigate(action)
             } else {
-                Toast.makeText(myContext, "글이 등록에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                showCustomToast("수정에 성공했습니다.")
             }
         }
     }

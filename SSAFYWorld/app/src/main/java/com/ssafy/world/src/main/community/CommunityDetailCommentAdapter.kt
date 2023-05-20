@@ -57,7 +57,7 @@ class CommunityDetailCommentAdapter(val mContext: Context) :
                 .transform(FitCenter(), RoundedCorners(30))
                 .into(binding.profileImage)
 
-            username.text = data.userId
+            username.text = data.userNickname
             content.text = data.comment
             time.text = getFormattedTime(data.time)
         }
