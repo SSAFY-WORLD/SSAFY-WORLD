@@ -205,7 +205,9 @@
         tools:layout="@layout/fragment_user">
         <action
             android:id="@+id/action_userFragment_to_inChatFragment"
-            app:destination="@id/inChatFragment" >
+            app:destination="@id/inChatFragment"
+            app:popUpTo="@id/userFragment"
+            app:popUpToInclusive="true">
             <argument
                 android:name="UserFromProfile"
                 app:argType="com.ssafy.world.data.model.User"/>

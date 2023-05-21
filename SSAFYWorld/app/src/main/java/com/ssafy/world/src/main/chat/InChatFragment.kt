@@ -60,19 +60,19 @@ class InChatFragment : Fragment() {
 	}
 
 	private fun listenMessages() {
-		CoroutineScope(Dispatchers.Main).launch {
-			val chatRef1 = Firebase.firestore.collection(Constants.KEY_COLLECTION_CHAT)
-				.whereEqualTo(Constants.KEY_SENDER_ID, sendUser.email)
-				.whereEqualTo(Constants.KEY_RECEIVER_ID, receiverId)
+		val chatRef1 = Firebase.firestore.collection(Constants.KEY_COLLECTION_CHAT)
+			.whereEqualTo(Constants.KEY_SENDER_ID, sendUser.email)
+			.whereEqualTo(Constants.KEY_RECEIVER_ID, receiverId)
+			.orderBy(Constants.KEY_TIMESTAMP, Query.Direction.ASCENDING)
 
-			val chatRef2 = Firebase.firestore.collection(Constants.KEY_COLLECTION_CHAT)
-				.whereEqualTo(Constants.KEY_SENDER_ID, receiverId)
-				.whereEqualTo(Constants.KEY_RECEIVER_ID, sendUser.email)
+		val chatRef2 = Firebase.firestore.collection(Constants.KEY_COLLECTION_CHAT)
+			.whereEqualTo(Constants.KEY_SENDER_ID, receiverId)
+			.whereEqualTo(Constants.KEY_RECEIVER_ID, sendUser.email)
+			.orderBy(Constants.KEY_TIMESTAMP, Query.Direction.ASCENDING)
 
-			// 실시간 업데이트를 위해 단일 문서 참조에 대한 리스너를 등록합니다.
-			chatListenerRegistration1 = chatRef1.addSnapshotListener(eventListener)
-			chatListenerRegistration2 = chatRef2.addSnapshotListener(eventListener)
-		}
+		// 실시간 업데이트를 위해 단일 문서 참조에 대한 리스너를 등록.
+		chatListenerRegistration1 = chatRef1.addSnapshotListener(eventListener)
+		chatListenerRegistration2 = chatRef2.addSnapshotListener(eventListener)
 	}
 
 

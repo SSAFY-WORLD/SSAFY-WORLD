@@ -48,10 +48,12 @@ class UserFragment : BaseFragment<FragmentUserBinding>(FragmentUserBinding::bind
         userViewModel.users.observe(viewLifecycleOwner) {
             userList = it
             userListAdapter.submitList(userList.toMutableList())
+            dismissLoadingDialog()
         }
     }
 
     private fun initUsers() {
+        showLoadingDialog(myContext)
         var currentUserEmail = ApplicationClass.sharedPreferences.getUser()?.email
         if (currentUserEmail == null) {
             currentUserEmail = ""

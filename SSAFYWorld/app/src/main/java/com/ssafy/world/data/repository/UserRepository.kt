@@ -3,7 +3,6 @@ package com.ssafy.world.data.repository
 import android.util.Log
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.ssafy.world.data.model.Community
 import com.ssafy.world.data.model.User
 import kotlinx.coroutines.tasks.await
 
@@ -28,8 +27,7 @@ object UserRepository {
     suspend fun getAllUsers(currentUserEmail: String): ArrayList<User> {
         return try {
             val querySnapshot = userCollection
-//                .whereNotEqualTo("email", currentUserEmail)
-                .orderBy("name")
+                .whereNotEqualTo("email", currentUserEmail)
                 .get()
                 .await()
             val userList = ArrayList<User>()

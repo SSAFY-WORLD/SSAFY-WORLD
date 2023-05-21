@@ -58,13 +58,17 @@ class RecentConversationAdapter(
                 userName.text = chatMessage.conversionName
                 userCurrentMessage.text = chatMessage.message
                 messageTime.text = getReadableDateTime(chatMessage.dateObject)
+                val receiverId = if (senderId == chatMessage.senderId) chatMessage.receiverId else chatMessage.senderId
                 // 새로운 메시지의 경우 badge를 보여줌
                 CoroutineScope(Dispatchers.IO).launch {
                     val unread = Firebase.firestore.collection(Constants.KEY_COLLECTION_CHAT)
+                        .whereEqualTo(Constants.KEY_SENDER_ID, receiverId)
                         .whereEqualTo(Constants.KEY_RECEIVER_ID, senderId)
                         .whereEqualTo(Constants.KEY_IS_READ, false)
                         .get().await().count()
-                    if (unread != 0) {
+                    if (unread == 0) {
+                        newBadge.visibility = View.INVISIBLE
+                    } else {
                         withContext(Dispatchers.Main) {
                             newBadge.visibility = View.VISIBLE
                             unReadCount.text = unread.toString()

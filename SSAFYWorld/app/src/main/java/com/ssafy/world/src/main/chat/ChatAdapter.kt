@@ -1,12 +1,10 @@
 package com.ssafy.world.src.main.chat
 
-import android.graphics.Bitmap
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.ssafy.world.R
 import com.ssafy.world.data.model.ChatMessage
 import com.ssafy.world.databinding.ItemReceivedMessageBinding
 import com.ssafy.world.databinding.ItemSentMessageBinding
@@ -79,7 +77,19 @@ class ChatAdapter(
 			with(binding) {
 				textMessage.text = chatMessage.message
 				textDateTime.text = getReadableDateTime(chatMessage.dateObject)
-//				binding.profileImage.setImageBitmap(profile)
+				if (chatMessage.conversionImage.isNotBlank()) {
+					Glide.with(binding.root)
+						.load(chatMessage.conversionImage)
+						.thumbnail(
+							Glide.with(binding.root).load(chatMessage.conversionImage)
+								.override(100, 100)
+						)
+						.skipMemoryCache(true)
+						.dontAnimate()
+						.into(profileImage)
+				} else {
+					profileImage.setImageResource(R.drawable.default_profile_image)
+				}
 			}
 		}
 	}
