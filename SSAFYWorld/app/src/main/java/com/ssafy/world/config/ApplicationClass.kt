@@ -10,6 +10,7 @@ import com.kakao.sdk.common.util.Utility
 import com.ssafy.world.R
 import com.ssafy.world.data.repository.CommunityRepository
 import com.ssafy.world.data.repository.UserRepository
+import com.ssafy.world.data.service.FCMService
 import com.ssafy.world.utils.SharedPreferencesUtil
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -43,6 +44,9 @@ class ApplicationClass : Application() {
         lateinit var retrofit: Retrofit
         val userRepository = UserRepository
         val communityRepository = CommunityRepository
+
+        // FCM Service
+        val messagingService = FCMService
     }
 
     // 앱이 처음 생성되는 순간, SP를 새로 만들어주고, 레트로핏 인스턴스를 생성합니다.

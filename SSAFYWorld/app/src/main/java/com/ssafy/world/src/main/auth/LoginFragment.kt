@@ -13,6 +13,11 @@ import com.ssafy.world.config.ApplicationClass
 import com.ssafy.world.config.BaseFragment
 import com.ssafy.world.databinding.FragmentLoginBinding
 import com.ssafy.world.data.model.User
+import com.ssafy.world.data.service.FCMService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 private const val TAG = "LoginFragment"
 
@@ -48,6 +53,12 @@ class LoginFragment :
         }
         loginBtn.setOnClickListener {
             navController.navigate(R.id.action_loginFragment_to_mainFragment)
+            CoroutineScope(Dispatchers.IO).launch {
+                val token = FCMService.getToken()
+                withContext(Dispatchers.Main) {
+                    showCustomToast(token)
+                }
+            }
         }
         loginBtnKakao.setOnClickListener {
             showLoadingDialog(myContext)

@@ -77,7 +77,8 @@
     <fragment
         android:id="@+id/communityListFragment"
         android:name="com.ssafy.world.src.main.community.CommunityListFragment"
-        android:label="CommunityListFragment">
+        android:label="CommunityListFragment"
+        tools:layout="@layout/fragment_community_list">
         <argument
             android:name="communityName"
             android:defaultValue="name" />
@@ -99,7 +100,8 @@
     <fragment
         android:id="@+id/communityWriteFragment"
         android:name="com.ssafy.world.src.main.community.CommunityWriteFragment"
-        android:label="CommunityWriteFragment" >
+        android:label="CommunityWriteFragment"
+        tools:layout="@layout/fragment_community_write">
         <argument
             android:name="communityId"
             android:defaultValue="" />
@@ -146,13 +148,20 @@
         android:id="@+id/mypageFragment"
         android:name="com.ssafy.world.src.main.mypage.MypageFragment"
         android:label="fragment_mypage"
-        tools:layout="@layout/fragment_mypage" />
+        tools:layout="@layout/fragment_mypage" >
+        <action
+            android:id="@+id/action_mypageFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/mypageFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
 
     <!-- Auth -->
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.ssafy.world.src.main.auth.LoginFragment"
-        android:label="LoginFragment">
+        android:label="LoginFragment"
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
             app:destination="@id/registerFragment"
@@ -174,7 +183,8 @@
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.ssafy.world.src.main.auth.RegisterFragment"
-        android:label="RegisterFragment">
+        android:label="RegisterFragment"
+        tools:layout="@layout/fragment_register">
         <action
             android:id="@+id/action_registerFragment_to_mainFragment"
             app:destination="@id/mainFragment"
@@ -223,7 +233,8 @@
     <dialog
         android:id="@+id/registerBottomSheetFragment"
         android:name="com.ssafy.world.src.main.auth.RegisterBottomSheetFragment"
-        android:label="RegisterBottomSheetFragment" >
+        android:label="RegisterBottomSheetFragment"
+        tools:layout="@layout/bottom_register">
 
         <action
             android:id="@+id/action_registerBottomSheetFragment_to_mainFragment"

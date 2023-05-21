@@ -16,6 +16,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SSAFYWorld"
         tools:targetApi="33">
+
+        <service android:name=".data.service.FirebaseMessageService" android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <activity
             android:name=".src.main.MainActivity"
             android:windowSoftInputMode="adjustResize"
