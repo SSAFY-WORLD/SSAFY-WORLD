@@ -31,6 +31,7 @@ object CommunityRepository {
         FirebaseStorage.getInstance()
     }
 
+    // Community
     suspend fun insertCommunity(community: Community, collection: String): Community {
         val curCollection = firestore.collection(collection)
         return try {
@@ -75,6 +76,7 @@ object CommunityRepository {
             Community()
         }
     }
+
     private suspend fun uploadImageAsync(
         imageBytes: ByteArray,
         imageRef: StorageReference
@@ -134,6 +136,7 @@ object CommunityRepository {
         }
     }
 
+    // Comment
     suspend fun insertComment(collection: String, community: Community, comment: Comment): Boolean {
         val curCollection = firestore.collection("comment")
         val newCommentRef = curCollection.document()
@@ -144,6 +147,35 @@ object CommunityRepository {
             true // 삽입 성공
         } catch (e: Exception) {
             false // 삽입 실패
+        }
+    }
+
+    suspend fun insertReply(collection: String, community: Community, comment: Comment): Boolean {
+        val curCollection = firestore.collection("reply")
+        val newCommentRef = curCollection.document()
+        comment.id = newCommentRef.id
+        return try {
+            newCommentRef.set(comment).await()
+            incrementCommunityCommentCount(collection, community, comment.communityId)
+            true // 삽입 성공
+        } catch (e: Exception) {
+            false // 삽입 실패
+        }
+    }
+
+    suspend fun deleteComment(
+        collection: String,
+        community: Community,
+        commentId: String
+    ): Boolean {
+        val commentRef = firestore.collection("comment").document(commentId)
+        Log.d(TAG, "deleteComment: $collection $commentId")
+        return try {
+            commentRef.delete().await()
+            decrementCommunityCommentCount(collection, community, community.id)
+            true // 삭제 성공
+        } catch (e: Exception) {
+            false // 삭제 실패
         }
     }
 
@@ -160,8 +192,12 @@ object CommunityRepository {
         }.await()
     }
 
-    private suspend fun decrementCommunityCommentCount(communityId: String) {
-        val communityRef = firestore.collection("community").document(communityId)
+    private suspend fun decrementCommunityCommentCount(
+        collection: String,
+        community: Community,
+        communityId: String
+    ) {
+        val communityRef = firestore.collection(collection).document(communityId)
         firestore.runTransaction { transaction ->
             val community = transaction.get(communityRef).toObject(Community::class.java)
             community?.let {
@@ -181,7 +217,6 @@ object CommunityRepository {
             for (document in querySnapshot.documents) {
                 val comment = document.toObject(Comment::class.java)
                 comment?.let {
-                    it.id = communityId
                     commentList.add(it)
                 }
             }
@@ -191,6 +226,37 @@ object CommunityRepository {
         } catch (e: Exception) {
             Log.e(TAG, "getCommentsByCommunityId: $e")
             ArrayList()
+        }
+    }
+
+    suspend fun getRepliesByCommentId(commentId: String): ArrayList<Comment> {
+        val curCollection = firestore.collection("reply")
+        Log.d(TAG, "getRepliesByCommentId: $commentId")
+        return try {
+            val querySnapshot = curCollection.whereEqualTo("commentId", commentId)
+                .orderBy("time").get().await()
+            val replyList = ArrayList<Comment>()
+            for (document in querySnapshot.documents) {
+                val reply = document.toObject(Comment::class.java)
+                reply?.let {
+                    replyList.add(it)
+                }
+            }
+            replyList
+        } catch (e: Exception) {
+            ArrayList()
+        }
+    }
+
+    suspend fun deleteReplyById(replyId: String, commentId: String): Boolean {
+        return try {
+            val replyCollection = firestore.collection("reply")
+            val replyDoc = replyCollection.document(replyId)
+            replyDoc.delete().await()
+            true
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to delete reply: $e")
+            false
         }
     }
 
