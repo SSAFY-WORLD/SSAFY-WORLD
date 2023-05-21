@@ -32,7 +32,7 @@ class LoginFragment :
         super.onViewCreated(view, savedInstanceState)
 
 
-        checkLogin()
+        //checkLogin()
         initButton()
         initEditTextListener()
         initObserver()
@@ -59,6 +59,9 @@ class LoginFragment :
                     showCustomToast(token)
                 }
             }
+            val email = idEditTextView.text.toString()
+            val pwd = pwdEditTextView.text.toString()
+            authViewModel.login(email, pwd)
         }
         loginBtnKakao.setOnClickListener {
             showLoadingDialog(myContext)
@@ -165,22 +168,24 @@ class LoginFragment :
         user.observe(viewLifecycleOwner) { user ->
             dismissLoadingDialog()
             if (user.id != "") {
-                Toast.makeText(myContext, "회원가입에 성공했습니다.", Toast.LENGTH_SHORT).show()
+                showCustomToast("로그인에 성공했습니다.")
                 ApplicationClass.sharedPreferences.saveUser(user)
                 navController.navigate(R.id.action_loginFragment_to_mainFragment)
             } else {
-                showCustomToast("")
-                Toast.makeText(myContext, "회원가입에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                showCustomToast("아이디 비빌번호를 다시 확인하세요.")
             }
         }
 
         isDuplicated.observe(viewLifecycleOwner) {
             dismissLoadingDialog()
-            if(it) {
+            if (it) {
                 ApplicationClass.sharedPreferences.saveUser(curUser)
                 navController.navigate(R.id.action_loginFragment_to_mainFragment)
             } else {
-                RegisterBottomSheetFragment(curUser).show(parentFragmentManager, "RegisterBottomSheet")
+                RegisterBottomSheetFragment(curUser).show(
+                    parentFragmentManager,
+                    "RegisterBottomSheet"
+                )
             }
         }
     }

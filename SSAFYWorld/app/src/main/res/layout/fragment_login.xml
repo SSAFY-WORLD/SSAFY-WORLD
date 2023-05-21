@@ -75,7 +75,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/pwdEditTextView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
@@ -107,7 +108,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="@dimen/_4sdp"
             android:orientation="horizontal">
 
             <ImageButton
@@ -117,12 +118,6 @@
                 android:background="@color/white"
                 android:src="@drawable/ic_login_kakao" />
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:background="@color/white"
-                android:src="@drawable/ic_login_kakao" />
         </LinearLayout>
     </LinearLayout>
 

@@ -12,6 +12,8 @@ import android.provider.Settings
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -27,7 +29,7 @@ import com.ssafy.world.src.main.auth.PermmissionBottomSheet
 
 // :: -> method reference
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
-
+    private val activityViewModel: MainActivityViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -68,6 +70,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 R.id.mypageFragment -> setTitle(getString(R.string.nav_mypage_title))
                 R.id.communityWriteFragment -> {
                     setTitle("글쓰기")
+                    hideBottomNav()
+                }
+                R.id.communityListFragment -> {
+                    setTitle(activityViewModel.communityTitle)
+                }
+                R.id.photoFragment, R.id.photoFullFragment -> {
+                    hideToolbar()
                     hideBottomNav()
                 }
                 else -> hideBottomNav()

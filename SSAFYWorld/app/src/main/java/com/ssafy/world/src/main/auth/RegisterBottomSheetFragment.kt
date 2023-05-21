@@ -88,6 +88,8 @@ class RegisterBottomSheetFragment(private val user: User) : BottomSheetDialogFra
             }
             ApplicationClass.sharedPreferences.saveUser(user)
             authViewModel.insertUser(user)
+            findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
+            dismiss()
         }
     }
 

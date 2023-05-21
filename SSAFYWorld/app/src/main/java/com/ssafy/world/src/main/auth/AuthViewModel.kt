@@ -45,4 +45,16 @@ class AuthViewModel : ViewModel() {
         Log.d(TAG, "isEmailDuplicate: ${isDuplicated.value}")
     }
 
+    fun login(email: String, password: String) = viewModelScope.launch {
+        try {
+            Log.d(TAG, "login2: ${_user.value}")
+            val getUser: User = repository.login(email, password)
+            Log.d(TAG, "login1: $getUser")
+            _user.postValue(getUser)
+            Log.d(TAG, "login: ${_user.value}")
+        } catch (e: Exception) {
+
+        }
+    }
+
 }

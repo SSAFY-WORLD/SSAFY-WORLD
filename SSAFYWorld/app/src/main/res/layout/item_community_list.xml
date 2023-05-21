@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/_8sdp">
+    android:paddingVertical="@dimen/_12sdp"
+    android:paddingHorizontal="@dimen/_16sdp">
+
 
     <TextView
         android:id="@+id/title"
@@ -15,6 +18,7 @@
         android:singleLine="true"
         android:textSize="@dimen/_16sdp"
         android:textStyle="bold"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -26,8 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_marginVertical="@dimen/_8sdp"
         android:ellipsize="end"
-        android:maxLines="1"
-        android:singleLine="true"
+        android:maxLines="2"
         android:textSize="@dimen/_12sdp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/list_ll_inform"
@@ -46,8 +49,9 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
+            android:id="@+id/user_profile"
+            android:layout_width="@dimen/_18sdp"
+            android:layout_height="match_parent"
             android:src="@drawable/default_profile_image" />
 
         <TextView
@@ -72,8 +76,8 @@
             android:layout_weight="1" />
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:layout_width="@dimen/_12sdp"
-            android:layout_height="@dimen/_12sdp"
+            android:layout_width="@dimen/_10sdp"
+            android:layout_height="@dimen/_10sdp"
             android:layout_gravity="center"
             android:src="@drawable/ic_photo_gray" />
 
@@ -86,8 +90,8 @@
             tools:text="0" />
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:layout_width="@dimen/_12sdp"
-            android:layout_height="@dimen/_12sdp"
+            android:layout_width="@dimen/_10sdp"
+            android:layout_height="@dimen/_10sdp"
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/_8sdp"
             android:src="@drawable/ic_comment_gray" />
