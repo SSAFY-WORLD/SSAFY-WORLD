@@ -4,13 +4,10 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.gson.Gson
 import com.ssafy.world.R
-import com.ssafy.world.config.ApplicationClass
 import com.ssafy.world.config.BaseFragment
-import com.ssafy.world.data.model.Community
 import com.ssafy.world.data.model.Photo
 import com.ssafy.world.databinding.FragmentPhotoBinding
 
@@ -23,6 +20,7 @@ class PhotoFragment :
         PhotoGridAdapter(myContext)
     }
 
+    private var imageCount = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,9 +36,24 @@ class PhotoFragment :
             adapter = myAdapter
         }
 
+
+        myAdapter.checkBoxClickListener = object : PhotoGridAdapter.CheckBoxClickListener {
+            override fun onClick(data: Photo) {
+                imageCount += if (data.isSelected) 1 else -1
+                photoTvCount.visibility = if (imageCount > 0) View.VISIBLE else View.GONE
+                photoTvCount.text = imageCount.toString()
+            }
+        }
+
+        myAdapter.itemClickListener = object : PhotoGridAdapter.ItemClickListener {
+            override fun onClick(data: Photo) {
+                PhotoFullDialog(data.url).show(requireActivity().supportFragmentManager, "")
+            }
+        }
+
         photoBtnComplete.setOnClickListener {
             val selectedPhotos = arrayListOf<Photo>()
-            myAdapter.currentList.forEach{
+            myAdapter.currentList.forEach {
                 if (it.isSelected) {
                     selectedPhotos.add(it)
                 }

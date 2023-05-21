@@ -36,6 +36,7 @@ class CommunityListFragment : BaseFragment<FragmentCommunityListBinding>(Fragmen
         initListener()
 
         communityViewModel.getAllCommunities(activityViewModel.entryCommunityCollection)
+        Log.d(TAG, "onViewCreated: ")
     }
 
 
@@ -70,6 +71,7 @@ class CommunityListFragment : BaseFragment<FragmentCommunityListBinding>(Fragmen
     private fun initListener() {
         communityViewModel.communityList.observe(viewLifecycleOwner) {
             if(!it.isEmpty()) {
+                Log.d(TAG, "initListener: $communityList")
                 communityList = it
                 myAdapter.submitList(communityList.toMutableList())
             }

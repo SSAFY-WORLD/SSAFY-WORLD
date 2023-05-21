@@ -44,7 +44,6 @@ class CommunityViewModel : ViewModel() {
     val replyDeleteSuccess: LiveData<Boolean>
         get() = _replyDeleteSuccess
 
-
     fun insertCommunity(community: Community, collection: String) = viewModelScope.launch {
         try {
             _community.value = repository.insertCommunity(community, collection)
@@ -90,6 +89,7 @@ class CommunityViewModel : ViewModel() {
                 _comments.value = ArrayList()
             }
         }
+
     fun deleteComment(collection: String, community: Community, commentId: String) =
         viewModelScope.launch {
             val success = repository.deleteComment(collection, community, commentId)
@@ -130,11 +130,10 @@ class CommunityViewModel : ViewModel() {
 
     fun deleteReplyById(replyId: String, commentId: String) = viewModelScope.launch {
         val success = CommunityRepository.deleteReplyById(replyId, commentId)
-        if(success) {
+        if (success) {
             getRepliesByCommentId(commentId)
         }
     }
-
 
 
 }

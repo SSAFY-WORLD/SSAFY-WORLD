@@ -40,6 +40,17 @@ class PhotoGridAdapter(val mContext: Context) : ListAdapter<Photo, PhotoGridAdap
         }
     }
 
+    interface ItemClickListener {
+        fun onClick(data: Photo)
+    }
+
+    lateinit var itemClickListener: ItemClickListener
+    interface CheckBoxClickListener {
+        fun onClick(data: Photo)
+    }
+
+    lateinit var checkBoxClickListener: CheckBoxClickListener
+
     inner class MyViewHolder(private val binding: ItemPhotoCheckboxBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -59,6 +70,10 @@ class PhotoGridAdapter(val mContext: Context) : ListAdapter<Photo, PhotoGridAdap
             // 체크박스 클릭 리스너 설정
             checkbox.setOnCheckedChangeListener { _, isChecked ->
                 data.isSelected = isChecked
+                checkBoxClickListener.onClick(data)
+            }
+            image.setOnClickListener {
+                itemClickListener.onClick(data)
             }
         }
     }

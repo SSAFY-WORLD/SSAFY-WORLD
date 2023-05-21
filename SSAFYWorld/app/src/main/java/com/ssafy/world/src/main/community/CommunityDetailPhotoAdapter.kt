@@ -3,6 +3,7 @@ package com.ssafy.world.src.main.community
 import android.content.Context
 import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.DiffUtil
@@ -10,7 +11,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.ssafy.world.data.model.Comment
+import com.ssafy.world.data.model.Photo
 import com.ssafy.world.databinding.ItemCommunityDetailPhotoBinding
 import com.ssafy.world.databinding.ItemPhotoBtnDeleteBinding
 
@@ -40,15 +44,21 @@ class CommunityDetailPhotoAdapter(val mContext: Context) : ListAdapter<String, C
         }
     }
 
+    interface ItemClickListener {
+        fun onClick(data: String)
+    }
+
+    lateinit var itemClickListener: ItemClickListener
+
     inner class MyViewHolder(private val binding: ItemCommunityDetailPhotoBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         init {
             val displayMetrics = itemView.resources.displayMetrics
             val screenWidth = displayMetrics.widthPixels
-            val itemSize = screenWidth / 2
+            val itemSize = (screenWidth * 0.9).toInt()
             val widthSize = screenWidth
-            binding.root.layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, itemSize).apply {
+            binding.root.layoutParams = LinearLayout.LayoutParams(itemSize, itemSize).apply {
                 gravity = Gravity.CENTER
             }
         }
@@ -57,6 +67,8 @@ class CommunityDetailPhotoAdapter(val mContext: Context) : ListAdapter<String, C
                 .load(data)
                 .transform(CenterCrop(), RoundedCorners(30))
                 .into(binding.image)
+
+            itemView.setOnClickListener { itemClickListener.onClick(data) }
         }
     }
 }

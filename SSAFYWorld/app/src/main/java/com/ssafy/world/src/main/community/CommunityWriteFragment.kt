@@ -1,7 +1,6 @@
 package com.ssafy.world.src.main.community
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
@@ -35,7 +34,7 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding>(
 
     private var photoUrlList: ArrayList<String> = arrayListOf()
 
-    private var isEdit : Boolean = false
+    private var isEdit: Boolean = false
     private var communityId = ""
     private lateinit var curCommunity: Community
 
@@ -45,10 +44,11 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding>(
 
         communityId = args.communityId
 
-        if(communityId != "") {
+        if (communityId != "") {
             isEdit = true
             communityViewModel.fetchCommunityById(args.communityName, communityId)
         }
+
         initRecyclerView()
         initButton()
         initPhoto()
@@ -64,30 +64,57 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding>(
 
     private fun initButton() = with(binding) {
         writeBtnImage.setOnClickListener {
+            activityViewModel.title = titleEditTextView.text.toString()
+            activityViewModel.content = contentEditTextView.text.toString()
             navController.navigate(R.id.action_communityWriteFragment_to_photoFragment)
         }
         writeBtnComplete.setOnClickListener {
+            val curTitle = titleEditTextView.text.toString().trim()
+            val curContent = contentEditTextView.text.toString().trim()
+
+            if (curTitle.isEmpty()) {
+                titleEditTextView.error = "제목을 입력해주세요."
+                titleEditTextView.requestFocus()
+                return@setOnClickListener
+            }
+
+            if (curContent.isEmpty()) {
+                contentEditTextView.error = "내용을 입력해주세요."
+                contentEditTextView.requestFocus()
+                return@setOnClickListener
+            }
+
             showLoadingDialog(myContext)
             val curUser = ApplicationClass.sharedPreferences.getUser()
             val curPost = Community().apply {
                 userId = curUser!!.email
                 userNickname = curUser!!.nickname
                 userProfile = curUser!!.profilePhoto
-                title = titleEditTextView.text.toString()
-                content = contentEditTextView.text.toString()
+                title = curTitle
+                content = curContent
                 time = System.currentTimeMillis()
                 photoUrls = photoUrlList
             }
-            if(!isEdit) {
-                communityViewModel.insertCommunity(curPost, activityViewModel.entryCommunityCollection)
+            if (!isEdit) {
+                communityViewModel.insertCommunity(
+                    curPost,
+                    activityViewModel.entryCommunityCollection
+                )
             } else {
                 curPost.id = curCommunity.id
-                communityViewModel.updateCommunity(activityViewModel.entryCommunityCollection, curPost)
+                communityViewModel.updateCommunity(
+                    activityViewModel.entryCommunityCollection,
+                    curPost
+                )
             }
         }
     }
 
-    private fun initPhoto() {
+    private fun initPhoto() = with(binding) {
+        titleEditTextView.setText(activityViewModel.title)
+        contentEditTextView.setText(activityViewModel.content)
+        activityViewModel.title = ""
+        activityViewModel.content = ""
         val photoListJson = arguments?.getString("photoListJson") ?: return
         val gson = Gson()
         val listType: Type = object : TypeToken<ArrayList<Photo>>() {}.type
@@ -97,11 +124,11 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding>(
                 add(it.url)
             }
         }
+        writeCv.visibility = View.VISIBLE
         initRecyclerView()
     }
 
     private fun initRecyclerView() = with(binding) {
-        writeCv.visibility = View.VISIBLE
         myAdapter.submitList(photoUrlList.toMutableList())
         writeRvPhoto.apply {
             layoutManager = LinearLayoutManager(myContext, LinearLayoutManager.HORIZONTAL, false)
@@ -117,16 +144,13 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding>(
 
     private fun initListener() = with(communityViewModel) {
         communityViewModel.community.observe(viewLifecycleOwner) {
-            Log.d(TAG, "initListener: $it")
-            Log.d(TAG, "initListener: $isEdit")
-            if(isEdit) {
+            if (isEdit) {
                 curCommunity = it
                 initView()
                 return@observe
-            }
-            else {
+            } else {
                 if (it.id != "") {
-                    Toast.makeText(myContext, "글이 등록되었습니다.", Toast.LENGTH_SHORT).show()
+                    showCustomToast("글이 등록되었습니다.")
                     navController.navigate(R.id.action_communityWriteFragment_to_communityListFragment)
                 } else {
                     Toast.makeText(myContext, "글이 등록에 실패했습니다.", Toast.LENGTH_SHORT).show()
@@ -136,13 +160,17 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding>(
         }
         communityViewModel.updateSuccess.observe(viewLifecycleOwner) {
             dismissLoadingDialog()
-            if(it) {
+            if (it) {
                 showCustomToast("수정에 성공했습니다.")
-                val action = CommunityWriteFragmentDirections.actionCommunityWriteFragmentToCommunityDetailFragment(communityId)
+                val action =
+                    CommunityWriteFragmentDirections.actionCommunityWriteFragmentToCommunityDetailFragment(
+                        communityId
+                    )
                 navController.navigate(action)
             } else {
                 showCustomToast("수정에 성공했습니다.")
             }
         }
     }
+
 }

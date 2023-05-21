@@ -24,6 +24,7 @@ import com.ssafy.world.databinding.FragmentCommunityDetailBinding
 import com.ssafy.world.databinding.ItemCommunityCommentBinding
 import com.ssafy.world.src.main.MainActivity
 import com.ssafy.world.src.main.MainActivityViewModel
+import com.ssafy.world.src.main.photo.PhotoFullDialog
 
 private const val TAG = "CommunityDetailFragment"
 
@@ -88,6 +89,13 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
             layoutManager = LinearLayoutManager(myContext, LinearLayoutManager.VERTICAL, false)
             adapter = myAdapter
         }
+        myAdapter.itemClickListener = object : CommunityDetailPhotoAdapter.ItemClickListener {
+            override fun onClick(data: String) {
+                PhotoFullDialog(data).show(requireActivity().supportFragmentManager, "")
+            }
+        }
+
+
         commentAdapter.submitList(commentList.toMutableList())
         commentRecyclerview.apply {
             layoutManager = LinearLayoutManager(myContext, LinearLayoutManager.VERTICAL, false)
@@ -124,6 +132,8 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
             object : CommunityDetailCommentAdapter.ReplyClickListener {
                 override fun onClick(view: View, data: Comment, position: Int) {
                     commentPosition = position
+//                    replyTvMessage.visibility = View.VISIBLE
+                    //replyTvMessage.text = "${data.userNickname} 님에게 답글 남기는 중.."
                     commentRecyclerview.scrollToPosition(position)
                     // 에딧텍스트에 포커스 설정
                     commentInput.requestFocus()
@@ -200,9 +210,8 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
 
         communityViewModel.deleteSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {
-                // 삭제에 성공한 경우, 해당 프래그먼트를 닫아 팝 시킴
                 showCustomToast("커뮤니티 삭제되었습니다.")
-                parentFragmentManager.popBackStack()
+                navController.navigate(R.id.action_communityDetailFragment_to_communityListFragment)
             } else {
                 showCustomToast("커뮤니티 삭제에 실패했습니다.")
             }
@@ -296,6 +305,7 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
         dialog.show()
     }
 
+
     private fun detectKeyboard() {
         val rootView = requireActivity().window.decorView.rootView
         var isKeyboardVisible = false
@@ -319,5 +329,9 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
                 isReply = ""
             }
         }
+    }
+    override fun onResume() {
+        super.onResume()
+        Log.d(TAG, "onResume: ")
     }
 }
