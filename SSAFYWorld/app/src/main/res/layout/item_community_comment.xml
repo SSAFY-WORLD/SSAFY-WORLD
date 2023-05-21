@@ -1,57 +1,123 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginVertical="@dimen/_12sdp">
-
-    <ImageView
-        android:id="@+id/profileImage"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:src="@drawable/default_profile_image"
-        android:layout_gravity="center"/>
+    android:layout_marginVertical="@dimen/_12sdp"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:layout_gravity="center">
+        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:text="Username" />
+        <ImageView
+            android:id="@+id/profileImage"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:src="@drawable/default_profile_image" />
 
-        <TextView
-            android:id="@+id/content"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:text="Comment content" />
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
 
-        <TextView
-            android:id="@+id/time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="2 분전"
-            android:textSize="10sp"
-            android:layout_marginTop="@dimen/_2sdp"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Username"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:text="2 분전"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/_8sdp" />
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Comment content"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/reply_btn_show"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_4sdp"
+                    android:text="답글 보기"
+                    android:textSize="@dimen/_8sdp"
+                    android:paddingLeft="0dp"
+                    android:paddingTop="@dimen/_4sdp"
+                    android:paddingBottom="@dimen/_4sdp"
+                    android:paddingEnd="@dimen/_4sdp"/>
+
+                <TextView
+                    android:id="@+id/reply_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_4sdp"
+                    android:text="답글 달기"
+                    android:textSize="@dimen/_8sdp"
+                    android:visibility="gone"
+                    android:paddingLeft="0dp"
+                    tools:visibility="visible"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:paddingTop="@dimen/_4sdp"
+                    android:paddingBottom="@dimen/_4sdp"
+                    android:paddingEnd="@dimen/_4sdp"/>
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+
+        <ImageButton
+            android:id="@+id/comment_more"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginRight="@dimen/_4sdp"
+            android:background="@color/white"
+            android:src="@drawable/ic_more"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
     </LinearLayout>
 
-    <ImageButton
-        android:id="@+id/comment_more"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:src="@drawable/ic_more"
-        android:background="@color/white"
-        android:layout_marginRight="@dimen/_4sdp"/>
+    <!-- 들여쓰기 간격을 주기 위한 부분 -->
+    <LinearLayout
+        android:id="@+id/reply_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_24sdp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/reply_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -24,6 +24,10 @@ class CommunityViewModel : ViewModel() {
     val comments: LiveData<ArrayList<Comment>>
         get() = _comments
 
+    private val _replies = MutableLiveData<ArrayList<Comment>>()
+    val replies: LiveData<ArrayList<Comment>>
+        get() = _replies
+
     private val _updateSuccess = MutableLiveData<Boolean>()
     val updateSuccess: LiveData<Boolean>
         get() = _updateSuccess
@@ -31,6 +35,15 @@ class CommunityViewModel : ViewModel() {
     private val _deleteSuccess = MutableLiveData<Boolean>()
     val deleteSuccess: LiveData<Boolean>
         get() = _deleteSuccess
+
+    private val _commentDeleteSuccess = MutableLiveData<Boolean>()
+    val commentDeleteSuccess: LiveData<Boolean>
+        get() = _commentDeleteSuccess
+
+    private val _replyDeleteSuccess = MutableLiveData<Boolean>()
+    val replyDeleteSuccess: LiveData<Boolean>
+        get() = _replyDeleteSuccess
+
 
     fun insertCommunity(community: Community, collection: String) = viewModelScope.launch {
         try {
@@ -66,10 +79,26 @@ class CommunityViewModel : ViewModel() {
             }
         }
 
+    fun insertReply(collection: String, community: Community, comment: Comment) =
+        viewModelScope.launch {
+            val success = repository.insertReply(collection, community, comment)
+            if (success) {
+                val communityId = comment.communityId
+                val comments = repository.getRepliesByCommentId(comment.commentId)
+                _replies.value = comments
+            } else {
+                _comments.value = ArrayList()
+            }
+        }
+    fun deleteComment(collection: String, community: Community, commentId: String) =
+        viewModelScope.launch {
+            val success = repository.deleteComment(collection, community, commentId)
+            _commentDeleteSuccess.value = success
+        }
+
     fun getCommentsByCommunityId(communityId: String) = viewModelScope.launch {
         try {
             val comments = repository.getCommentsByCommunityId(communityId)
-            Log.d(TAG, "getCommentsByCommunityId: $comments")
             _comments.value = comments
         } catch (e: Exception) {
             _comments.value = ArrayList()
@@ -92,6 +121,20 @@ class CommunityViewModel : ViewModel() {
             _community.value = community
         }
     }
+
+    fun getRepliesByCommentId(commentId: String) = viewModelScope.launch {
+        val replies = CommunityRepository.getRepliesByCommentId(commentId)
+        Log.d(TAG, "getRepliesByCommentId22: $replies")
+        _replies.value = replies
+    }
+
+    fun deleteReplyById(replyId: String, commentId: String) = viewModelScope.launch {
+        val success = CommunityRepository.deleteReplyById(replyId, commentId)
+        if(success) {
+            getRepliesByCommentId(commentId)
+        }
+    }
+
 
 
 }

@@ -7,6 +7,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Comment(
     var id: String,
+    var commentId: String,
     var communityId: String,
     var userId: String,
     var userNickname: String,
@@ -17,6 +18,6 @@ data class Comment(
     var replies: ArrayList<Comment> = ArrayList()
 ) : Parcelable {
 
-    constructor() : this("", "", "", "", "", "", 0, "")
+    constructor() : this("", "", "", "", "", "", "", 0, "")
 
 }

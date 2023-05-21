@@ -42,4 +42,5 @@
     <string name="community_cancel">취소</string>
     <string name="community_yes">확인</string>
     <string name="comment_hint">댓글을 남겨주세요</string>
+    <string name="reply">답글 달기</string>
 </resources>
