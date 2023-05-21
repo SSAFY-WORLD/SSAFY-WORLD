@@ -212,7 +212,7 @@ object CommunityRepository {
         Log.d(TAG, "getCommentsByCommunityId: $communityId")
         return try {
             val querySnapshot = curCollection.whereEqualTo("communityId", communityId)
-                .orderBy("time", Query.Direction.DESCENDING).get().await()
+                .orderBy("time").get().await()
             val commentList = ArrayList<Comment>()
             for (document in querySnapshot.documents) {
                 val comment = document.toObject(Comment::class.java)

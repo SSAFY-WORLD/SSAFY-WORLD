@@ -24,7 +24,7 @@ class CommunityListFragment : BaseFragment<FragmentCommunityListBinding>(Fragmen
     private var communityList: ArrayList<Community> = arrayListOf()
 
     private val myAdapter: CommunityListAdapter by lazy {
-        CommunityListAdapter()
+        CommunityListAdapter(myContext)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

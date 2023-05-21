@@ -46,6 +46,7 @@
                 app:layout_constraintStart_toStartOf="parent">
 
                 <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/user_profile"
                     android:layout_width="@dimen/_20sdp"
                     android:layout_height="@dimen/_20sdp"
                     android:src="@drawable/default_profile_image" />

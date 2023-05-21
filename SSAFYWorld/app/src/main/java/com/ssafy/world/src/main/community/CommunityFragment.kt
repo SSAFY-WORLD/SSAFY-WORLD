@@ -11,7 +11,10 @@ import com.ssafy.world.src.main.MainActivityViewModel
 
 private const val TAG = "CommunityFragment_싸피"
 
-class CommunityFragment : BaseFragment<FragmentCommunityBinding>(FragmentCommunityBinding::bind, R.layout.fragment_community) {
+class CommunityFragment : BaseFragment<FragmentCommunityBinding>(
+    FragmentCommunityBinding::bind,
+    R.layout.fragment_community
+) {
     private val activityViewModel: MainActivityViewModel by activityViewModels()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -19,12 +22,26 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(FragmentCommuni
         initButton()
     }
 
-    private fun initButton() {
-        with(binding) {
-            communityCvFreeBoard.setOnClickListener {
-                activityViewModel.entryCommunityCollection = "free"
-                navController.navigate(R.id.action_communityFragment_to_communityListFragment)
-            }
+    private fun initButton() = with(binding) {
+
+        communityFree.setOnClickListener {
+            activityViewModel.entryCommunityCollection = "free"
+            navController.navigate(R.id.action_communityFragment_to_communityListFragment)
         }
+        communityQuestion.setOnClickListener {
+            activityViewModel.entryCommunityCollection = "question"
+            navController.navigate(R.id.action_communityFragment_to_communityListFragment)
+        }
+        communityMarket.setOnClickListener {
+            activityViewModel.entryCommunityCollection = "market"
+            navController.navigate(R.id.action_communityFragment_to_communityListFragment)
+        }
+
+        communiyCompany.setOnClickListener {
+            activityViewModel.entryCommunityCollection = "company"
+            navController.navigate(R.id.action_communityFragment_to_communityListFragment)
+        }
+
+
     }
 }

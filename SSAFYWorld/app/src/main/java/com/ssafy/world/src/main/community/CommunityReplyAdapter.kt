@@ -53,8 +53,9 @@ class CommunityReplyAdapter(val mContext: Context) :
 
         fun bind(data: Comment) = with(binding) {
             Glide.with(mContext)
-                .load(data)
-                .transform(FitCenter(), RoundedCorners(30))
+                .load(data.userProfile)
+                .transform(FitCenter())
+                .circleCrop()
                 .into(binding.profileImage)
             if(data.userId == ApplicationClass.sharedPreferences.getUser()!!.email) {
                 commentMore.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_close_gray))

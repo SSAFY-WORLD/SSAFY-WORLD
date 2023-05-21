@@ -72,6 +72,7 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding>(
             val curPost = Community().apply {
                 userId = curUser!!.email
                 userNickname = curUser!!.nickname
+                userProfile = curUser!!.profilePhoto
                 title = titleEditTextView.text.toString()
                 content = contentEditTextView.text.toString()
                 time = System.currentTimeMillis()

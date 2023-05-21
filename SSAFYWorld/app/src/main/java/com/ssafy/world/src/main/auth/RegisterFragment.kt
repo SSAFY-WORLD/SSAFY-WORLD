@@ -51,6 +51,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(
 
         pwdCheckEditTextView.addTextChangedListener {
             checkEditTextValues()
+            checkPasswordValues()
         }
 
         nameEditTextView.addTextChangedListener {
@@ -78,6 +79,19 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(
             registerBtn.setBackgroundColor(ContextCompat.getColor(myContext, R.color.light_blue))
             registerBtn.setTextColor(ContextCompat.getColor(myContext, R.color.white))
 
+        }
+    }
+
+    private fun checkPasswordValues() = with(binding) {
+        val password = pwdEditTextView.text.toString()
+        val confirmPassword = pwdCheckEditTextView.text.toString()
+
+        if (password.isEmpty() || confirmPassword.isEmpty()) {
+            binding.pwdCheckTextField.error = null
+        } else if (password != confirmPassword) {
+            binding.pwdCheckTextField.error = "비밀번호가 일치하지 않습니다."
+        } else {
+            binding.pwdCheckTextField.error = null
         }
     }
 

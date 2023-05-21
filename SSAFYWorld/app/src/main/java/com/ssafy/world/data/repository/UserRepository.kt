@@ -63,4 +63,27 @@ object UserRepository {
             false
         }
     }
+
+    suspend fun login(email: String, password: String): User {
+        Log.d(TAG, "login: $email $password")
+        return try {
+            val querySnapshot = userCollection
+                .whereEqualTo("email", email)
+                .whereEqualTo("pwd", password)
+                .get()
+                .await()
+
+            if (!querySnapshot.isEmpty) {
+                val userDocument = querySnapshot.documents.first()
+                val user = userDocument.toObject(User::class.java)?.apply {
+                    id = userDocument.id
+                }
+                user!!
+            } else {
+                User()
+            }
+        } catch (e: Exception) {
+            User()
+        }
+    }
 }

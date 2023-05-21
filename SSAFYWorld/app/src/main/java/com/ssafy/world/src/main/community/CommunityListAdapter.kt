@@ -1,16 +1,19 @@
 package com.ssafy.world.src.main.community
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.ssafy.world.data.model.Community
 import com.ssafy.world.databinding.ItemCommunityListBinding
 import com.ssafy.world.utils.getFormattedTime
 
-class CommunityListAdapter() :
+class CommunityListAdapter(val mContext: Context) :
     ListAdapter<Community, CommunityListAdapter.MyViewHolder>(ItemComparator) {
     companion object ItemComparator : DiffUtil.ItemCallback<Community>() {
         override fun areItemsTheSame(oldItem: Community, newItem: Community): Boolean {
@@ -46,6 +49,11 @@ class CommunityListAdapter() :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(data: Community) = with(binding) {
+            Glide.with(mContext)
+                .load(data.userProfile)
+                .transform(FitCenter())
+                .circleCrop()
+                .into(binding.userProfile)
             title.text = data.title
             content.text = data.content
             nickname.text = data.userNickname

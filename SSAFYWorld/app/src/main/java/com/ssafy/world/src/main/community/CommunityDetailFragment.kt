@@ -13,6 +13,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.ssafy.world.R
 import com.ssafy.world.config.ApplicationClass
 import com.ssafy.world.config.BaseFragment
@@ -70,6 +72,11 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
         nickname.text = community.userNickname
         time.text = community.getFormattedTime()
         detailContent.text = community.content
+        Glide.with(myContext)
+            .load(community.userProfile)
+            .transform(FitCenter())
+            .circleCrop()
+            .into(binding.userProfile)
 
 
         if (curUser?.email == community?.userId) {
