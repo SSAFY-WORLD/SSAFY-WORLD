@@ -19,6 +19,8 @@ object UserRepository {
         return try {
             val newUserRef = userCollection.add(user).await()
             user.apply { id = newUserRef.id }
+            newUserRef.set(user).await()
+            user
         } catch (e: Exception) {
             user
         }
@@ -53,12 +55,21 @@ object UserRepository {
         }
     }
 
-    suspend fun isEmailDuplicate(email: String): Boolean {
+    suspend fun isEmailDuplicate(email: String): User? {
         return try {
             val querySnapshot = userCollection.whereEqualTo("email", email).get().await()
-            !querySnapshot.isEmpty
+            if (!querySnapshot.isEmpty) {
+                val userDocument = querySnapshot.documents.first()
+                val user = userDocument.toObject(User::class.java)?.apply {
+                    id = userDocument.id
+                }
+                Log.d(TAG, "auth: $user")
+                user // 중복됨
+            } else {
+                null // 중복 안됨
+            }
         } catch (e: Exception) {
-            false
+            null
         }
     }
 

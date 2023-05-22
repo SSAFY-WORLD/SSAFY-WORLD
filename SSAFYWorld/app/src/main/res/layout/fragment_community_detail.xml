@@ -11,7 +11,6 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/detail_bottom"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.7"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ScrollViewCount">
@@ -80,7 +79,7 @@
                     android:layout_marginLeft="@dimen/_8sdp"
                     android:background="@color/white"
                     android:src="@drawable/ic_more"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
             </LinearLayout>
 
@@ -99,45 +98,42 @@
                 android:elevation="1dp"
                 android:nestedScrollingEnabled="false" />
 
-            <FrameLayout
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:id="@+id/like_ll"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginHorizontal="@dimen/_16sdp"
                 android:orientation="horizontal"
-                android:layout_marginHorizontal="@dimen/_16sdp">
+                android:paddingVertical="@dimen/_4sdp">
 
-                <LinearLayout
+                <CheckBox
+                    android:id="@+id/like_checkbox"
+                    android:layout_width="@dimen/_16sdp"
+                    android:layout_height="@dimen/_16sdp"
+                    android:background="@drawable/checkbox_like"
+                    android:button="@null"
+                    android:padding="@dimen/_8sdp"/>
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="@dimen/_8sdp"
-                    android:paddingVertical="@dimen/_4sdp">
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:text="좋아요"
+                    android:textSize="@dimen/_10ssp" />
 
-                    <CheckBox
-                        android:layout_width="@dimen/_16sdp"
-                        android:layout_height="@dimen/_16sdp"
-                        android:background="@drawable/checkbox_like"
-                        android:button="@null" />
+                <TextView
+                    android:id="@+id/like_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:textColor="@color/light_blue"
+                    android:textSize="@dimen/_10ssp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="좋아요"
-                        android:layout_marginStart="@dimen/_4sdp"
-                        android:textSize="@dimen/_10ssp"
-                        android:layout_gravity="center"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="1"
-                        android:textColor="@color/light_blue"
-                        android:textStyle="bold"
-                        android:layout_marginStart="@dimen/_4sdp"
-                        android:textSize="@dimen/_10ssp"
-                        android:layout_gravity="center"/>
-                </LinearLayout>
-
-            </FrameLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -149,9 +145,9 @@
                 android:id="@+id/comment_recyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_16sdp"
                 android:elevation="1dp"
-                android:nestedScrollingEnabled="false"
-                android:layout_marginHorizontal="@dimen/_16sdp" />
+                android:nestedScrollingEnabled="false" />
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
@@ -174,9 +170,9 @@
             android:layout_marginStart="@dimen/_16sdp"
             android:background="@drawable/message_input_background"
             android:hint="@string/comment_hint"
+            android:paddingStart="@dimen/_4sdp"
             android:textColorHint="@color/light_dark_gray"
             android:textSize="@dimen/_12sdp"
-            android:paddingStart="@dimen/_4sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/comment_btn_write"
             app:layout_constraintStart_toStartOf="parent"

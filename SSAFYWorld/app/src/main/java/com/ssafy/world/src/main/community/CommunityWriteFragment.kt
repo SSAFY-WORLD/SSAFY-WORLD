@@ -92,6 +92,7 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding>(
                 userProfile = curUser!!.profilePhoto
                 title = curTitle
                 content = curContent
+                likeCount = 0
                 time = System.currentTimeMillis()
                 photoUrls = photoUrlList
             }

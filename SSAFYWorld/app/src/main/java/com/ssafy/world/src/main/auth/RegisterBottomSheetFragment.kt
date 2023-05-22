@@ -38,6 +38,7 @@ class RegisterBottomSheetFragment(private val user: User) : BottomSheetDialogFra
         super.onViewCreated(view, savedInstanceState)
         initButton()
         initEditTextListener()
+        initListener()
     }
 
     private fun initEditTextListener() = with(binding) {
@@ -86,10 +87,7 @@ class RegisterBottomSheetFragment(private val user: User) : BottomSheetDialogFra
                 name = nameEditTextView.text.toString()
                 nickname = nickEditTextView.text.toString()
             }
-            ApplicationClass.sharedPreferences.saveUser(user)
             authViewModel.insertUser(user)
-            findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
-            dismiss()
         }
     }
 
@@ -98,7 +96,8 @@ class RegisterBottomSheetFragment(private val user: User) : BottomSheetDialogFra
             if (user.id != "") {
                 Toast.makeText(context, "회원가입에 성공했습니다.", Toast.LENGTH_SHORT).show()
                 ApplicationClass.sharedPreferences.saveUser(user)
-                findNavController().navigate(R.id.action_registerBottomSheetFragment_to_mainFragment)
+                findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
+                dismiss()
             } else {
                 dismiss()
                 Toast.makeText(context, "회원가입에 실패했습니다.", Toast.LENGTH_SHORT).show()

@@ -52,15 +52,10 @@ class LoginFragment :
             navController.navigate(R.id.action_loginFragment_to_registerFragment)
         }
         loginBtn.setOnClickListener {
-            navController.navigate(R.id.action_loginFragment_to_mainFragment)
-            CoroutineScope(Dispatchers.IO).launch {
-                val token = FCMService.getToken()
-                withContext(Dispatchers.Main) {
-                    showCustomToast(token)
-                }
-            }
+            showLoadingDialog(myContext)
             val email = idEditTextView.text.toString()
             val pwd = pwdEditTextView.text.toString()
+
             authViewModel.login(email, pwd)
         }
         loginBtnKakao.setOnClickListener {
@@ -168,7 +163,6 @@ class LoginFragment :
         user.observe(viewLifecycleOwner) { user ->
             dismissLoadingDialog()
             if (user.id != "") {
-                showCustomToast("로그인에 성공했습니다.")
                 ApplicationClass.sharedPreferences.saveUser(user)
                 navController.navigate(R.id.action_loginFragment_to_mainFragment)
             } else {
@@ -178,8 +172,8 @@ class LoginFragment :
 
         isDuplicated.observe(viewLifecycleOwner) {
             dismissLoadingDialog()
-            if (it) {
-                ApplicationClass.sharedPreferences.saveUser(curUser)
+            if (it.id != "") {
+                ApplicationClass.sharedPreferences.saveUser(it)
                 navController.navigate(R.id.action_loginFragment_to_mainFragment)
             } else {
                 RegisterBottomSheetFragment(curUser).show(

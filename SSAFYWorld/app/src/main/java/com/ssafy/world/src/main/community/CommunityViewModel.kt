@@ -44,6 +44,12 @@ class CommunityViewModel : ViewModel() {
     val replyDeleteSuccess: LiveData<Boolean>
         get() = _replyDeleteSuccess
 
+    private val _likeCount = MutableLiveData<Int>()
+    val likeCount: LiveData<Int>
+        get() = _likeCount
+
+
+
     fun insertCommunity(community: Community, collection: String) = viewModelScope.launch {
         try {
             _community.value = repository.insertCommunity(community, collection)
@@ -133,6 +139,14 @@ class CommunityViewModel : ViewModel() {
         if (success) {
             getRepliesByCommentId(commentId)
         }
+    }
+
+    fun onIncrementLikeButtonClicked(collection: String, communityId: String, userId: String) = viewModelScope.launch {
+        _likeCount.value = repository.incrementCommunityLikeCount(collection, communityId, userId)
+    }
+
+    fun onDecrementLikeButtonClicked(collection: String, communityId: String, userId: String) = viewModelScope.launch {
+        _likeCount.value = repository.decrementCommunityLikeCount(collection, communityId, userId)
     }
 
 

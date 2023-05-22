@@ -60,6 +60,7 @@ class CommunityListAdapter(val mContext: Context) :
             photo.text = data.photoUrls.size.toString()
             comment.text = data.commentCount.toString()
             time.text = getFormattedTime(data.time)
+            likeCount.text = data.likeCount.toString()
             itemView.setOnClickListener {
                 itemClickListener.onClick(it, data, layoutPosition)
             }

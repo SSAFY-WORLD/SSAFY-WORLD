@@ -68,11 +68,14 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
     }
 
     private fun initView() = with(binding) {
-
+        if(community.likedUserIds.contains(curUser!!.id)) {
+            likeCheckbox.isChecked = true
+        }
         detailTitle.text = community.title
         nickname.text = community.userNickname
         time.text = community.getFormattedTime()
         detailContent.text = community.content
+        likeCount.text = community.likeCount.toString()
         Glide.with(myContext)
             .load(community.userProfile)
             .transform(FitCenter())
@@ -144,15 +147,6 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
                     isReply = data.id
                 }
             }
-
-//        commentAdapter.replyAdapters.forEach {
-//            it.replyItemClickListener = object : CommunityReplyAdapter.ReplyItemClickListener {
-//                override fun onClick(view: View, data: Comment, position: Int) {
-//                    communityViewModel.deleteReplyById(data.id, data.commentId)
-//                }
-//            }
-//        }
-
         communityViewModel.getCommentsByCommunityId(community.id)
     }
 
@@ -190,6 +184,17 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
 
         detailBtnMore.setOnClickListener {
             showCommunityOptionView(it)
+        }
+
+        likeCheckbox.setOnCheckedChangeListener { _, isChecked ->
+            Log.d(TAG, "initButton: $curUser")
+            if(isChecked && !community.likedUserIds.contains(curUser!!.id)) {
+                community.likedUserIds.add(curUser!!.id)
+                communityViewModel.onIncrementLikeButtonClicked(curBoard, community.id, curUser!!.id)
+            } else if(!isChecked) {
+                community.likedUserIds.remove(curUser!!.id)
+                communityViewModel.onDecrementLikeButtonClicked(curBoard, community.id, curUser!!.id)
+            }
         }
     }
 
@@ -230,6 +235,10 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
         communityViewModel.replies.observe(viewLifecycleOwner) { it ->
             Log.d(TAG, "initListener: $it")
             commentAdapter.replyAdapters[commentPosition].submitList(it.toMutableList())
+        }
+
+        communityViewModel.likeCount.observe(viewLifecycleOwner) {
+            binding.likeCount.text = it.toString()
         }
     }
 

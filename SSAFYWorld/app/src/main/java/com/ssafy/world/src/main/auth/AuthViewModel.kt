@@ -17,8 +17,8 @@ class AuthViewModel : ViewModel() {
     val user: LiveData<User>
         get() = _user
 
-    private val _isDuplicated = MutableLiveData<Boolean>()
-    val isDuplicated: LiveData<Boolean>
+    private val _isDuplicated = MutableLiveData<User>()
+    val isDuplicated: LiveData<User>
         get() = _isDuplicated
 
     fun insertUser(user: User)  = viewModelScope.launch {
@@ -38,20 +38,18 @@ class AuthViewModel : ViewModel() {
 
     fun isEmailDuplicate(email: String) = viewModelScope.launch {
         try {
-            _isDuplicated.value = repository.isEmailDuplicate(email)
+            _isDuplicated.value = repository.isEmailDuplicate(email) ?: User()
+            Log.d(TAG, "isEmailDuplicate: ${_isDuplicated.value}")
         } catch (e: Exception) {
-            _isDuplicated.value = false
+            User()
         }
-        Log.d(TAG, "isEmailDuplicate: ${isDuplicated.value}")
+
     }
 
     fun login(email: String, password: String) = viewModelScope.launch {
         try {
-            Log.d(TAG, "login2: ${_user.value}")
             val getUser: User = repository.login(email, password)
-            Log.d(TAG, "login1: $getUser")
             _user.postValue(getUser)
-            Log.d(TAG, "login: ${_user.value}")
         } catch (e: Exception) {
 
         }

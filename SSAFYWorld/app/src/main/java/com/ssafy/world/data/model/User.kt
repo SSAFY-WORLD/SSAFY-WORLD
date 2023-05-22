@@ -13,6 +13,7 @@ data class User(
     var profilePhoto: String,
     var kakaoId: String,
     var token: String,
+    var likeList: ArrayList<String> = arrayListOf<String>()
 ): Parcelable {
     constructor() : this("", "", "", "", "", "", "", "")
 

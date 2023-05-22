@@ -107,10 +107,11 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(
         }
 
         isDuplicated.observe(viewLifecycleOwner) {
-            if(it) {
-                Toast.makeText(myContext, "중복된 아이디 입니다.", Toast.LENGTH_SHORT).show()
-            } else {
+            // 중복 이면 null -> user.id == ""
+            if(it.id  == "") {
                 authViewModel.insertUser(curUser)
+            } else {
+                Toast.makeText(myContext, "중복된 아이디 입니다.", Toast.LENGTH_SHORT).show()
             }
         }
     }

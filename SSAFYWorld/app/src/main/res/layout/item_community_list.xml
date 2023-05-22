@@ -50,8 +50,8 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/user_profile"
-            android:layout_width="@dimen/_18sdp"
-            android:layout_height="match_parent"
+            android:layout_width="@dimen/_24sdp"
+            android:layout_height="@dimen/_24sdp"
             android:src="@drawable/default_profile_image" />
 
         <TextView
@@ -69,6 +69,34 @@
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/_4sdp"
             tools:text="5m" />
+
+        <LinearLayout
+            android:id="@+id/like_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/_8sdp">
+
+            <CheckBox
+                android:id="@+id/like_checkbox"
+                android:layout_width="@dimen/_14sdp"
+                android:layout_height="@dimen/_14sdp"
+                android:background="@drawable/checkbox_like"
+                android:button="@null"
+                android:padding="@dimen/_8sdp"/>
+
+            <TextView
+                android:id="@+id/like_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/_4sdp"
+                android:text="0"
+                android:textColor="@color/light_blue"
+                android:textSize="@dimen/_10ssp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
         <View
             android:layout_width="wrap_content"

@@ -1,25 +1,20 @@
 package com.ssafy.world.data.repository
 
 import android.util.Log
-import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.UploadTask
 import com.ssafy.world.data.model.Comment
 import com.ssafy.world.data.model.Community
 import com.ssafy.world.data.model.User
-import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlin.coroutines.suspendCoroutine
-import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 private const val TAG = "CommunityRepository"
 
@@ -163,6 +158,73 @@ object CommunityRepository {
         }
     }
 
+    suspend fun incrementCommunityLikeCount(
+        collection: String,
+        communityId: String,
+        userId: String
+    ): Int {
+        val communityRef = firestore.collection(collection).document(communityId)
+        return try {
+            addLikedUserToCommunity(collection, userId, communityId)
+            firestore.runTransaction { transaction ->
+                val community = transaction.get(communityRef).toObject(Community::class.java)
+                community?.let {
+                    it.likeCount += 1
+                    transaction.set(communityRef, it)
+                }
+                community?.likeCount
+            }.await()
+        } catch (e: Exception) {
+            // Return the current likeCount in case of an error
+            val snapshot = communityRef.get().await()
+            snapshot.toObject(Community::class.java)?.likeCount ?: 0
+        }
+    }
+
+    suspend fun decrementCommunityLikeCount(
+        collection: String,
+        communityId: String,
+        userId: String
+    ): Int {
+        val communityRef = firestore.collection(collection).document(communityId)
+        return try {
+            removeLikedUserFromCommunity(collection, userId, communityId)
+            firestore.runTransaction { transaction ->
+                val community = transaction.get(communityRef).toObject(Community::class.java)
+                community?.let {
+                    it.likeCount -= 1
+                    transaction.set(communityRef, it)
+                }
+                community?.likeCount
+            }.await()
+        } catch (e: Exception) {
+            // Return the current likeCount in case of an error
+            val snapshot = communityRef.get().await()
+            snapshot.toObject(Community::class.java)?.likeCount ?: 0
+        }
+    }
+
+    suspend fun addLikedUserToCommunity(collection: String, userId: String, communityId: String) {
+        val communityRef = firestore.collection(collection).document(communityId)
+        firestore.runTransaction { transaction ->
+            val communitySnapshot = transaction.get(communityRef)
+            val likedUserIds = communitySnapshot.toObject(Community::class.java)?.likedUserIds ?: ArrayList()
+            likedUserIds.add(userId)
+            transaction.update(communityRef, "likedUserIds", likedUserIds)
+        }.await()
+    }
+
+    suspend fun removeLikedUserFromCommunity(collection: String, userId: String, communityId: String) {
+        val communityRef = firestore.collection(collection).document(communityId)
+        firestore.runTransaction { transaction ->
+            val communitySnapshot = transaction.get(communityRef)
+            val likedUserIds = communitySnapshot.toObject(Community::class.java)?.likedUserIds
+            likedUserIds?.remove(userId)
+            transaction.update(communityRef, "likedUserIds", likedUserIds)
+        }.await()
+    }
+
+
     suspend fun deleteComment(
         collection: String,
         community: Community,
@@ -206,6 +268,7 @@ object CommunityRepository {
             }
         }.await()
     }
+
 
     suspend fun getCommentsByCommunityId(communityId: String): ArrayList<Comment> {
         val curCollection = firestore.collection("comment")

@@ -17,7 +17,9 @@ data class Community(
     var time: Long,
     var commentCount: Int = 0,
     var likeCount:Int = 0,
-    var photoUrls: ArrayList<String> = ArrayList()
+    var fcmToken:String = "",
+    var photoUrls: ArrayList<String> = ArrayList(),
+    var likedUserIds: ArrayList<String> = ArrayList(),
 ) : Parcelable {
     constructor() : this("", "","", "","","", 0)
 
