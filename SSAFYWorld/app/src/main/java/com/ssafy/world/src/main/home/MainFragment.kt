@@ -1,60 +1,105 @@
 package com.ssafy.world.src.main.home
 
+
+import android.annotation.SuppressLint
+import android.content.ContentResolver
+import android.database.Cursor
+import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
+import android.provider.CalendarContract
+import android.util.Log
 import android.view.View
-import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.ssafy.world.R
+import com.ssafy.world.config.BaseFragment
+import com.ssafy.world.data.model.Calendar
+import com.ssafy.world.databinding.FragmentMainBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val TAG = "MainFragment"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [MainFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class MainFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+class MainFragment :
+    BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind, R.layout.fragment_main) {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private val myAdapter: MainCalendarAdapter by lazy {
+        MainCalendarAdapter()
+    }
+    private var calendarList: ArrayList<Calendar> = arrayListOf()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // 삼성 캘린더 API를 사용하여 일정 가져오기
+        fetchCalendarEvents(getCalendarId("juyong4190@gmail.com"))
+        initRecycler()
+    }
+
+    private fun initRecycler() = with(binding) {
+        myAdapter.submitList(calendarList.toMutableList())
+        mainCalendarRv.apply {
+            layoutManager = LinearLayoutManager(myContext, LinearLayoutManager.VERTICAL, false)
+            adapter = myAdapter
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main, container, false)
+    @SuppressLint("Range")
+    private fun fetchCalendarEvents(calendarId: Long?) {
+        val contentResolver: ContentResolver = requireContext().contentResolver
+        val uri: Uri = CalendarContract.Events.CONTENT_URI
+        val projection: Array<String> = arrayOf(
+            CalendarContract.Events._ID,
+            CalendarContract.Events.TITLE,
+            CalendarContract.Events.DTSTART,
+            CalendarContract.Events.DTEND
+        )
+        val selection: String = "${CalendarContract.Events.CALENDAR_ID} = ?"
+        val selectionArgs: Array<String> = arrayOf(calendarId.toString())
+        val sortOrder: String = "${CalendarContract.Events.DTSTART} ASC"
+
+        val cursor: Cursor? =
+            contentResolver.query(uri, projection, selection, selectionArgs, sortOrder)
+
+        cursor?.use { cursor ->
+            while (cursor.moveToNext()) {
+                val eventId: Long =
+                    cursor.getLong(cursor.getColumnIndex(CalendarContract.Events._ID))
+                val title: String =
+                    cursor.getString(cursor.getColumnIndex(CalendarContract.Events.TITLE))
+                val startTime: Long =
+                    cursor.getLong(cursor.getColumnIndex(CalendarContract.Events.DTSTART))
+                val endTime: Long =
+                    cursor.getLong(cursor.getColumnIndex(CalendarContract.Events.DTEND))
+
+                // 일정 정보를 사용하여 원하는 작업을 수행할 수 있습니다.
+                calendarList.add(Calendar(eventId, title, startTime, endTime))
+            }
+            myAdapter.submitList(calendarList.toMutableList())
+        }
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MainFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MainFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+
+    @SuppressLint("Range")
+    private fun getCalendarId(calendarDisplayName: String): Long? {
+        val contentResolver: ContentResolver = requireContext().contentResolver
+        val uri: Uri = CalendarContract.Calendars.CONTENT_URI
+        val projection: Array<String> = arrayOf(
+            CalendarContract.Calendars._ID,
+            CalendarContract.Calendars.CALENDAR_DISPLAY_NAME
+        )
+        val selection: String = "${CalendarContract.Calendars.CALENDAR_DISPLAY_NAME} = ?"
+        val selectionArgs: Array<String> = arrayOf(calendarDisplayName)
+
+        val cursor: Cursor? = contentResolver.query(uri, projection, selection, selectionArgs, null)
+
+        var calendarId: Long? = null
+        cursor?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                calendarId = cursor.getLong(cursor.getColumnIndex(CalendarContract.Calendars._ID))
             }
+        }
+        Log.d(TAG, "getCalendarId: $calendarId")
+        return calendarId
     }
+
+
 }
+
+
