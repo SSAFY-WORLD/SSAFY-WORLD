@@ -9,6 +9,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.result.contract.ActivityResultContracts
@@ -27,13 +28,12 @@ import com.ssafy.world.databinding.BottomPermissionBinding
 import com.ssafy.world.src.main.auth.PermmissionBottomSheet
 
 
+private const val TAG = "MainActivity_메인"
 // :: -> method reference
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
     private val activityViewModel: MainActivityViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
 
         setToolbarWithNavcontroller()
         requestPermission()
@@ -120,15 +120,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             .check()
     }
 
-    private val requestPermissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            if (isGranted) {
-                // 권한이 허용된 경우 다음 작업을 수행할 수 있습니다.
-            } else {
-                // 권한이 거부된 경우 사용자에게 알림을 표시하거나 다른 조치를 취해야 합니다.
-            }
-        }
-
     // 권한 요청 실행
     private fun requestPermission() {
         val permission = android.Manifest.permission.READ_EXTERNAL_STORAGE
@@ -136,26 +127,27 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             val hasPermission = Environment.isExternalStorageManager()
             if (!hasPermission) {
                 showConfirmationBottomSheet()
-                return
             }
         } else {
             //showConfirmationDialog()
         }
-        requestPermissionLauncher.launch(permission)
+
     }
 
     private fun showConfirmationBottomSheet() {
+        Log.d(TAG, "showConfirmationBottomSheet: ")
         val bottomSheet = PermmissionBottomSheet()
         bottomSheet.show(supportFragmentManager, "ConfirmationBottomSheet")
         bottomSheet.setOnConfirmationListener {
             openAppPermissionSettings()
-            bottomSheet.dismiss()
         }
+
     }
     private fun openAppPermissionSettings() {
         val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
         val uri = Uri.fromParts("package", this.packageName, null)
         intent.data = uri
+
         startActivity(intent)
     }
 

@@ -34,7 +34,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/register_complete"
+            android:id="@+id/permission_cancel"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/_48sdp"
             android:layout_marginTop="@dimen/_8sdp"

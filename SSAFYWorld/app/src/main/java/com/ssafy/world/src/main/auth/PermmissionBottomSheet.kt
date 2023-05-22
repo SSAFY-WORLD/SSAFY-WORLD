@@ -21,6 +21,11 @@ class PermmissionBottomSheet() : BottomSheetDialogFragment() {
         onConfirmationListener = listener
     }
 
+    private var onCancelListener: (() -> Unit)? = null
+    fun setOnCancelListener(listener: () -> Unit) {
+        onCancelListener = listener
+    }
+
     override fun getTheme(): Int {
         return R.style.CustomBottomSheetDialog
     }
@@ -43,6 +48,10 @@ class PermmissionBottomSheet() : BottomSheetDialogFragment() {
     private fun initButton() = with(binding) {
         permissionComplete.setOnClickListener {
             onConfirmationListener?.invoke()
+            dismiss()
+        }
+        permissionCancel.setOnClickListener {
+            onCancelListener?.invoke()
             dismiss()
         }
     }

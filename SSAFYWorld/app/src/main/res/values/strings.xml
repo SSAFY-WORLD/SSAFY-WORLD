@@ -21,8 +21,8 @@
     <string name="register_fail_toast">회원가입에 실패했어요.</string>
     <string name="login_success_toast">로그인에 성공했어요!</string>
     <string name="login_fail_toast">로그인에 실패했어요.</string>
-    <string name="pemission_check"> 권한 </string>
-    <string name="permission_text">권한이 필요합니다. 바로 이동할까요?</string>
+    <string name="pemission_check"> 권한 요청 </string>
+    <string name="permission_text">저장소 접근을 위한 권한이 필요합니다. 바로 이동할까요?</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
