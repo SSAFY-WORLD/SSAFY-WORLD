@@ -100,21 +100,26 @@
 
             <LinearLayout
                 android:id="@+id/like_ll"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_8sdp"
                 android:layout_marginHorizontal="@dimen/_16sdp"
-                android:orientation="horizontal"
-                android:paddingVertical="@dimen/_4sdp">
+                android:orientation="horizontal">
 
-                <CheckBox
-                    android:id="@+id/like_checkbox"
-                    android:layout_width="@dimen/_16sdp"
-                    android:layout_height="@dimen/_16sdp"
-                    android:background="@drawable/checkbox_like"
-                    android:button="@null"
-                    android:padding="@dimen/_8sdp"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/_10sdp"
+                    android:paddingEnd="@dimen/_10sdp"
+                    android:paddingBottom="@dimen/_10sdp">
 
+                    <CheckBox
+                        android:id="@+id/like_checkbox"
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
+                        android:background="@drawable/checkbox_like"
+                        android:button="@null" />
+                </LinearLayout>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -128,8 +133,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/_4sdp"
-                    android:textColor="@color/light_blue"
+                    android:layout_marginStart="@dimen/_2sdp"
                     android:textSize="@dimen/_10ssp"
                     android:textStyle="bold" />
             </LinearLayout>
