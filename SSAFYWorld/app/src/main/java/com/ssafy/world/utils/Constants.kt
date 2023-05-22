@@ -1,6 +1,8 @@
 package com.ssafy.world.utils
 
 object Constants {
+    // FCM Token
+    const val KEY_TOKEN = "token"
     // 채팅을 위한 KEY
     const val KEY_COLLECTION_CHAT = "chat"
     const val KEY_SENDER_ID = "senderId"

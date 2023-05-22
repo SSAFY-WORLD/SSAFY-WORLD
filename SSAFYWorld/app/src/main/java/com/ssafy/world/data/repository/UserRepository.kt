@@ -4,6 +4,8 @@ import android.util.Log
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.ssafy.world.data.model.User
+import com.ssafy.world.data.service.FCMService
+import com.ssafy.world.utils.Constants
 import kotlinx.coroutines.tasks.await
 
 private const val TAG = "UserRepository"
@@ -93,6 +95,33 @@ object UserRepository {
             }
         } catch (e: Exception) {
             User()
+        }
+    }
+
+    suspend fun deleteUser(userEmail: String): Boolean {
+        return try {
+            userCollection.document(userEmail).delete().await()
+            true
+        } catch (e: Exception) {
+            Log.e(TAG, "deleteUser error: ${e.message}")
+            false
+        }
+    }
+
+    // FCM Token Update
+    suspend fun updateUserToken(userEmail: String): Boolean {
+        val token = FCMService.getToken()
+        return try {
+            if (token.isNotBlank()) {
+                userCollection.document(userEmail)
+                    .update(Constants.KEY_TOKEN, token)
+                    .await()
+                true
+            } else {
+                false
+            }
+        } catch (e: Exception) {
+            false
         }
     }
 }
