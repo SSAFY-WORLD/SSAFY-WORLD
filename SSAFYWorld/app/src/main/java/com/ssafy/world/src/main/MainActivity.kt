@@ -1,7 +1,8 @@
 package com.ssafy.world.src.main
 
 
-import android.app.AlertDialog
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -12,29 +13,36 @@ import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.setupWithNavController
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
 import com.ssafy.world.R
 import com.ssafy.world.config.BaseActivity
 import com.ssafy.world.databinding.ActivityMainBinding
-import com.ssafy.world.databinding.BottomPermissionBinding
 import com.ssafy.world.src.main.auth.PermmissionBottomSheet
+import com.ssafy.world.utils.Constants
 
 
 private const val TAG = "MainActivity_메인"
 // :: -> method reference
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
     private val activityViewModel: MainActivityViewModel by viewModels()
+    private val notificationManager: NotificationManager by lazy {
+        getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    }
+    // Android Oreo 이상에서는 알림 채널을 생성해야 한다
+    private fun createNotificationChannel(id: String, name: String) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(id, name, importance)
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        createNotificationChannel(Constants.CHANNEL_ID, Constants.CHANNEL_NAME)
         setToolbarWithNavcontroller()
         requestPermission()
     }

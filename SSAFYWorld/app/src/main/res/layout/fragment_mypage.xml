@@ -27,4 +27,14 @@
         android:textColor="@color/white"
         app:cornerRadius="@dimen/_10sdp" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/fcm_test_btn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_48sdp"
+        android:layout_marginTop="32dp"
+        android:text="알림 보내기 테스트"
+        android:backgroundTint="@color/light_blue"
+        android:textColor="@color/white"
+        app:cornerRadius="@dimen/_10sdp" />
+
 </LinearLayout>
