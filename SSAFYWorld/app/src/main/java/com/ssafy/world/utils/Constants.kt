@@ -3,6 +3,9 @@ package com.ssafy.world.utils
 object Constants {
     // FCM Token
     const val KEY_TOKEN = "token"
+    // Notification Channel ID
+    const val CHANNEL_ID = "ssafy_world_channel"
+    const val CHANNEL_NAME = "ssafy"
     // 채팅을 위한 KEY
     const val KEY_COLLECTION_CHAT = "chat"
     const val KEY_SENDER_ID = "senderId"
@@ -34,7 +37,7 @@ object Constants {
     fun getRemoteMsgHeaders(): HashMap<String, String> {
         if (remoteMsgHeaders == null) {
             remoteMsgHeaders = HashMap()
-            remoteMsgHeaders!![REMOTE_MSG_AUTHORIZATION] = "key=AAAAFRz4Kco:APA91bF5XogB05ovv5nylNctYlv7hp6cGo9yMWDcV4zTNYTBw-t3-MS9f9B2o3pvgFmqNRyjV47fi7V-6-7J-q50cWo6rsjQ4eZoqq71PbKYcIDiIdibr30QsiJCAysmtfkqUzIrE7YB"
+            remoteMsgHeaders!![REMOTE_MSG_AUTHORIZATION] = "key=98bf28c1ca96b7215eed4ffd37e657167fc2e3d8"
             remoteMsgHeaders!![REMOTE_MSG_CONTENT_TYPE] = "application/json"
         }
         return remoteMsgHeaders!!
