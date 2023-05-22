@@ -44,9 +44,8 @@ class MainCalendarAdapter() : ListAdapter<Calendar, MainCalendarAdapter.MyViewHo
 
         fun bind(data: Calendar) = with(binding) {
             title.text = data.title
-            val start = getFormattedTime(data.startTime)
-            val end = getFormattedTime(data.endTime)
-            preiod.text = "$start ~ $end"
+            continueDay.text = data.startTime
+            preiod.text = "${data.startTime} ~ ${data.endTime}"
         }
     }
 }

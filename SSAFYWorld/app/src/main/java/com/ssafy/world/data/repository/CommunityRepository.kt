@@ -173,7 +173,17 @@ object CommunityRepository {
                     transaction.set(communityRef, it)
                 }
                 community?.likeCount
-            }.await()
+            }.await()?.let { likeCount ->
+                if (likeCount >= 1) {
+                    // 좋아요 갯수가 10 이상인 경우 "hot" 컬렉션에 저장
+                    val hotCollectionRef = firestore.collection("hot")
+                    communityRef.get().await().toObject(Community::class.java)?.let {
+                        hotCollectionRef.document(communityId)
+                            .set(it)
+                    }
+                }
+                likeCount
+            } ?: 0
         } catch (e: Exception) {
             // Return the current likeCount in case of an error
             val snapshot = communityRef.get().await()
@@ -196,7 +206,14 @@ object CommunityRepository {
                     transaction.set(communityRef, it)
                 }
                 community?.likeCount
-            }.await()
+            }.await()?.let { likeCount ->
+                if (likeCount < 10) {
+                    // 좋아요 갯수가 10 미만인 경우 "hot" 컬렉션에서 삭제
+                    val hotCollectionRef = firestore.collection("hot")
+                    hotCollectionRef.document(communityId).delete()
+                }
+                likeCount
+            } ?: 0
         } catch (e: Exception) {
             // Return the current likeCount in case of an error
             val snapshot = communityRef.get().await()
@@ -204,17 +221,39 @@ object CommunityRepository {
         }
     }
 
+    suspend fun getHotCommunities(): ArrayList<Community> {
+        val hotCollectionRef = firestore.collection("hot")
+        return try {
+            val snapshot = hotCollectionRef.get().await()
+            val communityList = arrayListOf<Community>()
+            for (document in snapshot) {
+                val community = document.toObject(Community::class.java)
+                communityList.add(community)
+            }
+            communityList
+        } catch (e: Exception) {
+            arrayListOf<Community>()
+        }
+    }
+
+
+
     suspend fun addLikedUserToCommunity(collection: String, userId: String, communityId: String) {
         val communityRef = firestore.collection(collection).document(communityId)
         firestore.runTransaction { transaction ->
             val communitySnapshot = transaction.get(communityRef)
-            val likedUserIds = communitySnapshot.toObject(Community::class.java)?.likedUserIds ?: ArrayList()
+            val likedUserIds =
+                communitySnapshot.toObject(Community::class.java)?.likedUserIds ?: ArrayList()
             likedUserIds.add(userId)
             transaction.update(communityRef, "likedUserIds", likedUserIds)
         }.await()
     }
 
-    suspend fun removeLikedUserFromCommunity(collection: String, userId: String, communityId: String) {
+    suspend fun removeLikedUserFromCommunity(
+        collection: String,
+        userId: String,
+        communityId: String
+    ) {
         val communityRef = firestore.collection(collection).document(communityId)
         firestore.runTransaction { transaction ->
             val communitySnapshot = transaction.get(communityRef)

@@ -149,5 +149,9 @@ class CommunityViewModel : ViewModel() {
         _likeCount.value = repository.decrementCommunityLikeCount(collection, communityId, userId)
     }
 
+    fun getHotCommunities() = viewModelScope.launch {
+        _communityList.value = repository.getHotCommunities()
+    }
+
 
 }
