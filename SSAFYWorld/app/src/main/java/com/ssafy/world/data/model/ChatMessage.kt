@@ -5,6 +5,7 @@ import java.util.*
 
 data class ChatMessage(
     var senderId: String = "",
+    var senderImage: String = "",
     var receiverId: String = "",
     var message: String = "",
     var dateObject: Long = System.currentTimeMillis(),

@@ -20,6 +20,7 @@ object ChatRepository {
         val chat = hashMapOf<String, Any>().apply {
             this[Constants.KEY_SENDER_ID] = sendUser.email
             this[Constants.KEY_RECEIVER_ID] = receiverId
+            this[Constants.KEY_SENDER_IMAGE] = sendUser.profilePhoto
             this[Constants.KEY_MESSAGE] = message.message
             this[Constants.KEY_TIMESTAMP] = message.dateObject
             this[Constants.KEY_IS_READ] = message.isRead

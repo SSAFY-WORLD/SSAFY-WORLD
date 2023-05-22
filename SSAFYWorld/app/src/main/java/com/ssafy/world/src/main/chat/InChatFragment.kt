@@ -89,6 +89,7 @@ class InChatFragment : Fragment() {
 					// 로그인한 유저가 보내는 메시지
 					val chatMessage = ChatMessage(
 						senderId = documentChange.document.getString(Constants.KEY_SENDER_ID)!!,
+						senderImage = documentChange.document.getString(Constants.KEY_SENDER_IMAGE)!!,
 						receiverId = documentChange.document.getString(Constants.KEY_RECEIVER_ID)!!,
 						message = documentChange.document.getString(Constants.KEY_MESSAGE)!!,
 						dateObject = documentChange.document.getLong(Constants.KEY_TIMESTAMP)!!,
@@ -155,6 +156,7 @@ class InChatFragment : Fragment() {
 	private fun sendMessage(message: String, sendUser: User, receiverId: String) {
 		val chat = ChatMessage(
 			sendUser.email,
+			sendUser.profilePhoto,
 			receiverId,
 			message,
 			System.currentTimeMillis()

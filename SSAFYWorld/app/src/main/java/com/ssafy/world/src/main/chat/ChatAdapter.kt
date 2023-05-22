@@ -77,9 +77,9 @@ class ChatAdapter(
 			with(binding) {
 				textMessage.text = chatMessage.message
 				textDateTime.text = getReadableDateTime(chatMessage.dateObject)
-				if (chatMessage.conversionImage.isNotBlank()) {
+				if (chatMessage.senderImage != "") {
 					Glide.with(binding.root)
-						.load(chatMessage.conversionImage)
+						.load(chatMessage.senderImage)
 						.thumbnail(
 							Glide.with(binding.root).load(chatMessage.conversionImage)
 								.override(100, 100)
