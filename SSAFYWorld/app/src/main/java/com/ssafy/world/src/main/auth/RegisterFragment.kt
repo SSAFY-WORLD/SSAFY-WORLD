@@ -98,18 +98,25 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(
     private fun initObserver() = with(authViewModel) {
         user.observe(viewLifecycleOwner) { user ->
             if (user.id != "") {
-                Toast.makeText(myContext, "회원가입에 성공했습니다.", Toast.LENGTH_SHORT).show()
-                ApplicationClass.sharedPreferences.saveUser(user)
-                navController.navigate(R.id.action_registerFragment_to_mainFragment)
+                // FCM Token Update
+                updateUserToken(user.id)
             } else {
                 Toast.makeText(myContext, "회원가입에 실패했습니다.", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        tokenSuccess.observe(viewLifecycleOwner) { isSuccess ->
+            ApplicationClass.sharedPreferences.saveUser(user.value!!)
+            dismissLoadingDialog()
+            navController.navigate(R.id.action_registerFragment_to_mainFragment)
+            Toast.makeText(myContext, "회원가입에 성공했습니다.", Toast.LENGTH_SHORT).show()
         }
 
         isDuplicated.observe(viewLifecycleOwner) {
             if(it) {
                 Toast.makeText(myContext, "중복된 아이디 입니다.", Toast.LENGTH_SHORT).show()
             } else {
+                showLoadingDialog(myContext)
                 authViewModel.insertUser(curUser)
             }
         }

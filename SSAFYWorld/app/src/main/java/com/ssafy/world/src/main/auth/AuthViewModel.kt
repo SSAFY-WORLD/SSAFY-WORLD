@@ -21,6 +21,14 @@ class AuthViewModel : ViewModel() {
     val isDuplicated: LiveData<Boolean>
         get() = _isDuplicated
 
+    private val _tokenSuccess = MutableLiveData<Boolean>()
+    val tokenSuccess: LiveData<Boolean>
+        get() = _tokenSuccess
+
+	private val _deleteUserSuccess = MutableLiveData<Boolean>()
+	val deleteUserSuccess: LiveData<Boolean>
+		get() = _deleteUserSuccess
+
     fun insertUser(user: User)  = viewModelScope.launch {
         try {
             _user.value = repository.insertUser(user)
@@ -55,6 +63,24 @@ class AuthViewModel : ViewModel() {
         } catch (e: Exception) {
 
         }
+    }
+
+    fun deleteUser(userId: String) = viewModelScope.launch {
+	    try {
+            _deleteUserSuccess.postValue(repository.deleteUser(userId))
+	    } catch (e: Exception) {
+			_deleteUserSuccess.postValue(false)
+		}
+    }
+    // FCM Token Update
+    fun updateUserToken(userEmail: String) = viewModelScope.launch {
+        try {
+            Log.d(TAG, "updateToken: ${_tokenSuccess.value}")
+            _tokenSuccess.value = repository.updateUserToken(userEmail)
+        } catch (e: Exception) {
+            _tokenSuccess.value = false
+        }
+        Log.d(TAG, "updateToken: ${_tokenSuccess.value}")
     }
 
 }

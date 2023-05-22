@@ -43,4 +43,8 @@
     <string name="community_yes">확인</string>
     <string name="comment_hint">댓글을 남겨주세요</string>
     <string name="reply">답글 달기</string>
+    <string name="logout_text">로그아웃 하시겠습니까?</string>
+    <string name="logout_complete">로그아웃 되었습니다</string>
+    <string name="withdrawal_text">회원탈퇴 하시겠습니까?</string>
+    <string name="withdrawal_complete">회원탈퇴 되었습니다</string>
 </resources>
