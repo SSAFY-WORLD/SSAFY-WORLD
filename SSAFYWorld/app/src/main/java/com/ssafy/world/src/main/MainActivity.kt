@@ -1,10 +1,12 @@
 package com.ssafy.world.src.main
 
 
+import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -14,6 +16,8 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.gun0912.tedpermission.PermissionListener
@@ -26,6 +30,7 @@ import com.ssafy.world.utils.Constants
 
 
 private const val TAG = "MainActivity_메인"
+
 // :: -> method reference
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
     private val activityViewModel: MainActivityViewModel by viewModels()
@@ -45,6 +50,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         createNotificationChannel(Constants.CHANNEL_ID, Constants.CHANNEL_NAME)
         setToolbarWithNavcontroller()
         requestPermission()
+        requestCalendarPermission()
+        //requestStoragePermission()
     }
 
     private fun setToolbarWithNavcontroller() {
@@ -63,7 +70,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             hideKeyboard()
             showBottomNav()
             showToolbar()
-            when (destination.id)  {
+            when (destination.id) {
                 R.id.loginFragment, R.id.registerFragment -> {
                     hideBottomNav()
                     hideToolbar()
@@ -124,7 +131,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 }
             })
             .setDeniedMessage("권한을 허용해주세요.")
-            .setPermissions(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+            .setPermissions(android.Manifest.permission.READ_CALENDAR)
+            .setPermissions(android.Manifest.permission.WRITE_CALENDAR)
             .check()
     }
 
@@ -151,6 +159,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         }
 
     }
+
     private fun openAppPermissionSettings() {
         val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
         val uri = Uri.fromParts("package", this.packageName, null)
@@ -159,5 +168,46 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         startActivity(intent)
     }
 
+    private fun requestCalendarPermission() {
+        val permission = Manifest.permission.READ_CALENDAR
+        if (ContextCompat.checkSelfPermission(
+                this,
+                permission
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            // 이미 권한이 허용된 경우 처리를 수행하도록 합니다.
+            // 예를 들어, 삼성 캘린더에 접근하여 일정을 가져오는 코드를 여기에 추가합니다.
+            //fetchSamsungCalendarEvents()
+        } else {
+            // 권한 요청이 필요한 경우 권한 요청을 수행합니다.
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(permission),
+                CALENDAR_PERMISSION_REQUEST_CODE
+            )
+        }
+    }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == CALENDAR_PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // 권한이 허용되었을 경우 실행할 코드를 여기에 작성합니다.
+                Log.d(TAG, "Calendar permission granted")
+                //fetchSamsungCalendarEvents()
+            } else {
+                // 권한이 거부되었을 경우 실행할 코드를 여기에 작성합니다.
+                Log.d(TAG, "Calendar permission denied")
+            }
+        }
+    }
+
+    companion object {
+        private const val STORAGE_PERMISSION_REQUEST_CODE = 1001
+        private const val CALENDAR_PERMISSION_REQUEST_CODE = 1002
+    }
 }
