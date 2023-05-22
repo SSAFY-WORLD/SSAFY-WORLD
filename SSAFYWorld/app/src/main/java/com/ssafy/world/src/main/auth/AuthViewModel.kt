@@ -74,9 +74,9 @@ class AuthViewModel : ViewModel() {
     fun updateUserToken(userEmail: String) = viewModelScope.launch {
         try {
             Log.d(TAG, "updateToken: ${_tokenSuccess.value}")
-            _tokenSuccess.value = repository.updateUserToken(userEmail)
+            _tokenSuccess.postValue(repository.updateUserToken(userEmail))
         } catch (e: Exception) {
-            _tokenSuccess.value = false
+            _tokenSuccess.postValue(false)
         }
         Log.d(TAG, "updateToken: ${_tokenSuccess.value}")
     }

@@ -163,11 +163,16 @@ class LoginFragment :
         user.observe(viewLifecycleOwner) { user ->
             dismissLoadingDialog()
             if (user.id != "") {
-                ApplicationClass.sharedPreferences.saveUser(user)
-                navController.navigate(R.id.action_loginFragment_to_mainFragment)
+                // FCM Token Update
+                updateUserToken(user.id)
             } else {
                 showCustomToast("아이디 비빌번호를 다시 확인하세요.")
             }
+        }
+
+        tokenSuccess.observe(viewLifecycleOwner) { isSuccess ->
+            ApplicationClass.sharedPreferences.saveUser(user.value!!)
+            navController.navigate(R.id.action_loginFragment_to_mainFragment)
         }
 
         isDuplicated.observe(viewLifecycleOwner) {

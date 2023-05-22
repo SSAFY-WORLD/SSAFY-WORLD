@@ -107,7 +107,6 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(
 
         tokenSuccess.observe(viewLifecycleOwner) { isSuccess ->
             ApplicationClass.sharedPreferences.saveUser(user.value!!)
-            dismissLoadingDialog()
             navController.navigate(R.id.action_registerFragment_to_mainFragment)
             Toast.makeText(myContext, "회원가입에 성공했습니다.", Toast.LENGTH_SHORT).show()
         }
