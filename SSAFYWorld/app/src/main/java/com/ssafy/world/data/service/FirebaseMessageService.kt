@@ -11,6 +11,7 @@ import com.google.firebase.messaging.RemoteMessage
 import com.ssafy.world.R
 import com.ssafy.world.src.main.MainActivity
 import com.ssafy.world.utils.Constants
+import com.ssafy.world.utils.Constants.SUMMARY_ID
 
 private const val TAG = "FirebaseMessageService_싸피"
 class FirebaseMessageService: FirebaseMessagingService() {
@@ -23,40 +24,50 @@ class FirebaseMessageService: FirebaseMessagingService() {
     //https://firebase.google.com/docs/cloud-messaging/android/receive
     @SuppressLint("MissingPermission")
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
+        var messageDestination = ""
         var messageTitle = ""
         var messageContent = ""
 
-        if (remoteMessage.notification != null) { // notification이 있는 경우 foreground처리
-            //foreground
-            messageTitle = remoteMessage.notification!!.title.toString()
-            messageContent = remoteMessage.notification!!.body.toString()
-
-        } else {  // background 에 있을경우 혹은 foreground에 있을경우 두 경우 모두
-            val data = remoteMessage.data
-            Log.d(TAG, "data.message: $data")
-            Log.d(TAG, "data.message: ${data["title"]}")
-            Log.d(TAG, "data.message: ${data["body"]}")
-
-            messageTitle = data["title"].toString()
-            messageContent = data["body"].toString()
-        }
-
+        // background 에 있을경우 혹은 foreground에 있을경우 두 경우 모두
+        val data = remoteMessage.data
+        Log.d(TAG, "data.message: ${data[Constants.DESTINATION]}")
+        Log.d(TAG, "data.message: ${data[Constants.TITLE]}")
+        Log.d(TAG, "data.message: ${data[Constants.MESSAGE]}")
+        Log.d(TAG, "data.message: ${data[Constants.IMAGE]}")
+        messageDestination = data[Constants.DESTINATION].toString()
+        messageTitle = data[Constants.TITLE].toString()
+        messageContent = data[Constants.MESSAGE].toString()
+        // 받아온 destination 정보를 바탕으로 알람이 어떤 Fragment로 갈지 지정
         val mainIntent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            putExtra(Constants.DESTINATION, messageDestination)
         }
 
         val mainPendingIntent: PendingIntent =
-            PendingIntent.getActivity(this, 0, mainIntent, PendingIntent.FLAG_IMMUTABLE)
+            PendingIntent.getActivity(this, 101, mainIntent, PendingIntent.FLAG_IMMUTABLE)
 
-        val builder1 = NotificationCompat.Builder(this, Constants.CHANNEL_ID)
+        val notification = NotificationCompat.Builder(this, Constants.CHANNEL_ID)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setDefaults(NotificationCompat.DEFAULT_SOUND or NotificationCompat.DEFAULT_VIBRATE)
             .setSmallIcon(R.drawable.ic_app_logo)
             .setContentTitle(messageTitle)
             .setContentText(messageContent)
             .setAutoCancel(true)
             .setContentIntent(mainPendingIntent)
 
+        val summaryNotification = NotificationCompat.Builder(this, Constants.CHANNEL_ID)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setDefaults(NotificationCompat.DEFAULT_SOUND or NotificationCompat.DEFAULT_VIBRATE)
+            .setSmallIcon(R.drawable.ic_app_logo)
+            .setContentTitle(messageTitle)
+            .setContentText(messageContent)
+            .setGroup(messageDestination)
+            .setGroupSummary(true)
+            .setAutoCancel(true)
+
         NotificationManagerCompat.from(this).apply {
-            notify(101, builder1.build())
+            notify(101, notification.build())
+            notify(SUMMARY_ID, summaryNotification.build())
         }
     }
 }

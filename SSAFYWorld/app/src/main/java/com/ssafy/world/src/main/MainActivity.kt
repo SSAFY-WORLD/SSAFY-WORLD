@@ -40,18 +40,38 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     // Android Oreo 이상에서는 알림 채널을 생성해야 한다
     private fun createNotificationChannel(id: String, name: String) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val importance = NotificationManager.IMPORTANCE_HIGH
             val channel = NotificationChannel(id, name, importance)
             notificationManager.createNotificationChannel(channel)
         }
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        intent.getStringExtra(Constants.DESTINATION)?.let { destination ->
+            moveFragment(destination)
+        }
         createNotificationChannel(Constants.CHANNEL_ID, Constants.CHANNEL_NAME)
         setToolbarWithNavcontroller()
         requestPermission()
         requestCalendarPermission()
         //requestStoragePermission()
+    }
+
+    private fun moveFragment(destination: String) {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
+        when (destination) {
+            Constants.CHAT -> {
+                setTitle(getString(R.string.nav_chat_title))
+                navController.navigate(R.id.chatFragment)
+            }
+            Constants.COMMUNITY -> {
+                setTitle(activityViewModel.communityTitle)
+                navController.navigate(R.id.communityListFragment)
+            }
+            else -> hideBottomNav()
+        }
     }
 
     private fun setToolbarWithNavcontroller() {

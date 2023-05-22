@@ -8,9 +8,11 @@ import com.google.gson.GsonBuilder
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.util.Utility
 import com.ssafy.world.R
+import com.ssafy.world.data.remote.NotificationAPI
 import com.ssafy.world.data.repository.CommunityRepository
 import com.ssafy.world.data.repository.UserRepository
 import com.ssafy.world.data.service.FCMService
+import com.ssafy.world.utils.Constants.BASE_URL
 import com.ssafy.world.utils.SharedPreferencesUtil
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -77,7 +79,7 @@ class ApplicationClass : Application() {
         // retrofit 이라는 전역변수에 API url, 인터셉터, Gson을 넣어주고 빌드해주는 코드
         // 이 전역변수로 http 요청을 서버로 보내면 됩니다.
         retrofit = Retrofit.Builder()
-            .baseUrl(API_URL)
+            .baseUrl(BASE_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()

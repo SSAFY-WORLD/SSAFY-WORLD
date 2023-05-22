@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import com.ssafy.world.R
 import com.ssafy.world.config.ApplicationClass
 import com.ssafy.world.config.BaseFragment
+import com.ssafy.world.data.model.NotificationData
 import com.ssafy.world.databinding.FragmentMypageBinding
 import com.ssafy.world.src.main.auth.AuthViewModel
 import com.ssafy.world.src.main.community.CommunityViewModel
@@ -45,6 +46,11 @@ class MypageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
                     }
                 }
             }
+        }
+        fcmTestBtn.setOnClickListener {
+            val token = "fjVdQ9J9T_SbEw10zBAZht:APA91bHft71KnRDlcwuataGnGql6krKM35OLExO0aoPBdMH4HR-xfL9YiuGm5NLHcMfI5hVkY9CBvTACwcaHV9HGQ75cJ_oRZwiMsYGuLm7m4IX8ChVx-MX8tJ1kBUATRpn4Sjjle77n"
+            val data = NotificationData("채팅", "알람 타이틀", "메시지")
+            sendRemoteNotification(data, token)
         }
     }
 

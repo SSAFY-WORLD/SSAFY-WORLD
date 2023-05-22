@@ -12,6 +12,8 @@ import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
+import com.ssafy.world.data.model.NotificationData
+import com.ssafy.world.data.model.PushNotification
 import com.ssafy.world.utils.CustomAlertDialog
 import com.ssafy.world.utils.LoadingDialog
 
@@ -77,6 +79,11 @@ abstract class BaseFragment<B : ViewBinding>(
         if (mCustomDialog.isShowing) {
             mCustomDialog.dismiss()
         }
+    }
+
+    // FCM 알람보내기
+    fun sendRemoteNotification(data: NotificationData, token: String) {
+        ApplicationClass.messagingService.sendRemoteNotification(data, token)
     }
 
 }
