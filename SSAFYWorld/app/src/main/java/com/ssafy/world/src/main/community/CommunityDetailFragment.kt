@@ -70,7 +70,7 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
     }
 
     private fun initView() = with(binding) {
-        if(community.likedUserIds.contains(curUser!!.id)) {
+        if (community.likedUserIds.contains(curUser!!.id)) {
             likeCheckbox.isChecked = true
         }
         detailTitle.text = community.title
@@ -171,7 +171,7 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
                     activityViewModel.entryCommunityCollection,
                     community,
                     cur
-                ) 
+                )
                 val noti = NotificationData("메시지", "싸피월드", "${curUser!!.nickname} 님이 답글을 남겼습니다.")
                 sendRemoteNotification(noti, cur.fcmToken)
                 Log.d(TAG, "initButton: ")
@@ -197,12 +197,20 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
 
         likeCheckbox.setOnCheckedChangeListener { _, isChecked ->
             Log.d(TAG, "initButton: $curUser")
-            if(isChecked && !community.likedUserIds.contains(curUser!!.id)) {
+            if (isChecked && !community.likedUserIds.contains(curUser!!.id)) {
                 community.likedUserIds.add(curUser!!.id)
-                communityViewModel.onIncrementLikeButtonClicked(curBoard, community.id, curUser!!.id)
-            } else if(!isChecked) {
+                communityViewModel.onIncrementLikeButtonClicked(
+                    curBoard,
+                    community.id,
+                    curUser!!.id
+                )
+            } else if (!isChecked) {
                 community.likedUserIds.remove(curUser!!.id)
-                communityViewModel.onDecrementLikeButtonClicked(curBoard, community.id, curUser!!.id)
+                communityViewModel.onDecrementLikeButtonClicked(
+                    curBoard,
+                    community.id,
+                    curUser!!.id
+                )
             }
         }
     }

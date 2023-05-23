@@ -9,6 +9,7 @@ import com.ssafy.world.utils.Constants
 import kotlinx.coroutines.tasks.await
 
 private const val TAG = "UserRepository"
+
 object UserRepository {
     private val firestore: FirebaseFirestore by lazy {
         FirebaseFirestore.getInstance()
@@ -17,7 +18,7 @@ object UserRepository {
     private val userCollection: CollectionReference
         get() = firestore.collection("users")
 
-    suspend fun insertUser(user: User) : User {
+    suspend fun insertUser(user: User): User {
         return try {
             val newUserRef = userCollection.add(user).await()
             user.apply { id = newUserRef.id }
@@ -136,4 +137,43 @@ object UserRepository {
             false
         }
     }
+
+    suspend fun saveToValidationCollection(value: String): Boolean {
+        return try {
+            val validationCollection = firestore.collection("validation")
+            val querySnapshot = validationCollection.get().await()
+
+            if (!querySnapshot.isEmpty) {
+                val document = querySnapshot.documents.first()
+                document.reference.update("code", value).await()
+            } else {
+                validationCollection.add(mapOf("code" to value)).await()
+            }
+
+            true
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to save value: ${e.message}")
+            false
+        }
+    }
+
+    suspend fun getValidationCode(): String? {
+        return try {
+            val validationCollection = firestore.collection("validation")
+            val querySnapshot = validationCollection.get().await()
+
+            if (!querySnapshot.isEmpty) {
+                val document = querySnapshot.documents.first()
+                val code = document.getString("code")
+                code
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to retrieve validation code: ${e.message}")
+            null
+        }
+    }
+
+
 }
