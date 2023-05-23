@@ -114,7 +114,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:imeOptions="actionNext"
+                android:imeOptions="actionDone"
                 android:nextFocusForward="@id/change_pwd_btn"/>
         </com.google.android.material.textfield.TextInputLayout>
 

@@ -1,6 +1,6 @@
 package com.ssafy.world.src.main.mypage
 
-import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,14 +16,12 @@ import com.ssafy.world.config.ApplicationClass
 import com.ssafy.world.data.model.User
 import com.ssafy.world.databinding.BottomChangePwdBinding
 import com.ssafy.world.src.main.auth.AuthViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class ChangePwdBottomSheetFragment(private val user: User) : BottomSheetDialogFragment() {
 	private var _binding: BottomChangePwdBinding? = null
 	private val binding get() = _binding!!
 	private var currentPwdCheck = false
+	private var newPwdCheck = false
 	private var confirmPwdCheck = false
 
 	private val authViewModel: AuthViewModel by viewModels()
@@ -52,11 +50,21 @@ class ChangePwdBottomSheetFragment(private val user: User) : BottomSheetDialogFr
 	private fun initObserver() = with(authViewModel) {
 		updateUserPwdSuccess.observe(viewLifecycleOwner) { success ->
 			if (success) {
-				Toast.makeText(context, "비밀번호가 변경되었습니다. 변경된 비빌번호로 로그인 해주세요", Toast.LENGTH_SHORT).show()
-				ApplicationClass.sharedPreferences.clearUser()
-				findNavController().navigate(R.id.action_changePwdBottomSheetFragment_to_loginFragment)
+				changeUser()
+				Toast.makeText(context, "비밀번호가 변경되었습니다.", Toast.LENGTH_SHORT).show()
 			}
 		}
+	}
+
+	private fun changeUser() {
+		val updateUser = user.apply {
+			pwd = binding.newPwd.text.toString()
+		}
+		ApplicationClass.sharedPreferences.apply {
+			clearUser()
+			saveUser(updateUser)
+		}
+		dismiss()
 	}
 
 	private fun initEditTextListener() = with(binding) {
@@ -102,10 +110,18 @@ class ChangePwdBottomSheetFragment(private val user: User) : BottomSheetDialogFr
 			confirmPwdTextField.error = null
 			confirmPwdCheck = true
 		}
+
+		if (password == user.pwd) {
+			pwdTextField.error = "기존과 동일한 비밀번호 입니다."
+			newPwdCheck = false
+		} else {
+			pwdTextField.error = null
+			newPwdCheck = true
+		}
 	}
 
 	private fun checkEditTextValues() = with(binding) {
-		val validate = !currentPwdCheck || !confirmPwdCheck
+		val validate = !currentPwdCheck || !confirmPwdCheck || !newPwdCheck
 
 		if (validate) {
 			changePwdBtn.isEnabled = false
@@ -135,11 +151,11 @@ class ChangePwdBottomSheetFragment(private val user: User) : BottomSheetDialogFr
 
 	private fun initButton() = with(binding) {
 		changePwdBtn.setOnClickListener {
+
 			// 비밀번호 변경하기
 			authViewModel.updateUserPwd(user.id, newPwd.text.toString())
 		}
 		currentPwd.setOnFocusChangeListener { view, hasFocus ->
-			val pwd = currentPwd.text.toString()
 			checkEditTextValues()
 		}
 	}
