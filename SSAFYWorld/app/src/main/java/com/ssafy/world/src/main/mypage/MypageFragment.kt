@@ -2,6 +2,7 @@ package com.ssafy.world.src.main.mypage
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import com.ssafy.world.R
 import com.ssafy.world.config.ApplicationClass
@@ -12,6 +13,7 @@ import com.ssafy.world.utils.CustomAlertDialog
 
 class MypageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding::bind, R.layout.fragment_mypage) {
     private val authViewModel: AuthViewModel by viewModels()
+    private var isModifyClicked = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -61,8 +63,46 @@ class MypageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
         imageAddBtn.setOnClickListener {
              showAlertDialog(R.string.change_porfile_title, myContext)
         }
+        setUpdateUserBtn()
     }
 
+    private fun setUpdateUserBtn() = with(binding) {
+        updateUser.setOnClickListener {
+            toogleText()
+        }
+        closeBtn.setOnClickListener {
+            toogleText()
+        }
+    }
+
+    private fun toogleText() = with(binding) {
+        if (!isModifyClicked) {
+            // 유저 정보를 볼 수 있게 바꿔줌
+            userName.visibility = View.GONE
+            userNameEditText.visibility = View.VISIBLE
+            userNickNameEditText.visibility = View.VISIBLE
+            userNickName.visibility = View.GONE
+            imageAddBtn.visibility = View.VISIBLE
+            closeBtn.visibility = View.VISIBLE
+            // 완료 버튼
+            updateUser.apply {
+                setText(R.string.account_tv_modify)
+            }
+        } else {
+            // 수정 가능하게 바꿔줌
+            userName.visibility = View.VISIBLE
+            userNameEditText.visibility = View.GONE
+            userNickNameEditText.visibility = View.GONE
+            userNickName.visibility = View.VISIBLE
+            imageAddBtn.visibility = View.INVISIBLE
+            closeBtn.visibility = View.INVISIBLE
+            // 완료 버튼
+            updateUser.apply {
+                setText(R.string.account_tv_updateUser)
+            }
+        }
+        isModifyClicked = !isModifyClicked
+    }
     private fun initObserver() = with(authViewModel) {
         isDuplicated.observe(viewLifecycleOwner) { user ->
             // 중복이면 해당 유저를 찾은 것이다

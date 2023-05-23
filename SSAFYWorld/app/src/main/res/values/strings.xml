@@ -62,6 +62,10 @@
     <string name="account_btn_changePwd">비빌번호 변경하기</string>
     <string name="account_logout">로그아웃</string>
     <string name="account_withdrawl">회원탈퇴</string>
+    <string name="account_tv_updateUser">프로필 수정</string>
+    <string name="account_tv_cancel">취소</string>
+    <string name="account_tv_confirm">확인</string>
+    <string name="account_tv_modify">완료</string>
     <string name="app_info">앱정보</string>
     <string name="app_version">버전정보</string>
     <string name="app_licence">라이선스</string>
