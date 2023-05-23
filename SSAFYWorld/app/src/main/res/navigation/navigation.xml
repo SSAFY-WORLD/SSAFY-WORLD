@@ -182,6 +182,13 @@
             app:exitAnim="@animator/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_mainFragment_to_webViewFragment"
+            app:destination="@id/webViewFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 
 
     </fragment>
@@ -314,7 +321,26 @@
     <fragment
         android:id="@+id/communitySearchFragment"
         android:name="com.ssafy.world.src.main.community.CommunitySearchFragment"
-        android:label="CommunitySearchFragment" />
+        android:label="CommunitySearchFragment" >
+
+        <action
+            android:id="@+id/action_communitySearchFragment_to_communityDetailFragment"
+            app:destination="@id/communityDetailFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popUpTo="@id/communityDetailFragment"
+            app:popUpToInclusive="true"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/webViewFragment"
+        android:name="com.ssafy.world.src.main.home.WebViewFragment"
+        android:label="WebViewFragment" >
+        <argument
+            android:name="url"
+            android:defaultValue=""/>
+    </fragment>
 
 
 </navigation>

@@ -94,6 +94,7 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding>(
                 title = curTitle
                 content = curContent
                 likeCount = 0
+                fcmToken = curUser!!.token
                 collection = activityViewModel.entryCommunityCollection
                 time = System.currentTimeMillis()
                 photoUrls = photoUrlList

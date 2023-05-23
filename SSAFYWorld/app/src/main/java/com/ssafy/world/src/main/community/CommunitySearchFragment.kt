@@ -1,8 +1,10 @@
 package com.ssafy.world.src.main.community
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,12 +41,24 @@ class CommunitySearchFragment : BaseFragment<FragmentCommunitySearchBinding>(
             layoutManager = LinearLayoutManager(myContext, LinearLayoutManager.VERTICAL, false)
             adapter = myAdapter
         }
+        myAdapter.itemClickListener= object : CommunityListAdapter.ItemClickListener {
+            override fun onClick(view: View, data: Community, position: Int) {
+                activityViewModel.entryCommunityCollection = data.collection
+                val action = CommunitySearchFragmentDirections.actionCommunitySearchFragmentToCommunityDetailFragment(myList[position].id)
+                navController.navigate(action)
+            }
+        }
     }
 
     private fun initEditListener() = with(binding) {
         idEditTextView.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                // 검색 버튼을 눌렀을 때 실행될 동작을 여기에 작성합니다.
+                val searchText = idEditTextView.text.toString().trim()
+
+                if (searchText.isEmpty()) {
+                    idEditTextView.error = "검색어를 입력해주세요." // 에러 메시지 설정
+                    return@setOnEditorActionListener true
+                }
                 if (activityViewModel.entryCommunityCollection == "") {
                     communityViewModel.getSearchCommunities(idEditTextView.text.toString())
                 } else {

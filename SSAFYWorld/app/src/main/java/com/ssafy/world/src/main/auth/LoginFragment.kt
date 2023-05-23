@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.kakao.sdk.user.UserApiClient
 import com.ssafy.world.R
 import com.ssafy.world.config.ApplicationClass
@@ -14,10 +15,7 @@ import com.ssafy.world.config.BaseFragment
 import com.ssafy.world.databinding.FragmentLoginBinding
 import com.ssafy.world.data.model.User
 import com.ssafy.world.data.service.FCMService
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 private const val TAG = "LoginFragment"
 
@@ -33,9 +31,15 @@ class LoginFragment :
 
 
         //checkLogin()
+        initToken()
         initButton()
         initEditTextListener()
         initObserver()
+    }
+
+    private fun initToken() = lifecycleScope.launch {
+        curUser = User()
+        curUser.token = FCMService.getToken()
     }
 
     private fun checkLogin() {
@@ -94,6 +98,7 @@ class LoginFragment :
             if (error != null) {
                 Log.e(TAG, "로그인 실패", error)
                 Toast.makeText(myContext, "로그인 실패", Toast.LENGTH_SHORT).show()
+                dismissLoadingDialog()
             } else if (token != null) {
                 getKAKAOInform()
             }
@@ -105,6 +110,7 @@ class LoginFragment :
         UserApiClient.instance.me { user, error ->
             if (error != null) {
                 Log.e(TAG, "사용자 정보 요청 실패", error)
+                dismissLoadingDialog()
             } else if (user != null) {
                 val scopes = mutableListOf<String>()
 
@@ -149,12 +155,13 @@ class LoginFragment :
     }
 
     private fun insertUser(user: com.kakao.sdk.user.model.User) {
-        curUser = User().apply {
+        curUser.apply {
             email = user.kakaoAccount?.email.toString()
             nickname = user.kakaoAccount?.profile?.nickname.toString()
             profilePhoto = user.kakaoAccount?.profile?.thumbnailImageUrl.toString()
             kakaoId = user.id.toString()
         }
+
         authViewModel.isEmailDuplicate(curUser.email)
     }
 
@@ -163,6 +170,7 @@ class LoginFragment :
         user.observe(viewLifecycleOwner) { user ->
             dismissLoadingDialog()
             if (user.id != "") {
+                updateUserToken(user.id)
                 ApplicationClass.sharedPreferences.saveUser(user)
                 navController.navigate(R.id.action_loginFragment_to_mainFragment)
             } else {
@@ -173,6 +181,7 @@ class LoginFragment :
         isDuplicated.observe(viewLifecycleOwner) {
             dismissLoadingDialog()
             if (it.id != "") {
+                Log.d(TAG, "initObserver: $it")
                 ApplicationClass.sharedPreferences.saveUser(it)
                 navController.navigate(R.id.action_loginFragment_to_mainFragment)
             } else {

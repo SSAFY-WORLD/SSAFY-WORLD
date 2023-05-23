@@ -8,12 +8,15 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ssafy.world.R
 import com.ssafy.world.config.ApplicationClass
 import com.ssafy.world.data.model.User
+import com.ssafy.world.data.service.FCMService
 import com.ssafy.world.databinding.BottomRegisterBinding
+import kotlinx.coroutines.launch
 
 class RegisterBottomSheetFragment(private val user: User) : BottomSheetDialogFragment() {
     private var _binding: BottomRegisterBinding? = null
@@ -39,6 +42,10 @@ class RegisterBottomSheetFragment(private val user: User) : BottomSheetDialogFra
         initButton()
         initEditTextListener()
         initListener()
+    }
+
+    private fun initToken() = lifecycleScope.launch {
+        user.token = FCMService.getToken()
     }
 
     private fun initEditTextListener() = with(binding) {

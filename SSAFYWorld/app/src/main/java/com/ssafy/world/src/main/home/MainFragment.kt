@@ -22,18 +22,22 @@ import com.ssafy.world.data.model.Calendar
 import com.ssafy.world.data.model.Community
 import com.ssafy.world.databinding.FragmentMainBinding
 import com.ssafy.world.src.main.MainActivityViewModel
-import com.ssafy.world.src.main.community.CommunityListAdapter
-import com.ssafy.world.src.main.community.CommunityListFragmentDirections
 import com.ssafy.world.src.main.community.CommunityViewModel
 import java.time.Instant
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.ZoneId
 
 private const val TAG = "MainFragment"
 
 class MainFragment :
     BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind, R.layout.fragment_main) {
+
+    companion object {
+        val signUrl = "https://dydwkd486.github.io/ssafy-sign/"
+        val signUploadUrl = "https://drive.google.com/drive/folders/1JrMoL6xU4Jv1wcFmwxVQyZfA9FLgy9uA"
+        val eduUrl = "https://edu.ssafy.com/edu/main/index.do"
+        val gitUrl = "https://github.com/Kim-JuYong"
+    }
 
     private val viewModel: CommunityViewModel by viewModels()
     private val activityViewModel: MainActivityViewModel by activityViewModels()
@@ -71,6 +75,23 @@ class MainFragment :
         showHotBtn.setOnClickListener {
             navController.navigate(R.id.action_mainFragment_to_mainHotFragment)
         }
+
+        goSign.setOnClickListener {
+            openUrlInExternalBrowser(signUrl)
+        }
+        goGoogle.setOnClickListener {
+            openUrlInExternalBrowser(signUploadUrl)
+        }
+        goEduSsafy.setOnClickListener {
+            openUrlInExternalBrowser(eduUrl)
+        }
+        goGithub.setOnClickListener {
+            openUrlInExternalBrowser(gitUrl)
+        }
+    }
+    fun openUrlInExternalBrowser(url: String) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(intent)
     }
 
     private fun initRecycler() = with(binding) {

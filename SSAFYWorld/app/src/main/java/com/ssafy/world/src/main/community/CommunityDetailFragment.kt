@@ -20,6 +20,8 @@ import com.ssafy.world.config.ApplicationClass
 import com.ssafy.world.config.BaseFragment
 import com.ssafy.world.data.model.Comment
 import com.ssafy.world.data.model.Community
+import com.ssafy.world.data.model.NotificationData
+import com.ssafy.world.data.service.FCMService
 import com.ssafy.world.databinding.FragmentCommunityDetailBinding
 import com.ssafy.world.databinding.ItemCommunityCommentBinding
 import com.ssafy.world.src.main.MainActivity
@@ -160,6 +162,7 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
                 comment = commentInput.text.toString()
                 time = System.currentTimeMillis()
                 communityId = community.id
+                fcmToken = curUser!!.token
             }
 
             if (isReply != "") {
@@ -168,15 +171,21 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
                     activityViewModel.entryCommunityCollection,
                     community,
                     cur
-                )
+                ) 
+                val noti = NotificationData("메시지", "싸피월드", "${curUser!!.nickname} 님이 답글을 남겼습니다.")
+                sendRemoteNotification(noti, cur.fcmToken)
+                Log.d(TAG, "initButton: ")
             } else {
                 communityViewModel.insertComment(
                     activityViewModel.entryCommunityCollection,
                     community,
                     cur
                 )
+                Log.d(TAG, "initButton: 22")
             }
 
+            val noti = NotificationData("메시지", "싸피월드", "${curUser!!.nickname} 님이 댓글을 남겼습니다.")
+            FCMService.sendRemoteNotification(noti, community.fcmToken)
             (activity as MainActivity).hideKeyboard()
             commentInput.setText("")
             showCustomToast("댓글이 등록됐어요.")
@@ -233,7 +242,6 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
         }
 
         communityViewModel.replies.observe(viewLifecycleOwner) { it ->
-            Log.d(TAG, "initListener: $it")
             commentAdapter.replyAdapters[commentPosition].submitList(it.toMutableList())
         }
 
@@ -339,8 +347,6 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
             }
         }
     }
-    override fun onResume() {
-        super.onResume()
-        Log.d(TAG, "onResume: ")
-    }
+
+
 }
