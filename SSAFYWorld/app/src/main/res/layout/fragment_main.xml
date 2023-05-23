@@ -39,6 +39,104 @@
             app:layout_constraintTop_toBottomOf="@id/main_home_where" />
 
         <LinearLayout
+            android:id="@+id/main_ll_go"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:paddingVertical="@dimen/_12sdp"
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@id/main_home_hello"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <LinearLayout
+                android:id="@+id/go_edu_ssafy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginRight="@dimen/_24sdp">
+                <ImageView
+                    android:layout_width="@dimen/_24sdp"
+                    android:layout_height="@dimen/_24sdp"
+                    android:src="@drawable/ic_go_e"
+                    android:layout_gravity="center"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_8sdp"
+                    android:textColor="@color/dark_navy"
+                    android:text="에듀싸피"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/go_github"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="@dimen/_12sdp"
+                android:layout_marginRight="@dimen/_24sdp">
+                <ImageView
+                    android:layout_width="@dimen/_24sdp"
+                    android:layout_height="@dimen/_24sdp"
+                    android:src="@drawable/ic_go_git"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_8sdp"
+                    android:textColor="@color/dark_navy"
+                    android:text="깃허브"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/go_sign"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="@dimen/_12sdp"
+                android:layout_marginRight="@dimen/_36sdp">
+                <ImageView
+                    android:layout_width="@dimen/_24sdp"
+                    android:layout_height="@dimen/_24sdp"
+                    android:src="@drawable/ic_go_sign"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_8sdp"
+                    android:textColor="@color/dark_navy"
+                    android:text="전자서명"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/go_google"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="@dimen/_24sdp"
+                    android:layout_height="@dimen/_24sdp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_go_google" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_8sdp"
+                    android:textColor="@color/dark_navy"
+                    android:text="구글독스"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
             android:id="@+id/main_ll_alarm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -46,7 +144,7 @@
             android:padding="@dimen/_10sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/main_home_hello">
+            app:layout_constraintTop_toBottomOf="@+id/main_ll_go">
 
             <LinearLayout
                 android:layout_width="match_parent"

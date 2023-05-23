@@ -121,11 +121,11 @@ object UserRepository {
     }
 
     // FCM Token Update
-    suspend fun updateUserToken(userEmail: String): Boolean {
+    suspend fun updateUserToken(userId: String): Boolean {
         val token = FCMService.getToken()
         return try {
             if (token.isNotBlank()) {
-                userCollection.document(userEmail)
+                userCollection.document(userId)
                     .update(Constants.KEY_TOKEN, token)
                     .await()
                 true

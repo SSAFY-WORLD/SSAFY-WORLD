@@ -1,17 +1,22 @@
 package com.ssafy.world.src.main.auth
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.ssafy.world.R
 import com.ssafy.world.config.ApplicationClass
 import com.ssafy.world.config.BaseFragment
 import com.ssafy.world.databinding.FragmentRegisterBinding
 import com.ssafy.world.data.model.User
+import com.ssafy.world.data.service.FCMService
+import kotlinx.coroutines.launch
 
+private const val TAG = "RegisterFragment"
 class RegisterFragment : BaseFragment<FragmentRegisterBinding>(
     FragmentRegisterBinding::bind,
     R.layout.fragment_register
@@ -22,14 +27,19 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initToken()
         initButton()
         initEditTextListener()
         initObserver()
     }
 
+    private fun initToken() = lifecycleScope.launch {
+        curUser = User()
+        curUser.token = FCMService.getToken()
+    }
     private fun initButton() = with(binding) {
         registerBtn.setOnClickListener {
-            curUser = User().apply {
+            curUser.apply {
                 id = ""
                 email = idEditTextView.text.toString()
                 pwd = pwdEditTextView.text.toString()
@@ -98,22 +108,20 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(
 
     private fun initObserver() = with(authViewModel) {
         user.observe(viewLifecycleOwner) { user ->
+            Log.d(TAG, "initObserver: $user")
             if (user.id != "") {
                 // FCM Token Update
-                updateUserToken(user.id)
+                ApplicationClass.sharedPreferences.saveUser(user!!)
+                navController.navigate(R.id.action_registerFragment_to_mainFragment)
+                Toast.makeText(myContext, "회원가입에 성공했습니다.", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(myContext, "회원가입에 실패했습니다.", Toast.LENGTH_SHORT).show()
             }
         }
 
-        tokenSuccess.observe(viewLifecycleOwner) { isSuccess ->
-            ApplicationClass.sharedPreferences.saveUser(user.value!!)
-            navController.navigate(R.id.action_registerFragment_to_mainFragment)
-            Toast.makeText(myContext, "회원가입에 성공했습니다.", Toast.LENGTH_SHORT).show()
-        }
-
         isDuplicated.observe(viewLifecycleOwner) {
             // 중복 이면 null -> user.id == ""
+            Log.d(TAG, "initObserver: $it")
             if(it.id  == "") {
                 authViewModel.insertUser(curUser)
             } else {

@@ -35,15 +35,18 @@ object FCMService {
     }
     fun sendRemoteNotification(data: NotificationData, token: String) = CoroutineScope(Dispatchers.IO).launch {
         val service = ApplicationClass.retrofit.create(NotificationAPI::class.java)
+        Log.d(TAG, "sendRemoteNotification: $token")
         try {
             val notification = PushNotification(data, token)
             val response = service.postNotification(Constants.getRemoteMsgHeaders(), notification)
             if(response.isSuccessful) {
                 Log.d(TAG, "Response: ${Gson().toJson(response)}")
             } else {
+                Log.d(TAG, "sendRemoteNotification: ${response.errorBody().toString()}")
                 Log.e(ContentValues.TAG, response.errorBody().toString())
             }
         } catch(e: Exception) {
+            Log.d(TAG, "sendRemoteNotification: ${e.toString()}")
             Log.e(ContentValues.TAG, e.toString())
         }
     }
