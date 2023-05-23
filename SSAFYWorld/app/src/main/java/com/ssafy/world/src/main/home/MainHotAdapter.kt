@@ -46,6 +46,12 @@ class MainHotAdapter(val mContext: Context) : ListAdapter<Community, MainHotAdap
         return minOf(super.getItemCount(), 3)
     }
 
+    interface ItemClickListener {
+        fun onClick(data: Community)
+    }
+
+    lateinit var itemClickListener: ItemClickListener
+
 
     inner class MyViewHolder(private val binding: ItemHotCommunityBinding) : RecyclerView.ViewHolder(binding.root) {
 
@@ -62,6 +68,9 @@ class MainHotAdapter(val mContext: Context) : ListAdapter<Community, MainHotAdap
             comment.text = data.commentCount.toString()
             time.text = getFormattedTime(data.time)
             likeCount.text = data.likeCount.toString()
+            itemView.setOnClickListener {
+                itemClickListener.onClick(data)
+            }
         }
     }
 }

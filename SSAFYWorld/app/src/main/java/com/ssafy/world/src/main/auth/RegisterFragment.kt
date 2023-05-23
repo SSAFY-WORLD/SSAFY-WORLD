@@ -35,6 +35,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(
                 pwd = pwdEditTextView.text.toString()
                 name = nameEditTextView.text.toString()
                 nickname = nicknameEditTextView.text.toString()
+                profilePhoto = "https://firebasestorage.googleapis.com/v0/b/ssafy-world.appspot.com/o/community_images%2Fdefault_profile_image.png?alt=media&token=81bc6041-f3c5-45ce-962f-8456b1ab30e9"
             }
             authViewModel.isEmailDuplicate(curUser.email)
         }

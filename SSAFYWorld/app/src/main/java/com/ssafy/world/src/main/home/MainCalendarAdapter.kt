@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.world.data.model.Calendar
+import com.ssafy.world.data.model.Community
 import com.ssafy.world.databinding.ItemCalendarBinding
 import com.ssafy.world.utils.getFormattedTime
 
@@ -39,6 +40,13 @@ class MainCalendarAdapter() : ListAdapter<Calendar, MainCalendarAdapter.MyViewHo
         return minOf(super.getItemCount(), 3)
     }
 
+    interface ItemClickListener {
+        fun onClick(data: Calendar)
+    }
+
+    lateinit var itemClickListener: ItemClickListener
+
+
 
     inner class MyViewHolder(private val binding: ItemCalendarBinding) : RecyclerView.ViewHolder(binding.root) {
 
@@ -46,6 +54,10 @@ class MainCalendarAdapter() : ListAdapter<Calendar, MainCalendarAdapter.MyViewHo
             title.text = data.title
             continueDay.text = data.startTime
             preiod.text = "${data.startTime} ~ ${data.endTime}"
+
+            itemView.setOnClickListener {
+                itemClickListener.onClick(data)
+            }
         }
     }
 }

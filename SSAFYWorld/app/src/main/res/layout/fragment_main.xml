@@ -62,6 +62,15 @@
                     android:textSize="@dimen/_16ssp"
                     android:textStyle="bold" />
 
+                <ImageButton
+                    android:layout_width="@dimen/_18sdp"
+                    android:layout_height="@dimen/_18sdp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/ic_notification"
+                    android:backgroundTint="@color/dark_navy"
+                    android:textColor="@color/dark_navy"
+                    android:layout_marginLeft="@dimen/_4sdp"/>
+
                 <View
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
@@ -107,18 +116,31 @@
                     android:textSize="@dimen/_16ssp"
                     android:textStyle="bold" />
 
+                <ImageButton
+                    android:id="@+id/add_calendar_btn"
+                    android:layout_width="@dimen/_18sdp"
+                    android:layout_height="@dimen/_18sdp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/ic_calendar_plus"
+                    android:backgroundTint="@color/dark_navy"
+                    android:textColor="@color/dark_navy"
+                    android:layout_marginLeft="@dimen/_4sdp"/>
+
                 <View
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="1" />
 
+
                 <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/show_calendar_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@null"
                     android:text="전체보기"
                     android:textAlignment="textEnd"
                     android:textColor="@color/dark_navy" />
+
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -151,12 +173,24 @@
                     android:textSize="@dimen/_16ssp"
                     android:textStyle="bold" />
 
+
+                <ImageButton
+                    android:layout_width="@dimen/_18sdp"
+                    android:layout_height="@dimen/_18sdp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/ic_hot"
+                    android:backgroundTint="@color/dark_navy"
+                    android:textColor="@color/dark_navy"
+                    android:layout_marginLeft="@dimen/_4sdp"/>
+
+
                 <View
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="1" />
 
                 <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/show_hot_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@null"

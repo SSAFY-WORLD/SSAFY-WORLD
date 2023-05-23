@@ -130,7 +130,6 @@ class CommunityViewModel : ViewModel() {
 
     fun getRepliesByCommentId(commentId: String) = viewModelScope.launch {
         val replies = CommunityRepository.getRepliesByCommentId(commentId)
-        Log.d(TAG, "getRepliesByCommentId22: $replies")
         _replies.value = replies
     }
 
