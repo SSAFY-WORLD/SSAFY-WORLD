@@ -47,4 +47,6 @@
     <string name="logout_complete">로그아웃 되었습니다</string>
     <string name="withdrawal_text">회원탈퇴 하시겠습니까?</string>
     <string name="withdrawal_complete">회원탈퇴 되었습니다</string>
+    <string name="search_hint">검색어를 입력하세요</string>
+    <string name="search_list_hint">게시글을 찾을 수 없어요</string>
 </resources>

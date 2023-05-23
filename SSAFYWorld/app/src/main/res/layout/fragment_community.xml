@@ -7,6 +7,60 @@
     android:orientation="vertical"
     tools:context=".src.main.community.CommunityFragment">
 
+    <LinearLayout
+        android:id="@+id/main_ll_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/white">
+
+            <TextView
+                android:id="@+id/toolbarText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="커뮤니티"
+                android:textAlignment="center"
+                android:textColor="@color/dark_navy"
+                android:textSize="@dimen/_14sdp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="end">
+                <TextView
+                    android:id="@+id/photo_tv_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textColor="@color/dark_navy"
+                    android:visibility="gone"/>
+
+                <ImageButton
+                    android:id="@+id/search_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_search"
+                    android:layout_gravity="end|center"
+                    android:padding="@dimen/_10sdp"
+                    android:layout_marginRight="@dimen/_12sdp"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/light_gray"/>
+    </LinearLayout>
     <!-- TODO: Update blank fragment layout -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/community_free"

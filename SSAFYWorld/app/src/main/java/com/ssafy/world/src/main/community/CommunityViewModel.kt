@@ -152,5 +152,13 @@ class CommunityViewModel : ViewModel() {
         _communityList.value = repository.getHotCommunities()
     }
 
+    fun getSearchCommunities(keyword: String) = viewModelScope.launch {
+        _communityList.value = repository.searchCommunities(keyword)
+    }
+
+    fun getSearchCommunitiesInCollection(collection: String, keyword: String) = viewModelScope.launch {
+        _communityList.value = repository.searchCommunitiesInCollection(collection, keyword)
+    }
+
 
 }

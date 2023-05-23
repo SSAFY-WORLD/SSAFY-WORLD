@@ -378,5 +378,59 @@ object CommunityRepository {
         return outputStream.toByteArray()
     }
 
+    suspend fun searchCommunities(searchText: String): ArrayList<Community> {
+        val collectionRefs = arrayOf(
+            firestore.collection("free"),
+            firestore.collection("question"),
+            firestore.collection("company"),
+            firestore.collection("market")
+        )
+
+        val communityList = arrayListOf<Community>()
+
+        try {
+            for (collectionRef in collectionRefs) {
+                val querySnapshot = collectionRef
+                    .whereGreaterThanOrEqualTo("title", searchText)
+                    .get()
+                    .await()
+                for (document in querySnapshot) {
+                    val community = document.toObject(Community::class.java)
+                    if (community.title.contains(searchText) || community.content.contains(searchText)) {
+                        communityList.add(community)
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            // Error handling
+        }
+
+        communityList.sortByDescending { it.time }
+        return communityList
+    }
+
+    suspend fun searchCommunitiesInCollection(collection: String, searchText: String): ArrayList<Community> {
+        val collectionRef = firestore.collection(collection)
+        val communityList = arrayListOf<Community>()
+
+        try {
+            val querySnapshot = collectionRef
+                .whereGreaterThanOrEqualTo("title", searchText)
+                .get()
+                .await()
+            for (document in querySnapshot) {
+                val community = document.toObject(Community::class.java)
+                if (community.title.contains(searchText) || community.content.contains(searchText)) {
+                    communityList.add(community)
+                }
+            }
+        } catch (e: Exception) {
+            // Error handling
+        }
+
+        communityList.sortByDescending { it.time }
+        return communityList
+    }
+
 
 }

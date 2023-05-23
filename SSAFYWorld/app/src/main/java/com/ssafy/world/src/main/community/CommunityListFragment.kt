@@ -66,6 +66,9 @@ class CommunityListFragment : BaseFragment<FragmentCommunityListBinding>(Fragmen
                 communityId = "", communityName = "")
             navController.navigate(action)
         }
+        searchBtn.setOnClickListener {
+            navController.navigate(R.id.action_communityListFragment_to_communitySearchFragment)
+        }
     }
 
     private fun initListener() {

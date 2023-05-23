@@ -116,10 +116,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 R.id.communityFragment -> {
                     setTitle(getString(R.string.nav_community_title))
                     blockBackPressed()
+                    hideToolbar()
                 }
                 R.id.communityListFragment -> {
                     hideBottomNav()
                     unblockBackPressed()
+                    hideToolbar()
                 }
                 R.id.chatFragment -> {
                     setTitle(getString(R.string.nav_chat_title))
@@ -134,9 +136,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     hideBottomNav()
                     unblockBackPressed()
                 }
-                R.id.communityListFragment -> {
-                    setTitle(activityViewModel.communityTitle)
+                R.id.communitySearchFragment -> {
+                    hideBottomNav()
                     unblockBackPressed()
+                    hideToolbar()
                 }
                 R.id.photoFragment, R.id.photoFullFragment -> {
                     hideToolbar()
