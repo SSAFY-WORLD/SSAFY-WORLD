@@ -30,8 +30,8 @@ class LoginFragment :
         super.onViewCreated(view, savedInstanceState)
 
 
+        //checkLogin()
         initToken()
-        checkLogin()
         initButton()
         initEditTextListener()
         initObserver()

@@ -11,19 +11,24 @@ import androidx.lifecycle.lifecycleScope
 import com.ssafy.world.R
 import com.ssafy.world.config.ApplicationClass
 import com.ssafy.world.config.BaseFragment
-import com.ssafy.world.databinding.FragmentRegisterBinding
 import com.ssafy.world.data.model.User
 import com.ssafy.world.data.service.FCMService
+import com.ssafy.world.databinding.FragmentRegisterBinding
 import kotlinx.coroutines.launch
+import java.util.*
 
 private const val TAG = "RegisterFragment"
+
 class RegisterFragment : BaseFragment<FragmentRegisterBinding>(
     FragmentRegisterBinding::bind,
     R.layout.fragment_register
 ) {
 
     private val authViewModel: AuthViewModel by viewModels()
+
     private lateinit var curUser: User
+
+    private var isValid = false
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -37,7 +42,11 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(
         curUser = User()
         curUser.token = FCMService.getToken()
     }
+
     private fun initButton() = with(binding) {
+        authButton.setOnClickListener {
+
+        }
         registerBtn.setOnClickListener {
             curUser.apply {
                 id = ""
@@ -45,7 +54,8 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(
                 pwd = pwdEditTextView.text.toString()
                 name = nameEditTextView.text.toString()
                 nickname = nicknameEditTextView.text.toString()
-                profilePhoto = "https://firebasestorage.googleapis.com/v0/b/ssafy-world.appspot.com/o/community_images%2Fdefault_profile_image.png?alt=media&token=81bc6041-f3c5-45ce-962f-8456b1ab30e9"
+                profilePhoto =
+                    "https://firebasestorage.googleapis.com/v0/b/ssafy-world.appspot.com/o/community_images%2Fdefault_profile_image.png?alt=media&token=81bc6041-f3c5-45ce-962f-8456b1ab30e9"
             }
             authViewModel.isEmailDuplicate(curUser.email)
         }
@@ -106,6 +116,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(
         }
     }
 
+
     private fun initObserver() = with(authViewModel) {
         user.observe(viewLifecycleOwner) { user ->
             Log.d(TAG, "initObserver: $user")
@@ -122,12 +133,12 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(
         isDuplicated.observe(viewLifecycleOwner) {
             // 중복 이면 null -> user.id == ""
             Log.d(TAG, "initObserver: $it")
-            if(it.id  == "") {
+            if (it.id == "") {
                 authViewModel.insertUser(curUser)
             } else {
                 Toast.makeText(myContext, "중복된 아이디 입니다.", Toast.LENGTH_SHORT).show()
             }
         }
-    }
 
+    }
 }

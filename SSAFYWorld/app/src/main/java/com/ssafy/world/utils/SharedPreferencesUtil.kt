@@ -9,6 +9,7 @@ import com.ssafy.world.data.model.User
 class SharedPreferencesUtil(context: Context) {
     companion object {
         private const val KEY_USER = "user"
+        private const val KEY_VALIDATION = "validation"
     }
 
     private var preferences: SharedPreferences =
@@ -42,5 +43,11 @@ class SharedPreferencesUtil(context: Context) {
         preferences.edit().remove(KEY_USER).apply()
     }
 
+    fun saveValidation(code: String) {
+        preferences.edit().putString(KEY_VALIDATION, code).apply()
+    }
 
+    fun getValidation() : String? {
+        return preferences.getString(KEY_VALIDATION, null)
+    }
 }

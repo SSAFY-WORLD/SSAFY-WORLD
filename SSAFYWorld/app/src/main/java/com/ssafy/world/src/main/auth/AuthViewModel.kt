@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.ssafy.world.config.ApplicationClass
 import com.ssafy.world.data.model.User
 import kotlinx.coroutines.launch
+import java.util.*
 
 private const val TAG = "AuthViewModel"
 class AuthViewModel : ViewModel() {
@@ -32,6 +33,10 @@ class AuthViewModel : ViewModel() {
 	private val _deleteUserSuccess = MutableLiveData<Boolean>()
 	val deleteUserSuccess: LiveData<Boolean>
 		get() = _deleteUserSuccess
+
+    private val _validationSuccess = MutableLiveData<String>()
+    val validationSuccess: LiveData<String>
+        get() = _validationSuccess
 
     fun insertUser(user: User)  = viewModelScope.launch {
         try {
@@ -93,4 +98,13 @@ class AuthViewModel : ViewModel() {
         Log.d(TAG, "updateToken: ${_tokenSuccess.value}")
     }
 
+    fun saveToValidationCollection(validationCode: String) = viewModelScope.launch {
+        if(repository.saveToValidationCollection(validationCode)) {
+            _validationSuccess.postValue(validationCode)
+        }
+    }
+
+    fun getValidationCode() = viewModelScope.launch {
+        _validationSuccess.postValue(repository.getValidationCode())
+    }
 }
