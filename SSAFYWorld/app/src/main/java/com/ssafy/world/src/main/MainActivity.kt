@@ -37,6 +37,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     private val notificationManager: NotificationManager by lazy {
         getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     }
+
     // Android Oreo 이상에서는 알림 채널을 생성해야 한다
     private fun createNotificationChannel(id: String, name: String) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -45,6 +46,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             notificationManager.createNotificationChannel(channel)
         }
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         intent.getStringExtra(Constants.DESTINATION)?.let { destination ->
@@ -94,27 +96,57 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 R.id.loginFragment, R.id.registerFragment -> {
                     hideBottomNav()
                     hideToolbar()
+                    unblockBackPressed()
                 }
                 R.id.userFragment -> {
                     hideBottomNav()
                     setTitle(getString(R.string.nav_user_title))
+                    unblockBackPressed()
                 }
-                R.id.mainFragment -> setTitle(getString(R.string.nav_home_title))
-                R.id.communityFragment -> setTitle(getString(R.string.nav_community_title))
-                R.id.chatFragment -> setTitle(getString(R.string.nav_chat_title))
-                R.id.mypageFragment -> setTitle(getString(R.string.nav_mypage_title))
+                R.id.mainFragment -> {
+                    setTitle(getString(R.string.nav_home_title))
+                    blockBackPressed()
+
+                }
+                R.id.mainHotFragment -> {
+                    setTitle("인기 게시글")
+                    unblockBackPressed()
+                    hideBottomNav()
+                }
+                R.id.communityFragment -> {
+                    setTitle(getString(R.string.nav_community_title))
+                    blockBackPressed()
+                }
+                R.id.communityListFragment -> {
+                    hideBottomNav()
+                    unblockBackPressed()
+                }
+                R.id.chatFragment -> {
+                    setTitle(getString(R.string.nav_chat_title))
+                    blockBackPressed()
+                }
+                R.id.mypageFragment -> {
+                    setTitle(getString(R.string.nav_mypage_title))
+                    blockBackPressed()
+                }
                 R.id.communityWriteFragment -> {
                     setTitle("글쓰기")
                     hideBottomNav()
+                    unblockBackPressed()
                 }
                 R.id.communityListFragment -> {
                     setTitle(activityViewModel.communityTitle)
+                    unblockBackPressed()
                 }
                 R.id.photoFragment, R.id.photoFullFragment -> {
                     hideToolbar()
                     hideBottomNav()
+                    unblockBackPressed()
                 }
-                else -> hideBottomNav()
+                else -> {
+                    hideBottomNav()
+                    unblockBackPressed()
+                }
             }
         }
     }
@@ -123,6 +155,17 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     private val showBottomNav = { binding.mainBtmNav.visibility = View.VISIBLE }
     private val hideToolbar = { binding.mainLlToolbar.visibility = View.GONE }
     private val showToolbar = { binding.mainLlToolbar.visibility = View.VISIBLE }
+
+    private var backPressedBlocked = false
+    private val blockBackPressed = { backPressedBlocked = true }
+    private val unblockBackPressed = { backPressedBlocked = false }
+
+    override fun onBackPressed() {
+        if (!backPressedBlocked) {
+            super.onBackPressed()
+        }
+    }
+
     fun hideKeyboard() {
         val inputMethodManager =
             getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

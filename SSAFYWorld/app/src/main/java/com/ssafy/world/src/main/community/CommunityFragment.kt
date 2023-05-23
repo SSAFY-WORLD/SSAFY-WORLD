@@ -48,4 +48,6 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(
 
 
     }
+
+
 }

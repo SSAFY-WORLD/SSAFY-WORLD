@@ -1,6 +1,7 @@
 package com.ssafy.world.src.main.community
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
@@ -44,6 +45,7 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding>(
 
         communityId = args.communityId
 
+        initListener()
         if (communityId != "") {
             isEdit = true
             communityViewModel.fetchCommunityById(args.communityName, communityId)
@@ -52,7 +54,6 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding>(
         initRecyclerView()
         initButton()
         initPhoto()
-        initListener()
     }
 
     private fun initView() = with(binding) {
@@ -93,6 +94,7 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding>(
                 title = curTitle
                 content = curContent
                 likeCount = 0
+                collection = activityViewModel.entryCommunityCollection
                 time = System.currentTimeMillis()
                 photoUrls = photoUrlList
             }
@@ -120,16 +122,17 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding>(
         val gson = Gson()
         val listType: Type = object : TypeToken<ArrayList<Photo>>() {}.type
         val photoList: ArrayList<Photo> = gson.fromJson(photoListJson, listType)
+        photoUrlList.clear()
         photoUrlList.apply {
             photoList.forEach {
                 add(it.url)
             }
         }
-        writeCv.visibility = View.VISIBLE
         initRecyclerView()
     }
 
     private fun initRecyclerView() = with(binding) {
+        writeCv.visibility = View.VISIBLE
         myAdapter.submitList(photoUrlList.toMutableList())
         writeRvPhoto.apply {
             layoutManager = LinearLayoutManager(myContext, LinearLayoutManager.HORIZONTAL, false)
@@ -147,6 +150,7 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding>(
         communityViewModel.community.observe(viewLifecycleOwner) {
             if (isEdit) {
                 curCommunity = it
+                Log.d(TAG, "initListener: $it")
                 initView()
                 return@observe
             } else {

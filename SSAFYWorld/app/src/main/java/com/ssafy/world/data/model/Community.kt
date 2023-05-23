@@ -17,6 +17,7 @@ data class Community(
     var time: Long,
     var commentCount: Int = 0,
     var likeCount:Int = 0,
+    var collection:String = "",
     var fcmToken:String = "",
     var photoUrls: ArrayList<String> = ArrayList(),
     var likedUserIds: ArrayList<String> = ArrayList(),
