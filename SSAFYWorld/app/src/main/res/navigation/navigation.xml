@@ -195,7 +195,7 @@
             android:id="@+id/action_mypageFragment_to_loginFragment"
             app:destination="@id/loginFragment"
             app:popUpTo="@id/loginFragment"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true" />
     </fragment>
 
     <!-- Auth -->
@@ -322,13 +322,7 @@
         tools:layout="@layout/bottom_change_pwd">
         <action
             android:id="@+id/action_changePwdBottomSheetFragment_to_loginFragment"
-            app:destination="@id/loginFragment"
-            app:popUpTo="@id/loginFragment"
-            app:popUpToInclusive="true"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_enter_anim"
-            app:popExitAnim="@anim/nav_default_exit_anim" />
+            app:destination="@id/loginFragment" />
     </dialog>
 
 

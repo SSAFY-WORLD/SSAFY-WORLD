@@ -69,7 +69,7 @@ class MypageFragment : BaseFragment<FragmentMypageBinding>(FragmentMypageBinding
             if (user.id != ""){
                 ChangePwdBottomSheetFragment(user).show(
                     parentFragmentManager,
-                    "RegisterBottomSheet"
+                    "ChangePwdBottomSheet"
                 )
             }
         }
