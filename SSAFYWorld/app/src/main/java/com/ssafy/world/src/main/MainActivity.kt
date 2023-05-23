@@ -128,7 +128,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     blockBackPressed()
                 }
                 R.id.mypageFragment -> {
-                    setTitle(getString(R.string.nav_mypage_title))
+                    hideToolbar()
                     blockBackPressed()
                 }
                 R.id.communityWriteFragment -> {

@@ -25,6 +25,10 @@ class AuthViewModel : ViewModel() {
     val tokenSuccess: LiveData<Boolean>
         get() = _tokenSuccess
 
+    private val _updateUserPwdSuccess = MutableLiveData<Boolean>()
+    val updateUserPwdSuccess: LiveData<Boolean>
+        get() = _updateUserPwdSuccess
+
 	private val _deleteUserSuccess = MutableLiveData<Boolean>()
 	val deleteUserSuccess: LiveData<Boolean>
 		get() = _deleteUserSuccess
@@ -69,6 +73,14 @@ class AuthViewModel : ViewModel() {
 	    } catch (e: Exception) {
 			_deleteUserSuccess.postValue(false)
 		}
+    }
+
+    fun updateUserPwd(userId: String, userPwd: String) = viewModelScope.launch {
+        try {
+            _updateUserPwdSuccess.postValue(repository.updateUserPwd(userId, userPwd))
+        } catch (e: Exception) {
+            _updateUserPwdSuccess.postValue(false)
+        }
     }
     // FCM Token Update
     fun updateUserToken(userEmail: String) = viewModelScope.launch {

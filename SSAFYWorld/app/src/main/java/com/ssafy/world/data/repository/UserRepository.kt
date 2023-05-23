@@ -98,12 +98,24 @@ object UserRepository {
         }
     }
 
-    suspend fun deleteUser(userEmail: String): Boolean {
+    suspend fun deleteUser(userId: String): Boolean {
         return try {
-            userCollection.document(userEmail).delete().await()
+            userCollection.document(userId).delete().await()
             true
         } catch (e: Exception) {
             Log.e(TAG, "deleteUser error: ${e.message}")
+            false
+        }
+    }
+
+    suspend fun updateUserPwd(userId: String, userPwd: String): Boolean {
+        return try {
+            userCollection.document(userId)
+                .update("pwd", userPwd)
+                .await()
+            true
+        } catch (e: Exception) {
+            Log.e(TAG, "updateUserPwd error: ${e.message}")
             false
         }
     }

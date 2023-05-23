@@ -32,7 +32,7 @@ class LoginFragment :
         super.onViewCreated(view, savedInstanceState)
 
 
-        //checkLogin()
+        checkLogin()
         initButton()
         initEditTextListener()
         initObserver()
