@@ -5,12 +5,15 @@ import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
+import androidx.core.os.bundleOf
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.ssafy.world.R
@@ -51,17 +54,21 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     private fun moveFragment(destination: String) {
+        Log.d(TAG, "moveFragment: ")
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
-        when (destination) {
+        val cur = destination.split("-")
+        Log.d(TAG, "moveFragment: $cur")
+        when (cur[0]) {
             Constants.CHAT -> {
                 setTitle(getString(R.string.nav_chat_title))
                 navController.navigate(R.id.chatFragment)
             }
             Constants.COMMUNITY -> {
+                val bundle = bundleOf("communityId" to cur[1])
                 setTitle(activityViewModel.communityTitle)
-                navController.navigate(R.id.communityListFragment)
+                navController.navigate(R.id.communityDetailFragment, bundle)
             }
             else -> hideBottomNav()
         }
@@ -216,6 +223,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 ),
                 101
             )
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        Log.d(TAG, "onNewIntent: ")
+        intent.getStringExtra(Constants.DESTINATION)?.let { destination ->
+            moveFragment(destination)
         }
     }
 }

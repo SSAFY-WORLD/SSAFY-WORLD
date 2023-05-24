@@ -5,6 +5,7 @@ import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -59,8 +60,8 @@ class CommunityListFragment : BaseFragment<FragmentCommunityListBinding>(Fragmen
 
             myAdapter.itemClickListener = object : CommunityListAdapter.ItemClickListener {
                 override fun onClick(view: View, data: Community, position: Int) {
-                    val action = CommunityListFragmentDirections.actionCommunityListFragmentToCommunityDetailFragment(communityList[position].id)
-                    navController.navigate(action)
+                   val bundle = bundleOf("communityId" to data.id)
+                    navController.navigate(R.id.action_communityListFragment_to_communityDetailFragment, bundle)
                 }
             }
         }

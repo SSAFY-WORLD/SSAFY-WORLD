@@ -70,7 +70,7 @@ class CommunityMapDetailFragment : BaseFragment<FragmentCommunityMapDetailBindin
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        curId = args.communityId
+        curId = arguments?.getString("communityId") ?: ""
         curBoard = activityViewModel.entryCommunityCollection
         if (curId != "") {
             communityViewModel.fetchCommunityById(curBoard, curId)

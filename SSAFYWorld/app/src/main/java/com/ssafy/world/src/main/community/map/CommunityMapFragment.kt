@@ -3,6 +3,7 @@ package com.ssafy.world.src.main.community.map
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -67,11 +68,8 @@ class CommunityMapFragment : BaseFragment<FragmentCommunityMapListBinding>(
 
             myAdapter.itemClickListener = object : CommunityListAdapter.ItemClickListener {
                 override fun onClick(view: View, data: Community, position: Int) {
-                    val action =
-                        CommunityMapFragmentDirections.actionCommunityMapFragmentToCommunityMapDetail(
-                            data.id
-                        )
-                    navController.navigate(action)
+                    val bundle = bundleOf("communityId" to data.id)
+                    navController.navigate(R.id.action_communityMapFragment_to_communityMapDetail, bundle)
                 }
             }
         }

@@ -44,7 +44,7 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
     private val curUser by lazy { ApplicationClass.sharedPreferences.getUser() }
     private var isReply = ""
     private var isNew = false
-    private var replyFCM = ""
+    private var replyComment = Comment()
 
     private val myAdapter: CommunityDetailPhotoAdapter by lazy {
         CommunityDetailPhotoAdapter(myContext)
@@ -59,7 +59,7 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        curId = args.communityId
+        curId = arguments?.getString("communityId") ?: ""
         curBoard = activityViewModel.entryCommunityCollection
         if (curId != "") {
             communityViewModel.fetchCommunityById(curBoard, curId)
@@ -138,7 +138,7 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
         commentAdapter.replyClickListener =
             object : CommunityDetailCommentAdapter.ReplyClickListener {
                 override fun onClick(view: View, data: Comment, position: Int) {
-                    replyFCM = data.fcmToken
+                    replyComment.fcmToken = data.fcmToken
                     commentPosition = position
 //                    replyTvMessage.visibility = View.VISIBLE
                     //replyTvMessage.text = "${data.userNickname} 님에게 답글 남기는 중.."
@@ -180,8 +180,10 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
                     community,
                     cur
                 )
-                val noti = NotificationData("메시지", "싸피월드", "${curUser!!.nickname} 님이 답글을 남겼습니다.")
-                sendRemoteNotification(noti, replyFCM)
+                if(replyComment.userId != curUser!!.id) {
+                    val noti = NotificationData("커뮤니티-${cur.id}", "싸피월드", "${curUser!!.nickname} 님이 답글을 남겼습니다.")
+                    sendRemoteNotification(noti, replyComment.fcmToken)
+                }
             } else {
                 communityViewModel.insertComment(
                     activityViewModel.entryCommunityCollection,
@@ -189,9 +191,11 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
                     cur
                 )
             }
+            if(community.userId != curUser!!.id) {
+                val noti = NotificationData("커뮤니티-${community.id}", "싸피월드", "${curUser!!.nickname} 님이 댓글을 남겼습니다.")
+                FCMService.sendRemoteNotification(noti, community.fcmToken)
+            }
 
-            val noti = NotificationData("메시지", "싸피월드", "${curUser!!.nickname} 님이 댓글을 남겼습니다.")
-            FCMService.sendRemoteNotification(noti, community.fcmToken)
             (activity as MainActivity).hideKeyboard()
             commentInput.setText("")
             showCustomToast("댓글이 등록됐어요.")

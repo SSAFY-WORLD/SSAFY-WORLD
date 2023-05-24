@@ -49,12 +49,12 @@ class FirebaseMessageService: FirebaseMessagingService() {
         messageContent = data[Constants.MESSAGE].toString()
         // 받아온 destination 정보를 바탕으로 알람이 어떤 Fragment로 갈지 지정
         val mainIntent = Intent(this, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
             putExtra(Constants.DESTINATION, messageDestination)
         }
 
         val mainPendingIntent: PendingIntent =
-            PendingIntent.getActivity(this, 101, mainIntent, PendingIntent.FLAG_MUTABLE)
+            PendingIntent.getActivity(this, UUID.randomUUID().hashCode(), mainIntent,   PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
 
         val summaryNotification = NotificationCompat.Builder(this, Constants.CHANNEL_ID)
@@ -63,6 +63,7 @@ class FirebaseMessageService: FirebaseMessagingService() {
             .setSmallIcon(R.drawable.ic_app_logo)
             .setContentTitle(messageTitle)
             .setContentText(messageContent)
+            .setContentIntent(mainPendingIntent)
             .setGroup(messageDestination)
             .setGroupSummary(true)
             .setAutoCancel(true)
