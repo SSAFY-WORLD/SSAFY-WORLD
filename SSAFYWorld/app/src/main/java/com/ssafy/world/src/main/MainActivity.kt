@@ -49,6 +49,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         intent.getStringExtra(Constants.DESTINATION)?.let { destination ->
             moveFragment(destination)
         }
@@ -56,10 +57,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         setToolbarWithNavcontroller()
 
 
-//        requestPermission()
+        requestPermission()
 //        requestCalendarPermission()
-        requestPermissionWithTed()
-        requestStoragePermission()
     }
 
     private fun moveFragment(destination: String) {
@@ -198,48 +197,39 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         binding.toolbarText.text = title
     }
 
-    private fun requestPermissionWithTed() {
-        TedPermission.create()
-            .setPermissionListener(object : PermissionListener {
-                override fun onPermissionGranted() {
-                    // 권한이 허용된 경우 다음 작업을 수행할 수 있습니다.
-                }
-
-                override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
-                    // 권한이 거부된 경우 사용자에게 알림을 표시하거나 다른 조치를 취해야 합니다.
-                }
-            })
-            .setDeniedMessage("권한을 허용해주세요.")
-            .setPermissions(android.Manifest.permission.READ_CALENDAR ,
-                android.Manifest.permission.WRITE_CALENDAR,
-                android.Manifest.permission.ACCESS_FINE_LOCATION,
-                android.Manifest.permission.ACCESS_COARSE_LOCATION)
-            .check()
-
-
-    }
-
-    private fun requestStoragePermission() {
-        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.TIRAMISU) {
+    private fun requestPermission() {
+        val permissions = arrayOf(
+            Manifest.permission.READ_CALENDAR,
+            Manifest.permission.WRITE_CALENDAR,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             ActivityCompat.requestPermissions(
                 this,
-                arrayOf(Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.POST_NOTIFICATIONS),
+                arrayOf(
+                    Manifest.permission.READ_CALENDAR,
+                    Manifest.permission.WRITE_CALENDAR,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.READ_MEDIA_IMAGES,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ),
                 101
             )
-        } else{
-            TedPermission.create()
-                .setPermissionListener(object : PermissionListener {
-                    override fun onPermissionGranted() {
-                        // 권한이 허용된 경우 다음 작업을 수행할 수 있습니다.
-                    }
-
-                    override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
-                        // 권한이 거부된 경우 사용자에게 알림을 표시하거나 다른 조치를 취해야 합니다.
-                    }
-                })
-                .setDeniedMessage("권한을 허용해주세요.")
-                .setPermissions(android.Manifest.permission.READ_EXTERNAL_STORAGE)
-                .check()
+        } else {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.READ_CALENDAR,
+                    Manifest.permission.WRITE_CALENDAR,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ),
+                101
+            )
         }
     }
+
 }

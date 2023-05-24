@@ -1,4 +1,4 @@
-package com.ssafy.world.src.main.community
+package com.ssafy.world.src.main.community.map
 
 import android.content.Context
 import android.graphics.Rect
@@ -32,6 +32,7 @@ import com.ssafy.world.databinding.FragmentCommunityMapDetailBinding
 import com.ssafy.world.databinding.ItemCommunityCommentBinding
 import com.ssafy.world.src.main.MainActivity
 import com.ssafy.world.src.main.MainActivityViewModel
+import com.ssafy.world.src.main.community.*
 import com.ssafy.world.src.main.photo.PhotoFullDialog
 
 private const val TAG = "CommunityMapDetailFragm"

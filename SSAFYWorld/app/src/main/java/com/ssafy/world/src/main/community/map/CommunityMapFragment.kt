@@ -1,7 +1,6 @@
-package com.ssafy.world.src.main.community
+package com.ssafy.world.src.main.community.map
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -13,11 +12,15 @@ import com.ssafy.world.config.BaseFragment
 import com.ssafy.world.data.model.Community
 import com.ssafy.world.databinding.FragmentCommunityMapListBinding
 import com.ssafy.world.src.main.MainActivityViewModel
+import com.ssafy.world.src.main.community.CommunityListAdapter
+import com.ssafy.world.src.main.community.CommunityViewModel
 
-class CommunityMapFragment : BaseFragment<FragmentCommunityMapListBinding>(FragmentCommunityMapListBinding::bind, R.layout.fragment_community_map_list) {
+class CommunityMapFragment : BaseFragment<FragmentCommunityMapListBinding>(
+    FragmentCommunityMapListBinding::bind,
+    R.layout.fragment_community_map_list
+) {
     private val activityViewModel: MainActivityViewModel by activityViewModels()
     private val communityViewModel: CommunityViewModel by viewModels()
-    val args: CommunityListFragmentArgs by navArgs()
 
     private var communityList: ArrayList<Community> = arrayListOf()
 
@@ -54,12 +57,16 @@ class CommunityMapFragment : BaseFragment<FragmentCommunityMapListBinding>(Fragm
             layoutManager = LinearLayoutManager(myContext, LinearLayoutManager.VERTICAL, false)
             adapter = myAdapter
 
-            val dividerItemDecoration = DividerItemDecoration(myContext, LinearLayoutManager.VERTICAL)
+            val dividerItemDecoration =
+                DividerItemDecoration(myContext, LinearLayoutManager.VERTICAL)
             communityRv.addItemDecoration(dividerItemDecoration)
 
             myAdapter.itemClickListener = object : CommunityListAdapter.ItemClickListener {
                 override fun onClick(view: View, data: Community, position: Int) {
-                    val action = CommunityMapFragmentDirections.actionCommunityMapFragmentToCommunityMapDetail(data.id)
+                    val action =
+                        CommunityMapFragmentDirections.actionCommunityMapFragmentToCommunityMapDetail(
+                            data.id
+                        )
                     navController.navigate(action)
                 }
             }

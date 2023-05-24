@@ -365,7 +365,7 @@
     </fragment>
     <fragment
         android:id="@+id/communityMapFragment"
-        android:name="com.ssafy.world.src.main.community.CommunityMapFragment"
+        android:name="com.ssafy.world.src.main.community.map.CommunityMapFragment"
         android:label="CommunityMapFragment">
 
         <action
@@ -399,13 +399,13 @@
     </fragment>
     <fragment
         android:id="@+id/mapFragment"
-        android:name="com.ssafy.world.src.main.community.MapFragment"
+        android:name="com.ssafy.world.src.main.community.map.MapFragment"
         android:label="MapFragment">
 
     </fragment>
     <fragment
         android:id="@+id/communityMapSearchFragment"
-        android:name="com.ssafy.world.src.main.community.CommunityMapSearchFragment"
+        android:name="com.ssafy.world.src.main.community.map.CommunityMapSearchFragment"
         android:label="CommunityMapSearchFragment">
 
         <action
@@ -418,7 +418,7 @@
     </fragment>
     <fragment
         android:id="@+id/communityMapWriteFragment"
-        android:name="com.ssafy.world.src.main.community.CommunityMapWriteFragment"
+        android:name="com.ssafy.world.src.main.community.map.CommunityMapWriteFragment"
         android:label="CommunityMapWriteFragment">
 
         <argument
@@ -445,7 +445,7 @@
     </fragment>
     <fragment
         android:id="@+id/communityMapDetail"
-        android:name="com.ssafy.world.src.main.community.CommunityMapDetailFragment"
+        android:name="com.ssafy.world.src.main.community.map.CommunityMapDetailFragment"
         android:label="CommunityMapDetail">
 
         <argument

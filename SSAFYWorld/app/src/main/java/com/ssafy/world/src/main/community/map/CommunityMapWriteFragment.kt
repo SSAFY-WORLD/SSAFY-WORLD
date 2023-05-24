@@ -1,4 +1,4 @@
-package com.ssafy.world.src.main.community
+package com.ssafy.world.src.main.community.map
 
 import android.os.Bundle
 import android.view.View
@@ -7,7 +7,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.gms.maps.*
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.model.Place
@@ -20,6 +23,9 @@ import com.ssafy.world.data.model.Community
 import com.ssafy.world.data.model.Photo
 import com.ssafy.world.databinding.FragmentCommunityMapWriteBinding
 import com.ssafy.world.src.main.MainActivityViewModel
+import com.ssafy.world.src.main.community.CommunityViewModel
+import com.ssafy.world.src.main.community.CommunityWriteFragmentDirections
+import com.ssafy.world.src.main.community.CommunityWritePhotoAdapter
 import java.lang.reflect.Type
 
 class CommunityMapWriteFragment : BaseFragment<FragmentCommunityMapWriteBinding>(
@@ -169,7 +175,9 @@ class CommunityMapWriteFragment : BaseFragment<FragmentCommunityMapWriteBinding>
     }
 
     private fun initRecyclerView() = with(binding) {
-        writeCv.visibility = View.VISIBLE
+        if(photoUrlList.size > 0) {
+            writeCv.visibility = View.VISIBLE
+        }
         myAdapter.submitList(photoUrlList.toMutableList())
         writeRvPhoto.apply {
             layoutManager = LinearLayoutManager(myContext, LinearLayoutManager.HORIZONTAL, false)
