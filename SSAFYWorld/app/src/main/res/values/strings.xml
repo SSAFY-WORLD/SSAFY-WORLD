@@ -2,7 +2,7 @@
     <string name="app_name">싸피월드</string>
     <string name="kakao_native_app_key">4674876d3a4a4de70110fc7745ed039f</string>
     <string name="google_map_api_key">AIzaSyCJzBAuClwnUegX4yf7Q-VHCp3AcJq_gb8</string>
-    
+
     <!-- Naming Rules -->
     <!-- 도메인명_컴포넌트함축어_용도(=목적) -->
 

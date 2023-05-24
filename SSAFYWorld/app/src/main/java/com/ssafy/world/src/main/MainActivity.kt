@@ -151,6 +151,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     hideBottomNav()
                     unblockBackPressed()
                 }
+                R.id.notificationFragment -> {
+                    setTitle("알림 목록")
+                    unblockBackPressed()
+                    hideBottomNav()
+                }
                 else -> {
                     hideBottomNav()
                     unblockBackPressed()

@@ -2,14 +2,12 @@ package com.ssafy.world.src.main.home
 
 
 import android.annotation.SuppressLint
-import android.app.Notification
 import android.content.ContentResolver
 import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.provider.CalendarContract
 import android.util.Log
 import android.view.View
@@ -85,6 +83,10 @@ class MainFragment :
         showHotBtn.setOnClickListener {
             navController.navigate(R.id.action_mainFragment_to_mainHotFragment)
         }
+        // 알림 전체 보기
+        showAlarmBtn.setOnClickListener {
+            navController.navigate(R.id.action_mainFragment_to_communityDetailFragment)
+        }
 
         goSign.setOnClickListener {
             openUrlInExternalBrowser(signUrl)
@@ -97,6 +99,16 @@ class MainFragment :
         }
         goGithub.setOnClickListener {
             openUrlInExternalBrowser(gitUrl)
+        }
+        // 알림 클릭시 해당 Community화면으로 이동
+        notificationAdapter.itemClickListener = object: NotificationListAdapter.ItemClickListener {
+            override fun onClick(view: View, data: NotificationEntity) {
+                val destination = data.id.split("-")[0]
+                val bundle = Bundle().apply {
+                    "communityId" to destination
+                }
+                navController.navigate(R.id.action_mainFragment_to_communityDetailFragment, bundle)
+            }
         }
     }
     fun openUrlInExternalBrowser(url: String) {
