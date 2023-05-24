@@ -45,7 +45,7 @@ class UserFragment : BaseFragment<FragmentUserBinding>(FragmentUserBinding::bind
     }
 
     private fun initObserver() {
-        userViewModel.users.observe(viewLifecycleOwner) {
+        userViewModel.userList.observe(viewLifecycleOwner) {
             userList = it
             userListAdapter.submitList(userList.toMutableList())
             dismissLoadingDialog()

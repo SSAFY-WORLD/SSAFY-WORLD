@@ -141,7 +141,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     unblockBackPressed()
                     hideToolbar()
                 }
-                R.id.photoFragment, R.id.photoFullFragment -> {
+                R.id.photoFragment, R.id.photoFullFragment , R.id.photoSingleFragment -> {
                     hideToolbar()
                     hideBottomNav()
                     unblockBackPressed()

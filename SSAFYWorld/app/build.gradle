@@ -5,6 +5,7 @@ plugins {
     id 'com.google.gms.google-services'
     id 'androidx.navigation.safeargs.kotlin'
     id 'kotlin-parcelize'
+
 }
 
 android {
@@ -106,4 +107,6 @@ dependencies {
     // Swipe To delete
     implementation 'it.xabaras.android:recyclerview-swipedecorator:1.4'
 
+    // OSS License
+    implementation "com.google.android.gms:play-services-oss-licenses:17.0.0"
 }
