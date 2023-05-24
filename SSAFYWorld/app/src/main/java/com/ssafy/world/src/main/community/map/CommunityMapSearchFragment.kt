@@ -22,7 +22,7 @@ import com.ssafy.world.src.main.MainActivityViewModel
 private const val TAG = "CommunityMapSearchFragm"
 class CommunityMapSearchFragment : BaseFragment<FragmentCommunityMapSearchBinding>(
     FragmentCommunityMapSearchBinding::bind,
-    R.layout.fragment_community_search
+    R.layout.fragment_community_map_search
 ) {
 
     private val activityViewModel: MainActivityViewModel by activityViewModels()

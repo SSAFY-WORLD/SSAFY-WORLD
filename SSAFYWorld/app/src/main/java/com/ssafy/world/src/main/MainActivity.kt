@@ -143,17 +143,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     hideBottomNav()
                     unblockBackPressed()
                 }
-                R.id.communitySearchFragment -> {
+                R.id.communitySearchFragment, R.id.communityMapSearchFragment -> {
                     hideBottomNav()
                     unblockBackPressed()
                     hideToolbar()
+                }
+                R.id.communityDetailFragment, R.id.communityMapDetail -> {
+                    hideBottomNav()
+                    setTitle("커뮤니티")
                 }
                 R.id.photoFragment, R.id.photoFullFragment -> {
-                    hideToolbar()
-                    hideBottomNav()
-                    unblockBackPressed()
-                }
-                R.id.communityMapFragment -> {
                     hideToolbar()
                     hideBottomNav()
                     unblockBackPressed()

@@ -1,12 +1,14 @@
 package com.ssafy.world.src.main.community.map
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.ssafy.world.R
 import com.ssafy.world.config.BaseFragment
 import com.ssafy.world.data.model.Community
@@ -18,7 +20,8 @@ import com.ssafy.world.src.main.community.CommunityViewModel
 class CommunityMapFragment : BaseFragment<FragmentCommunityMapListBinding>(
     FragmentCommunityMapListBinding::bind,
     R.layout.fragment_community_map_list
-) {
+), SwipeRefreshLayout.OnRefreshListener {
+
     private val activityViewModel: MainActivityViewModel by activityViewModels()
     private val communityViewModel: CommunityViewModel by viewModels()
 
@@ -31,7 +34,6 @@ class CommunityMapFragment : BaseFragment<FragmentCommunityMapListBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         initView()
         initRecyclerView()
         initListener()
@@ -40,6 +42,8 @@ class CommunityMapFragment : BaseFragment<FragmentCommunityMapListBinding>(
     }
 
     private fun initView() = with(binding) {
+        swipeLayout.setOnRefreshListener(this@CommunityMapFragment) // SwipeRefreshLayout에 리스너 설정
+
         mapBtn.setOnClickListener {
             navController.navigate(R.id.action_communityMapFragment_to_mapFragment)
         }
@@ -75,10 +79,20 @@ class CommunityMapFragment : BaseFragment<FragmentCommunityMapListBinding>(
 
     private fun initListener() {
         communityViewModel.communityList.observe(viewLifecycleOwner) {
-            if(!it.isEmpty()) {
+            if (!it.isEmpty()) {
                 communityList = it
                 myAdapter.submitList(communityList.toMutableList())
+                Handler().postDelayed({
+                    binding.communityRv.scrollToPosition(0)
+                }, 100)
             }
+            // 새로 고침 완료 후에 SwipeRefreshLayout의 로딩 상태 제거
+            binding.swipeLayout.isRefreshing = false
         }
+    }
+
+    // SwipeRefreshLayout의 새로 고침 이벤트 처리
+    override fun onRefresh() {
+        communityViewModel.getAllCommunities(activityViewModel.entryCommunityCollection)
     }
 }

@@ -16,6 +16,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.ssafy.world.config.ApplicationClass
 import com.ssafy.world.data.model.Comment
 import com.ssafy.world.data.model.Community
+import com.ssafy.world.databinding.FragmentCommunityDetailBinding
 import com.ssafy.world.databinding.ItemCommunityCommentBinding
 import com.ssafy.world.utils.getFormattedTime
 
@@ -64,7 +65,6 @@ class CommunityDetailCommentAdapter(val mContext: Context, val viewModel: Commun
     }
 
     lateinit var replyShowClickListener: ReplyShowClickListener
-
     inner class MyViewHolder(private val binding: ItemCommunityCommentBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -103,6 +103,7 @@ class CommunityDetailCommentAdapter(val mContext: Context, val viewModel: Commun
             username.text = data.userNickname
             content.text = data.comment
             time.text = getFormattedTime(data.time)
+
         }
     }
 

@@ -133,7 +133,9 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding>(
     }
 
     private fun initRecyclerView() = with(binding) {
-        writeCv.visibility = View.VISIBLE
+        if(photoUrlList.size > 0) {
+            writeCv.visibility = View.VISIBLE
+        }
         myAdapter.submitList(photoUrlList.toMutableList())
         writeRvPhoto.apply {
             layoutManager = LinearLayoutManager(myContext, LinearLayoutManager.HORIZONTAL, false)

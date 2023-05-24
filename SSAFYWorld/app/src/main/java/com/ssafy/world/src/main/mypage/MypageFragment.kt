@@ -1,7 +1,10 @@
 package com.ssafy.world.src.main.mypage
 
 import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import com.ssafy.world.R
@@ -12,14 +15,17 @@ import com.ssafy.world.src.main.auth.AuthViewModel
 import com.ssafy.world.utils.CustomAlertDialog
 import com.ssafy.world.utils.ValidationAlertDialog
 
+private const val TAG = "MypageFragment"
 class MypageFragment :
     BaseFragment<FragmentMypageBinding>(FragmentMypageBinding::bind, R.layout.fragment_mypage) {
     private val authViewModel: AuthViewModel by viewModels()
     private var isModifyClicked = false
 
     private lateinit var validationDialog: ValidationAlertDialog
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        
         initView()
         initObserver()
         initButton()
@@ -27,8 +33,11 @@ class MypageFragment :
 
     private fun initView() = with(binding) {
         val user = ApplicationClass.sharedPreferences.getUser()!!
+        Log.d(TAG, "initView: $user")
         userEmail.text = user.email
         userName.text = user.name
+        userNameEditText.setText(user.email)
+        userNickNameEditText.setText(user.nickname)
         if (user.email == "manager") {
             validationLl.visibility = View.VISIBLE
         }
@@ -153,6 +162,11 @@ class MypageFragment :
         return (1..codeLength)
             .map { charPool.random() }
             .joinToString("")
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Log.d(TAG, "onDestroyView: ")
     }
 
 }
