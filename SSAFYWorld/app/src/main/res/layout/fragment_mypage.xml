@@ -55,8 +55,7 @@
                         android:id="@+id/profileImage"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        app:srcCompat="@drawable/default_profile_image" />
+                        android:scaleType="centerCrop"/>
                 </androidx.cardview.widget.CardView>
 
                 <ImageButton
@@ -87,14 +86,19 @@
 
             <EditText
                 android:id="@+id/userNameEditText"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/_120sdp"
                 android:layout_height="wrap_content"
+                android:gravity="center"
+                android:maxLength="5"
+                android:imeOptions="actionNext"
+                tools:visibility="visible"
+                android:nextFocusForward="@id/userNickNameEditText"
                 android:layout_marginTop="@dimen/_8sdp"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_24sdp"
                 android:textStyle="bold"
                 android:visibility="gone"
-                tools:text="홍길동"/>
+                tools:text="홍길동동동"/>
 
             <TextView
                 android:id="@+id/userNickName"
@@ -107,13 +111,18 @@
 
             <EditText
                 android:id="@+id/userNickNameEditText"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/_140sdp"
                 android:layout_height="wrap_content"
+                android:maxLength="9"
+                android:gravity="center"
+                android:imeOptions="actionDone"
+                tools:visibility="visible"
+                android:nextFocusForward="@id/update_user_btn"
                 android:layout_marginTop="@dimen/_8sdp"
                 android:textSize="@dimen/_14sdp"
                 android:textColor="@color/black"
                 android:visibility="gone"
-                tools:text="닉네임"/>
+                tools:text="닉네임닉네임닉네임"/>
 
             <TextView
                 android:id="@+id/userEmail"
@@ -126,7 +135,7 @@
         </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/update_user"
+            android:id="@+id/update_user_btn"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_48sdp"
             android:layout_marginHorizontal="@dimen/_16sdp"

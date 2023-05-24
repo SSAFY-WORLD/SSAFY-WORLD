@@ -200,8 +200,11 @@
         <action
             android:id="@+id/action_mypageFragment_to_loginFragment"
             app:destination="@id/loginFragment"
-            app:popUpTo="@id/loginFragment"
+            app:popUpTo="@id/mypageFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_mypageFragment_to_photoSingleFragment"
+            app:destination="@id/photoSingleFragment" />
     </fragment>
 
     <!-- Auth -->
@@ -362,6 +365,16 @@
         <action
             android:id="@+id/action_validationFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/photoSingleFragment"
+        android:name="com.ssafy.world.src.main.photo.PhotoSingleFragment"
+        android:label="PhotoSingleFragment">
+        <action
+            android:id="@+id/action_photoSingleFragment_to_mypageFragment"
+            app:destination="@id/mypageFragment"
+            app:popUpTo="@id/mypageFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
     <fragment
         android:id="@+id/communityMapFragment"

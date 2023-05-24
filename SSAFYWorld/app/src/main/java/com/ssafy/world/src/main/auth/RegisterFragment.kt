@@ -14,6 +14,7 @@ import com.ssafy.world.config.BaseFragment
 import com.ssafy.world.data.model.User
 import com.ssafy.world.data.service.FCMService
 import com.ssafy.world.databinding.FragmentRegisterBinding
+import com.ssafy.world.utils.Constants
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -55,7 +56,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(
                 name = nameEditTextView.text.toString()
                 nickname = nicknameEditTextView.text.toString()
                 profilePhoto =
-                    "https://firebasestorage.googleapis.com/v0/b/ssafy-world.appspot.com/o/community_images%2Fdefault_profile_image.png?alt=media&token=81bc6041-f3c5-45ce-962f-8456b1ab30e9"
+                    Constants.DEFAULT_PROFILE
             }
             authViewModel.isEmailDuplicate(curUser.email)
         }

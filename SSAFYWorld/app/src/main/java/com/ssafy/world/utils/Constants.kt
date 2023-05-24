@@ -1,6 +1,8 @@
 package com.ssafy.world.utils
 
 object Constants {
+    // Default Profile
+    const val DEFAULT_PROFILE = "https://firebasestorage.googleapis.com/v0/b/ssafy-world.appspot.com/o/community_images%2Fdefault_profile_image.png?alt=media&token=81bc6041-f3c5-45ce-962f-8456b1ab30e9"
     // FCM Token
     const val KEY_TOKEN = "token"
     // Notification Channel ID

@@ -11,13 +11,41 @@ import kotlinx.coroutines.launch
 class UserViewModel: ViewModel() {
     private val repository = ApplicationClass.userRepository
 
-    private val _users: MutableLiveData<ArrayList<User>> = MutableLiveData()
-    val users: LiveData<ArrayList<User>> = _users
+    private var _user = MutableLiveData<User?>()
+    val user: LiveData<User?>
+        get() = _user
 
+    private val _userList: MutableLiveData<ArrayList<User>> = MutableLiveData()
+    val userList: LiveData<ArrayList<User>> = _userList
+
+    private val _updateUserSuccess = MutableLiveData<Boolean>()
+    val updateUserPwdSuccess: LiveData<Boolean>
+        get() = _updateUserSuccess
+
+    fun getUser(id: String) = viewModelScope.launch {
+        try {
+            _user.value = repository.getUser(id)
+        } catch (e: Exception) {
+            _user.value = User()
+        }
+    }
     fun getAllUsers(email: String) {
         viewModelScope.launch {
             val userList = repository.getAllUsers(email)
-            _users.value = userList
+            _userList.value = userList
         }
     }
+
+    fun updateUser(updateUser: User) = viewModelScope.launch {
+        try {
+            _updateUserSuccess.postValue(repository.updateUserDetails(updateUser))
+        } catch (e: Exception) {
+            _updateUserSuccess.postValue(false)
+        }
+    }
+
+    fun initialize() {
+        _user.value = null
+    }
+
 }
