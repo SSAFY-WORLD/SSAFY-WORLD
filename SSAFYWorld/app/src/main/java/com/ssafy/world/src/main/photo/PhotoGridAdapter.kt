@@ -46,7 +46,7 @@ class PhotoGridAdapter(val mContext: Context) : ListAdapter<Photo, PhotoGridAdap
 
     lateinit var itemClickListener: ItemClickListener
     interface CheckBoxClickListener {
-        fun onClick(data: Photo)
+        fun onClick(binding: ItemPhotoCheckboxBinding, Itemdata: Photo)
     }
 
     lateinit var checkBoxClickListener: CheckBoxClickListener
@@ -70,7 +70,7 @@ class PhotoGridAdapter(val mContext: Context) : ListAdapter<Photo, PhotoGridAdap
             // 체크박스 클릭 리스너 설정
             checkbox.setOnCheckedChangeListener { _, isChecked ->
                 data.isSelected = isChecked
-                checkBoxClickListener.onClick(data)
+                checkBoxClickListener.onClick(binding, data)
             }
             image.setOnClickListener {
                 itemClickListener.onClick(data)

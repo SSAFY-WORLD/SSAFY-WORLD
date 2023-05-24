@@ -3,7 +3,10 @@ package com.ssafy.world.src.main.mypage
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -25,8 +28,10 @@ import com.ssafy.world.utils.Constants
 import com.ssafy.world.utils.CustomAlertDialog
 import com.ssafy.world.utils.ValidationAlertDialog
 
-class MypageFragment :
-    BaseFragment<FragmentMypageBinding>(FragmentMypageBinding::bind, R.layout.fragment_mypage) {
+private const val TAG = "MypageFragment_싸피"
+class MypageFragment : BaseFragment<FragmentMypageBinding>(
+    FragmentMypageBinding::bind, R.layout.fragment_mypage
+) {
     private val authViewModel: AuthViewModel by viewModels()
     private val userViewModel: UserViewModel by viewModels()
     private var isModifyClicked = false
@@ -35,6 +40,15 @@ class MypageFragment :
     private lateinit var user: User
 
     private lateinit var validationDialog: ValidationAlertDialog
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentMypageBinding.inflate(inflater, container, false)
+        return binding.root
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
@@ -79,7 +93,6 @@ class MypageFragment :
         // 이미지에서 다시 넘어온 경우
         selectedPhoto = arguments?.getString("profilePhoto") ?: ""
         if (selectedPhoto.isNotEmpty()) {
-            isModifyClicked = false
             val modifyName = arguments?.getString("name") ?: ""
             val modifyNickName = arguments?.getString("nickName") ?: ""
             if (modifyName.isNotEmpty()) {

@@ -10,6 +10,7 @@ import com.ssafy.world.R
 import com.ssafy.world.config.BaseFragment
 import com.ssafy.world.data.model.Photo
 import com.ssafy.world.databinding.FragmentPhotoBinding
+import com.ssafy.world.databinding.ItemPhotoCheckboxBinding
 
 private const val TAG = "PhotoFragment_싸피"
 
@@ -17,6 +18,7 @@ class PhotoSingleFragment :
 	BaseFragment<FragmentPhotoBinding>(FragmentPhotoBinding::bind, R.layout.fragment_photo) {
 	private val images: MutableList<Photo> = mutableListOf()
 	private var profilePhoto: Photo? = null
+	private var currentBinding: ItemPhotoCheckboxBinding? = null
 	private val myAdapter: PhotoGridAdapter by lazy {
 		PhotoGridAdapter(myContext)
 	}
@@ -37,10 +39,11 @@ class PhotoSingleFragment :
 
 
 		myAdapter.checkBoxClickListener = object : PhotoGridAdapter.CheckBoxClickListener {
-			override fun onClick(data: Photo) {
-				profilePhoto?.let {
-					it.isSelected = false
+			override fun onClick(binding: ItemPhotoCheckboxBinding, data: Photo) {
+				currentBinding?.let {
+					it.checkbox.isChecked = false
 				}
+				currentBinding = binding
 				profilePhoto = data
 				myAdapter.submitList(images.toMutableList())
 			}
@@ -54,7 +57,7 @@ class PhotoSingleFragment :
 
 		photoBtnComplete.setOnClickListener {
 			val bundle = Bundle()
-			bundle.putString("profilePhoto", profilePhoto?.url ?: "default")
+			bundle.putString("profilePhoto", profilePhoto?.url ?: "")
 			bundle.putString("name", arguments?.getString("name") ?: "")
 			bundle.putString("nickName", arguments?.getString("nickName") ?: "")
 			navController.navigate(R.id.action_photoSingleFragment_to_mypageFragment, bundle)
