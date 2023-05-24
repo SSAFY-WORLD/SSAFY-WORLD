@@ -139,6 +139,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     hideBottomNav()
                     unblockBackPressed()
                 }
+                R.id.mapFragment -> {
+                    setTitle("지도")
+                    hideBottomNav()
+                    unblockBackPressed()
+                }
                 R.id.communitySearchFragment -> {
                     hideBottomNav()
                     unblockBackPressed()

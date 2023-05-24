@@ -31,7 +31,6 @@ class CommunityMapFragment : BaseFragment<FragmentCommunityMapListBinding>(Fragm
 
         initView()
         initRecyclerView()
-        initButton()
         initListener()
 
         communityViewModel.getAllCommunities(activityViewModel.entryCommunityCollection)
@@ -40,6 +39,9 @@ class CommunityMapFragment : BaseFragment<FragmentCommunityMapListBinding>(Fragm
     private fun initView() = with(binding) {
         mapBtn.setOnClickListener {
             navController.navigate(R.id.action_communityMapFragment_to_mapFragment)
+        }
+        searchBtn.setOnClickListener {
+            navController.navigate(R.id.action_communityMapFragment_to_communitySearchFragment)
         }
         communityFab.setOnClickListener {
             navController.navigate(R.id.action_communityMapFragment_to_communityMapSearchFragment)
@@ -61,16 +63,6 @@ class CommunityMapFragment : BaseFragment<FragmentCommunityMapListBinding>(Fragm
                     navController.navigate(action)
                 }
             }
-        }
-    }
-
-    private fun initButton() = with(binding) {
-        communityFab.setOnClickListener {
-            val action = CommunityMapFragmentDirections.actionCommunityMapFragmentToCommunityMapSearchFragment()
-            navController.navigate(action)
-        }
-        searchBtn.setOnClickListener {
-            navController.navigate(R.id.action_communityListFragment_to_communitySearchFragment)
         }
     }
 
