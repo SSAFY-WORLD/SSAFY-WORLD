@@ -209,7 +209,8 @@ object CommunityRepository {
             firestore.collection("free"),
             firestore.collection("question"),
             firestore.collection("company"),
-            firestore.collection("market")
+            firestore.collection("market"),
+            firestore.collection("store")
         )
 
         val communityList = arrayListOf<Community>()

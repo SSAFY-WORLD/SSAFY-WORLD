@@ -21,6 +21,11 @@ data class Community(
     var fcmToken:String = "",
     var photoUrls: ArrayList<String> = ArrayList(),
     var likedUserIds: ArrayList<String> = ArrayList(),
+    var placeName: String = "",
+    var placeAddress: String = "",
+    var lat: Double = 0.0,
+    var lng: Double = 0.0,
+    var rating: Double = 0.0
 ) : Parcelable {
     constructor() : this("", "","", "","","", 0)
 

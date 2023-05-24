@@ -45,6 +45,11 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(
             activityViewModel.entryCommunityCollection = "company"
             navController.navigate(R.id.action_communityFragment_to_communityListFragment)
         }
+        communityStore.setOnClickListener {
+            activityViewModel.communityTitle = "맛집 게시판"
+            activityViewModel.entryCommunityCollection = "store"
+            navController.navigate(R.id.action_communityFragment_to_communityMapFragment)
+        }
         searchBtn.setOnClickListener {
             activityViewModel.entryCommunityCollection = ""
             navController.navigate(R.id.action_communityFragment_to_communitySearchFragment)

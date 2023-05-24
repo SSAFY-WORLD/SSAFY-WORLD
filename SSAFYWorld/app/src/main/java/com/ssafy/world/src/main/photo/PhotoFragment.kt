@@ -4,17 +4,21 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.gson.Gson
 import com.ssafy.world.R
 import com.ssafy.world.config.BaseFragment
 import com.ssafy.world.data.model.Photo
 import com.ssafy.world.databinding.FragmentPhotoBinding
+import com.ssafy.world.src.main.MainActivityViewModel
 
 private const val TAG = "PhotoFragment_싸피"
 
 class PhotoFragment :
     BaseFragment<FragmentPhotoBinding>(FragmentPhotoBinding::bind, R.layout.fragment_photo) {
+
+    private val activityViewModel: MainActivityViewModel by activityViewModels()
     private val images: MutableList<Photo> = mutableListOf()
     private val myAdapter: PhotoGridAdapter by lazy {
         PhotoGridAdapter(myContext)
@@ -62,6 +66,11 @@ class PhotoFragment :
             val photoListJson = gson.toJson(selectedPhotos)
             val bundle = Bundle()
             bundle.putString("photoListJson", photoListJson)
+
+            if(activityViewModel.entryCommunityCollection == "store") {
+                navController.navigate(R.id.action_photoFragment_to_communityMapWriteFragment, bundle)
+                return@setOnClickListener
+            }
             navController.navigate(R.id.action_photoFragment_to_communityWriteFragment, bundle)
         }
     }

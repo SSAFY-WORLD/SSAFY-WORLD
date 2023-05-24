@@ -148,8 +148,10 @@ class MainFragment :
         val cursor: Cursor? =
             contentResolver.query(uri, projection, selection, selectionArgs, sortOrder)
 
+        var itemCount = 0
+
         cursor?.use { cursor ->
-            while (cursor.moveToNext()) {
+            while (cursor.moveToNext() && itemCount < 3) {
                 val eventId: Long =
                     cursor.getLong(cursor.getColumnIndex(CalendarContract.Events._ID))
                 val title: String =
@@ -179,6 +181,7 @@ class MainFragment :
                             endDate.toString().substring(5)
                         )
                     )
+                    itemCount++
                 }
             }
             myAdapter.submitList(calendarList.toMutableList())
@@ -227,6 +230,11 @@ class MainFragment :
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = Uri.parse("content://com.android.calendar/events/$eventId")
         startActivity(intent)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        calendarList.clear()
     }
 }
 

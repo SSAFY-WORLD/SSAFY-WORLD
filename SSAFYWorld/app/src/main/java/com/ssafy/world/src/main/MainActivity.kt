@@ -54,9 +54,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         }
         createNotificationChannel(Constants.CHANNEL_ID, Constants.CHANNEL_NAME)
         setToolbarWithNavcontroller()
-        requestPermission()
-        requestCalendarPermission()
-        //requestStoragePermission()
+
+
+//        requestPermission()
+//        requestCalendarPermission()
+        requestPermissionWithTed()
+        requestStoragePermission()
     }
 
     private fun moveFragment(destination: String) {
@@ -106,7 +109,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 R.id.mainFragment -> {
                     setTitle(getString(R.string.nav_home_title))
                     blockBackPressed()
-
+                    showBottomNav()
                 }
                 R.id.mainHotFragment -> {
                     setTitle("인기 게시글")
@@ -118,7 +121,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     blockBackPressed()
                     hideToolbar()
                 }
-                R.id.communityListFragment -> {
+                R.id.communityListFragment, R.id.communityMapFragment -> {
                     hideBottomNav()
                     unblockBackPressed()
                     hideToolbar()
@@ -131,7 +134,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     setTitle(getString(R.string.nav_mypage_title))
                     blockBackPressed()
                 }
-                R.id.communityWriteFragment -> {
+                R.id.communityWriteFragment, R.id.communityMapWriteFragment -> {
                     setTitle("글쓰기")
                     hideBottomNav()
                     unblockBackPressed()
@@ -142,6 +145,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     hideToolbar()
                 }
                 R.id.photoFragment, R.id.photoFullFragment -> {
+                    hideToolbar()
+                    hideBottomNav()
+                    unblockBackPressed()
+                }
+                R.id.communityMapFragment -> {
                     hideToolbar()
                     hideBottomNav()
                     unblockBackPressed()
@@ -185,7 +193,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         binding.toolbarText.text = title
     }
 
-    private fun requestStoragePermission() {
+    private fun requestPermissionWithTed() {
         TedPermission.create()
             .setPermissionListener(object : PermissionListener {
                 override fun onPermissionGranted() {
@@ -197,83 +205,36 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 }
             })
             .setDeniedMessage("권한을 허용해주세요.")
-            .setPermissions(android.Manifest.permission.READ_CALENDAR)
-            .setPermissions(android.Manifest.permission.WRITE_CALENDAR)
+            .setPermissions(android.Manifest.permission.READ_CALENDAR ,
+                android.Manifest.permission.WRITE_CALENDAR,
+                android.Manifest.permission.ACCESS_FINE_LOCATION,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION)
             .check()
-    }
 
-    // 권한 요청 실행
-    private fun requestPermission() {
-        val permission = android.Manifest.permission.READ_EXTERNAL_STORAGE
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            val hasPermission = Environment.isExternalStorageManager()
-            if (!hasPermission) {
-                showConfirmationBottomSheet()
-            }
-        } else {
-            //showConfirmationDialog()
-        }
 
     }
 
-    private fun showConfirmationBottomSheet() {
-        Log.d(TAG, "showConfirmationBottomSheet: ")
-        val bottomSheet = PermmissionBottomSheet()
-        bottomSheet.show(supportFragmentManager, "ConfirmationBottomSheet")
-        bottomSheet.setOnConfirmationListener {
-            openAppPermissionSettings()
-        }
-
-    }
-
-    private fun openAppPermissionSettings() {
-        val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
-        val uri = Uri.fromParts("package", this.packageName, null)
-        intent.data = uri
-
-        startActivity(intent)
-    }
-
-    private fun requestCalendarPermission() {
-        val permission = Manifest.permission.READ_CALENDAR
-        if (ContextCompat.checkSelfPermission(
-                this,
-                permission
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            // 이미 권한이 허용된 경우 처리를 수행하도록 합니다.
-            // 예를 들어, 삼성 캘린더에 접근하여 일정을 가져오는 코드를 여기에 추가합니다.
-            //fetchSamsungCalendarEvents()
-        } else {
-            // 권한 요청이 필요한 경우 권한 요청을 수행합니다.
+    private fun requestStoragePermission() {
+        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.TIRAMISU) {
             ActivityCompat.requestPermissions(
                 this,
-                arrayOf(permission),
-                CALENDAR_PERMISSION_REQUEST_CODE
+                arrayOf(Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.POST_NOTIFICATIONS),
+                101
             )
-        }
-    }
+        } else{
+            TedPermission.create()
+                .setPermissionListener(object : PermissionListener {
+                    override fun onPermissionGranted() {
+                        // 권한이 허용된 경우 다음 작업을 수행할 수 있습니다.
+                    }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == CALENDAR_PERMISSION_REQUEST_CODE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // 권한이 허용되었을 경우 실행할 코드를 여기에 작성합니다.
-                Log.d(TAG, "Calendar permission granted")
-                //fetchSamsungCalendarEvents()
-            } else {
-                // 권한이 거부되었을 경우 실행할 코드를 여기에 작성합니다.
-                Log.d(TAG, "Calendar permission denied")
-            }
+                    override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
+                        // 권한이 거부된 경우 사용자에게 알림을 표시하거나 다른 조치를 취해야 합니다.
+                    }
+                })
+                .setDeniedMessage("권한을 허용해주세요.")
+                .setPermissions(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                .check()
         }
-    }
-
-    companion object {
-        private const val STORAGE_PERMISSION_REQUEST_CODE = 1001
-        private const val CALENDAR_PERMISSION_REQUEST_CODE = 1002
     }
 }
