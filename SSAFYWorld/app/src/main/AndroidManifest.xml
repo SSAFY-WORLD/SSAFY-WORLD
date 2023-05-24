@@ -21,7 +21,6 @@
         android:icon="@mipmap/ic_launcher"
         android:label="싸피월드"
         android:supportsRtl="true"
-        android:windowSoftInputMode="adjustResize"
         android:theme="@style/Theme.SSAFYWorld"
         tools:targetApi="33">
 
@@ -46,8 +45,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_map_api_key"/>
 
-        <activity
-            android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"/>
     </application>
 
 </manifest>

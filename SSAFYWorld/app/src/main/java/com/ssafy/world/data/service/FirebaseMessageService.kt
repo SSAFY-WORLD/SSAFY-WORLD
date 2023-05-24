@@ -44,16 +44,8 @@ class FirebaseMessageService: FirebaseMessagingService() {
         }
 
         val mainPendingIntent: PendingIntent =
-            PendingIntent.getActivity(this, 101, mainIntent, PendingIntent.FLAG_IMMUTABLE)
+            PendingIntent.getActivity(this, 101, mainIntent, PendingIntent.FLAG_MUTABLE)
 
-        val notification = NotificationCompat.Builder(this, Constants.CHANNEL_ID)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setDefaults(NotificationCompat.DEFAULT_SOUND or NotificationCompat.DEFAULT_VIBRATE)
-            .setSmallIcon(R.drawable.ic_app_logo)
-            .setContentTitle(messageTitle)
-            .setContentText(messageContent)
-            .setAutoCancel(true)
-            .setContentIntent(mainPendingIntent)
 
         val summaryNotification = NotificationCompat.Builder(this, Constants.CHANNEL_ID)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -64,9 +56,9 @@ class FirebaseMessageService: FirebaseMessagingService() {
             .setGroup(messageDestination)
             .setGroupSummary(true)
             .setAutoCancel(true)
+            .setFullScreenIntent(mainPendingIntent, true)
 
         NotificationManagerCompat.from(this).apply {
-            notify(101, notification.build())
             notify(SUMMARY_ID, summaryNotification.build())
         }
     }

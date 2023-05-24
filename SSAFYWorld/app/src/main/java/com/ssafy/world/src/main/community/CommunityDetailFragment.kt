@@ -44,6 +44,7 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
     private val curUser by lazy { ApplicationClass.sharedPreferences.getUser() }
     private var isReply = ""
     private var isNew = false
+    private var replyFCM = ""
 
     private val myAdapter: CommunityDetailPhotoAdapter by lazy {
         CommunityDetailPhotoAdapter(myContext)
@@ -137,12 +138,14 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
         commentAdapter.replyClickListener =
             object : CommunityDetailCommentAdapter.ReplyClickListener {
                 override fun onClick(view: View, data: Comment, position: Int) {
+                    replyFCM = data.fcmToken
                     commentPosition = position
 //                    replyTvMessage.visibility = View.VISIBLE
                     //replyTvMessage.text = "${data.userNickname} 님에게 답글 남기는 중.."
                     commentRecyclerview.scrollToPosition(position)
                     // 에딧텍스트에 포커스 설정
                     commentInput.requestFocus()
+
                     // 키보드 올리기
                     val imm =
                         myContext.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -178,7 +181,7 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
                     cur
                 )
                 val noti = NotificationData("메시지", "싸피월드", "${curUser!!.nickname} 님이 답글을 남겼습니다.")
-                sendRemoteNotification(noti, cur.fcmToken)
+                sendRemoteNotification(noti, replyFCM)
             } else {
                 communityViewModel.insertComment(
                     activityViewModel.entryCommunityCollection,
