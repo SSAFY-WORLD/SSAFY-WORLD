@@ -162,6 +162,7 @@
         android:layout_height="@dimen/_48sdp"
         android:background="@color/white"
         android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/scroll_view"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -187,7 +188,6 @@
             android:layout_width="@dimen/_48sdp"
             android:layout_height="@dimen/_48sdp"
             android:background="@drawable/ic_send_message"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

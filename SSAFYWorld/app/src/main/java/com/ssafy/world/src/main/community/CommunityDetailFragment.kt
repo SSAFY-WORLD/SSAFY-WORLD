@@ -3,16 +3,17 @@ package com.ssafy.world.src.main.community
 import android.content.Context
 import android.graphics.Rect
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.PopupMenu
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.ssafy.world.R
@@ -42,6 +43,7 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
     private var curId = ""
     private val curUser by lazy { ApplicationClass.sharedPreferences.getUser() }
     private var isReply = ""
+    private var isNew = false
 
     private val myAdapter: CommunityDetailPhotoAdapter by lazy {
         CommunityDetailPhotoAdapter(myContext)
@@ -52,7 +54,6 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
     private var commentList = arrayListOf<Comment>()
 
     private var commentPosition = 0;
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -109,7 +110,7 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
         commentAdapter.itemClickListener =
             object : CommunityDetailCommentAdapter.ItemClickListener {
                 override fun onClick(view: View, data: Comment, position: Int) {
-                    showCommentOptionView(view, data)
+                    showCommentOptionView(view, data, position)
                 }
             }
 
@@ -147,6 +148,10 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
                         myContext.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.showSoftInput(commentInput, InputMethodManager.SHOW_IMPLICIT)
                     isReply = data.id
+
+                    val commentItemView = commentRecyclerview.layoutManager?.findViewByPosition(position)
+                    val scrollY = commentItemView?.top ?: 0
+                    scrollView.smoothScrollTo(0, scrollY)
                 }
             }
         communityViewModel.getCommentsByCommunityId(community.id)
@@ -174,14 +179,12 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
                 )
                 val noti = NotificationData("메시지", "싸피월드", "${curUser!!.nickname} 님이 답글을 남겼습니다.")
                 sendRemoteNotification(noti, cur.fcmToken)
-                Log.d(TAG, "initButton: ")
             } else {
                 communityViewModel.insertComment(
                     activityViewModel.entryCommunityCollection,
                     community,
                     cur
                 )
-                Log.d(TAG, "initButton: 22")
             }
 
             val noti = NotificationData("메시지", "싸피월드", "${curUser!!.nickname} 님이 댓글을 남겼습니다.")
@@ -189,6 +192,7 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
             (activity as MainActivity).hideKeyboard()
             commentInput.setText("")
             showCustomToast("댓글이 등록됐어요.")
+            isNew = true
         }
 
         detailBtnMore.setOnClickListener {
@@ -196,7 +200,6 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
         }
 
         likeCheckbox.setOnCheckedChangeListener { _, isChecked ->
-            Log.d(TAG, "initButton: $curUser")
             if (isChecked && !community.likedUserIds.contains(curUser!!.id)) {
                 community.likedUserIds.add(curUser!!.id)
                 communityViewModel.onIncrementLikeButtonClicked(
@@ -217,9 +220,14 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
 
     private fun initListener() {
         communityViewModel.comments.observe(viewLifecycleOwner) {
-            Log.d(TAG, "initListener: $it")
             commentList = it
             commentAdapter.submitList(commentList.toMutableList())
+
+            if(isNew) {
+                Handler().postDelayed({
+                    binding.scrollView.fullScroll(View.FOCUS_DOWN)
+                }, 100)
+            }
         }
         communityViewModel.updateSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {
@@ -286,7 +294,7 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
         popupMenu.show()
     }
 
-    private fun showCommentOptionView(anchorView: View, comment: Comment) {
+    private fun showCommentOptionView(anchorView: View, comment: Comment, position: Int) {
         val popupMenu = PopupMenu(myContext, anchorView)
         popupMenu.inflate(R.menu.comment_option_view) // option_menu는 메뉴 아이템을 정의한 리소스 파일입니다.
 
@@ -294,7 +302,8 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
         popupMenu.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.menu_delete -> {
-                    showCommentDeleteConfirmationDialog(comment)
+                    isNew = false
+                    showCommentDeleteConfirmationDialog(comment, position)
                     true
                 }
                 else -> false
@@ -317,12 +326,12 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
         dialog.show()
     }
 
-    private fun showCommentDeleteConfirmationDialog(comment: Comment) {
+    private fun showCommentDeleteConfirmationDialog(comment: Comment, position: Int) {
         val dialog = AlertDialog.Builder(requireContext())
             .setMessage("정말 삭제하시겠습니까?")
             .setPositiveButton("확인") { _, _ ->
-                Log.d(TAG, "showCommentDeleteConfirmationDialog: $comment")
                 communityViewModel.deleteComment(curBoard, community, comment.id)
+                binding.commentRecyclerview.scrollToPosition(commentPosition)
             }
             .setNegativeButton("취소", null)
             .create()
@@ -355,6 +364,4 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
             }
         }
     }
-
-
 }

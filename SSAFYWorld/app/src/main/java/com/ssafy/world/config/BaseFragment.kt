@@ -22,7 +22,7 @@ abstract class BaseFragment<B : ViewBinding>(
     private val bind: (View) -> B,
     @LayoutRes layoutResId: Int //
 ) : Fragment(layoutResId) {
-    private var _binding: B? = null
+    var _binding: B? = null
     lateinit var mLoadingDialog: LoadingDialog
     lateinit var mCustomDialog: CustomAlertDialog
 

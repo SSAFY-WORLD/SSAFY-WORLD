@@ -5,27 +5,17 @@ import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
-import android.provider.Settings
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.setupWithNavController
-import com.gun0912.tedpermission.PermissionListener
-import com.gun0912.tedpermission.normal.TedPermission
 import com.ssafy.world.R
 import com.ssafy.world.config.BaseActivity
 import com.ssafy.world.databinding.ActivityMainBinding
-import com.ssafy.world.src.main.auth.PermmissionBottomSheet
 import com.ssafy.world.utils.Constants
 
 
@@ -49,6 +39,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         intent.getStringExtra(Constants.DESTINATION)?.let { destination ->
             moveFragment(destination)
         }
@@ -56,10 +47,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         setToolbarWithNavcontroller()
 
 
-//        requestPermission()
-//        requestCalendarPermission()
-        requestPermissionWithTed()
-        requestStoragePermission()
+        requestPermission()
     }
 
     private fun moveFragment(destination: String) {
@@ -144,12 +132,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     hideBottomNav()
                     unblockBackPressed()
                 }
-                R.id.communitySearchFragment -> {
+                R.id.communitySearchFragment, R.id.communityMapSearchFragment -> {
                     hideBottomNav()
                     unblockBackPressed()
                     hideToolbar()
                 }
-                R.id.photoFragment, R.id.photoFullFragment , R.id.photoSingleFragment -> {
+                R.id.communityDetailFragment, R.id.communityMapDetail -> {
+                    hideBottomNav()
+                    setTitle("커뮤니티")
+                }
+                R.id.photoFragment, R.id.photoFullFragment, R.id.photoSingleFragment -> {
                     hideToolbar()
                     hideBottomNav()
                     unblockBackPressed()
@@ -198,48 +190,32 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         binding.toolbarText.text = title
     }
 
-    private fun requestPermissionWithTed() {
-        TedPermission.create()
-            .setPermissionListener(object : PermissionListener {
-                override fun onPermissionGranted() {
-                    // 권한이 허용된 경우 다음 작업을 수행할 수 있습니다.
-                }
-
-                override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
-                    // 권한이 거부된 경우 사용자에게 알림을 표시하거나 다른 조치를 취해야 합니다.
-                }
-            })
-            .setDeniedMessage("권한을 허용해주세요.")
-            .setPermissions(android.Manifest.permission.READ_CALENDAR ,
-                android.Manifest.permission.WRITE_CALENDAR,
-                android.Manifest.permission.ACCESS_FINE_LOCATION,
-                android.Manifest.permission.ACCESS_COARSE_LOCATION)
-            .check()
-
-
-    }
-
-    private fun requestStoragePermission() {
-        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.TIRAMISU) {
+    private fun requestPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             ActivityCompat.requestPermissions(
                 this,
-                arrayOf(Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.POST_NOTIFICATIONS),
+                arrayOf(
+                    Manifest.permission.READ_CALENDAR,
+                    Manifest.permission.WRITE_CALENDAR,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.READ_MEDIA_IMAGES,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ),
                 101
             )
-        } else{
-            TedPermission.create()
-                .setPermissionListener(object : PermissionListener {
-                    override fun onPermissionGranted() {
-                        // 권한이 허용된 경우 다음 작업을 수행할 수 있습니다.
-                    }
-
-                    override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
-                        // 권한이 거부된 경우 사용자에게 알림을 표시하거나 다른 조치를 취해야 합니다.
-                    }
-                })
-                .setDeniedMessage("권한을 허용해주세요.")
-                .setPermissions(android.Manifest.permission.READ_EXTERNAL_STORAGE)
-                .check()
+        } else {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.READ_CALENDAR,
+                    Manifest.permission.WRITE_CALENDAR,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ),
+                101
+            )
         }
     }
 }

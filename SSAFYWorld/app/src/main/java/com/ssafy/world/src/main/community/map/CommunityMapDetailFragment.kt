@@ -1,8 +1,9 @@
-package com.ssafy.world.src.main.community
+package com.ssafy.world.src.main.community.map
 
 import android.content.Context
 import android.graphics.Rect
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -32,6 +33,7 @@ import com.ssafy.world.databinding.FragmentCommunityMapDetailBinding
 import com.ssafy.world.databinding.ItemCommunityCommentBinding
 import com.ssafy.world.src.main.MainActivity
 import com.ssafy.world.src.main.MainActivityViewModel
+import com.ssafy.world.src.main.community.*
 import com.ssafy.world.src.main.photo.PhotoFullDialog
 
 private const val TAG = "CommunityMapDetailFragm"
@@ -49,6 +51,7 @@ class CommunityMapDetailFragment : BaseFragment<FragmentCommunityMapDetailBindin
     private var isCommunityReady = false
     private val curUser by lazy { ApplicationClass.sharedPreferences.getUser() }
     private var isReply = ""
+    private var isNew = false
 
     private val myAdapter: CommunityDetailPhotoAdapter by lazy {
         CommunityDetailPhotoAdapter(myContext)
@@ -168,6 +171,10 @@ class CommunityMapDetailFragment : BaseFragment<FragmentCommunityMapDetailBindin
                         myContext.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.showSoftInput(commentInput, InputMethodManager.SHOW_IMPLICIT)
                     isReply = data.id
+
+                    val commentItemView = commentRecyclerview.layoutManager?.findViewByPosition(position)
+                    val scrollY = commentItemView?.top ?: 0
+                    scrollView.smoothScrollTo(0, scrollY)
                 }
             }
         communityViewModel.getCommentsByCommunityId(community.id)
@@ -208,6 +215,7 @@ class CommunityMapDetailFragment : BaseFragment<FragmentCommunityMapDetailBindin
             (activity as MainActivity).hideKeyboard()
             commentInput.setText("")
             showCustomToast("댓글이 등록됐어요.")
+            isNew = true
         }
 
         detailBtnMore.setOnClickListener {
@@ -237,6 +245,11 @@ class CommunityMapDetailFragment : BaseFragment<FragmentCommunityMapDetailBindin
         communityViewModel.comments.observe(viewLifecycleOwner) {
             commentList = it
             commentAdapter.submitList(commentList.toMutableList())
+            if(isNew) {
+                Handler().postDelayed({
+                    binding.scrollView.fullScroll(View.FOCUS_DOWN)
+                }, 100)
+            }
         }
 
         communityViewModel.deleteSuccess.observe(viewLifecycleOwner) { success ->
@@ -309,6 +322,7 @@ class CommunityMapDetailFragment : BaseFragment<FragmentCommunityMapDetailBindin
         val dialog = AlertDialog.Builder(requireContext())
             .setMessage("정말 삭제하시겠습니까?")
             .setPositiveButton("확인") { _, _ ->
+                isNew = false
                 communityViewModel.deleteCommunity(curBoard, community.id)
             }
             .setNegativeButton("취소", null)

@@ -3,11 +3,14 @@ package com.ssafy.world.src.main.mypage
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -25,6 +28,7 @@ import com.ssafy.world.utils.Constants
 import com.ssafy.world.utils.CustomAlertDialog
 import com.ssafy.world.utils.ValidationAlertDialog
 
+private const val TAG = "MypageFragment"
 class MypageFragment :
     BaseFragment<FragmentMypageBinding>(FragmentMypageBinding::bind, R.layout.fragment_mypage) {
     private val authViewModel: AuthViewModel by viewModels()
@@ -35,8 +39,10 @@ class MypageFragment :
     private lateinit var user: User
 
     private lateinit var validationDialog: ValidationAlertDialog
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         initView()
         initObserver()
         initButton()
@@ -269,6 +275,7 @@ class MypageFragment :
                 true
             )
         }
+        isModifyClicked = !isModifyClicked
     }
     private fun initObserver() = with(authViewModel) {
         isDuplicated.observe(viewLifecycleOwner) { user ->

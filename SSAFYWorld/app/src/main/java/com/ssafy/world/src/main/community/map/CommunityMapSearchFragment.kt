@@ -1,10 +1,9 @@
-package com.ssafy.world.src.main.community
+package com.ssafy.world.src.main.community.map
 
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.common.api.ApiException
@@ -19,13 +18,11 @@ import com.ssafy.world.R
 import com.ssafy.world.config.BaseFragment
 import com.ssafy.world.databinding.FragmentCommunityMapSearchBinding
 import com.ssafy.world.src.main.MainActivityViewModel
-import kotlin.math.log
 
-
-private const val TAG = "CommunityMapSearchFragment"
+private const val TAG = "CommunityMapSearchFragm"
 class CommunityMapSearchFragment : BaseFragment<FragmentCommunityMapSearchBinding>(
     FragmentCommunityMapSearchBinding::bind,
-    R.layout.fragment_community_search
+    R.layout.fragment_community_map_search
 ) {
 
     private val activityViewModel: MainActivityViewModel by activityViewModels()

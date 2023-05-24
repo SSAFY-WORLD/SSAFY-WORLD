@@ -1,4 +1,4 @@
-package com.ssafy.world.src.main.community
+package com.ssafy.world.src.main.community.map
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -20,7 +20,8 @@ class CommunityMapSearchAdapter : ListAdapter<Place, CommunityMapSearchAdapter.M
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val binding = ItemMapSearchBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ItemMapSearchBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(binding)
     }
 
