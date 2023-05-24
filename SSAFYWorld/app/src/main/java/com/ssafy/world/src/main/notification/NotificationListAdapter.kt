@@ -1,6 +1,7 @@
 package com.ssafy.world.src.main.notification
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -34,11 +35,11 @@ class NotificationListAdapter:
         }
     }
 
-//    interface ItemClickListener {
-//        fun onClick(view: View, data: NotificationEntity, position: Int)
-//    }
-//
-//    lateinit var itemClickListener: ItemClickListener
+    interface ItemClickListener {
+        fun onClick(view: View, data: NotificationEntity)
+    }
+
+    lateinit var itemClickListener: ItemClickListener
 
     inner class NotificationViewHolder(
         private val binding: ItemNotificationBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -48,6 +49,9 @@ class NotificationListAdapter:
             message.text = data.message
             notificationTime.text = getFormattedTime(data.receiveTime)
             notificationDestination.text = data.destination
+            itemView.setOnClickListener {
+                itemClickListener.onClick(it, data)
+            }
         }
     }
 
