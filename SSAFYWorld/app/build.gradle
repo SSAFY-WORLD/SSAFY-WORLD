@@ -115,4 +115,14 @@ dependencies {
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     // OSS License
     implementation "com.google.android.gms:play-services-oss-licenses:17.0.0"
+
+    def room_version = "2.5.0"
+    //Room 의존성 추가
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    // room with coroutine
+    implementation "androidx.room:room-ktx:$room_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$room_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.0"
 }
