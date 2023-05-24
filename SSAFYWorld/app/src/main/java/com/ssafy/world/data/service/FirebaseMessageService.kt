@@ -3,18 +3,28 @@ package com.ssafy.world.data.service
 import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Intent
+import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.ssafy.world.R
+import com.ssafy.world.config.ApplicationClass
+import com.ssafy.world.data.local.entity.NotificationEntity
 import com.ssafy.world.src.main.MainActivity
 import com.ssafy.world.utils.Constants
 import com.ssafy.world.utils.Constants.SUMMARY_ID
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.util.*
 
 private const val TAG = "FirebaseMessageService_싸피"
 class FirebaseMessageService: FirebaseMessagingService() {
+    private val notificationRepository by lazy {
+        ApplicationClass.notificationRepository
+    }
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         Log.d(TAG, "onNewToken: $token")
@@ -44,16 +54,8 @@ class FirebaseMessageService: FirebaseMessagingService() {
         }
 
         val mainPendingIntent: PendingIntent =
-            PendingIntent.getActivity(this, 101, mainIntent, PendingIntent.FLAG_IMMUTABLE)
+            PendingIntent.getActivity(this, 101, mainIntent, PendingIntent.FLAG_MUTABLE)
 
-        val notification = NotificationCompat.Builder(this, Constants.CHANNEL_ID)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setDefaults(NotificationCompat.DEFAULT_SOUND or NotificationCompat.DEFAULT_VIBRATE)
-            .setSmallIcon(R.drawable.ic_app_logo)
-            .setContentTitle(messageTitle)
-            .setContentText(messageContent)
-            .setAutoCancel(true)
-            .setContentIntent(mainPendingIntent)
 
         val summaryNotification = NotificationCompat.Builder(this, Constants.CHANNEL_ID)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -64,10 +66,28 @@ class FirebaseMessageService: FirebaseMessagingService() {
             .setGroup(messageDestination)
             .setGroupSummary(true)
             .setAutoCancel(true)
+            .setFullScreenIntent(mainPendingIntent, true)
 
         NotificationManagerCompat.from(this).apply {
-            notify(101, notification.build())
             notify(SUMMARY_ID, summaryNotification.build())
+        }
+
+        insertNotification(messageDestination, messageTitle, messageContent)
+    }
+
+
+    private fun insertNotification(
+        messageDescription: String,
+        messageTitle: String,
+        messageContent: String) {
+        val newNotification = NotificationEntity(
+            UUID.randomUUID().toString(),
+            messageDescription,
+            messageTitle,
+            messageContent,
+            System.currentTimeMillis())
+        CoroutineScope(Dispatchers.IO).launch {
+            notificationRepository.insertNotification(newNotification)
         }
     }
 }

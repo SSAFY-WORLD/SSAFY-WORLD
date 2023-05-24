@@ -2,6 +2,7 @@ package com.ssafy.world.src.main.home
 
 
 import android.annotation.SuppressLint
+import android.app.Notification
 import android.content.ContentResolver
 import android.content.Intent
 import android.database.Cursor
@@ -18,11 +19,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.ssafy.world.R
 import com.ssafy.world.config.ApplicationClass
 import com.ssafy.world.config.BaseFragment
+import com.ssafy.world.data.local.entity.NotificationEntity
 import com.ssafy.world.data.model.Calendar
 import com.ssafy.world.data.model.Community
 import com.ssafy.world.databinding.FragmentMainBinding
 import com.ssafy.world.src.main.MainActivityViewModel
 import com.ssafy.world.src.main.community.CommunityViewModel
+import com.ssafy.world.src.main.notification.NotificationListAdapter
+import com.ssafy.world.src.main.notification.NotificationViewModel
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -40,6 +44,7 @@ class MainFragment :
     }
 
     private val viewModel: CommunityViewModel by viewModels()
+    private val notificationViewModel: NotificationViewModel by viewModels()
     private val activityViewModel: MainActivityViewModel by activityViewModels()
     private val myAdapter: MainCalendarAdapter by lazy {
         MainCalendarAdapter()
@@ -47,8 +52,12 @@ class MainFragment :
     private val hotAdapter: MainHotAdapter by lazy {
         MainHotAdapter(myContext)
     }
+    private val notificationAdapter: NotificationListAdapter by lazy {
+        NotificationListAdapter()
+    }
     private var calendarList: ArrayList<Calendar> = arrayListOf()
     private var hotList: ArrayList<Community> = arrayListOf()
+    private var notificationList: MutableList<NotificationEntity> = arrayListOf()
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -121,12 +130,24 @@ class MainFragment :
                 navController.navigate(action)
             }
         }
+
+        // 알람 init
+        notificationAdapter.submitList(notificationList.toMutableList())
+        mainAlarmRv.apply {
+            layoutManager = LinearLayoutManager(myContext, LinearLayoutManager.VERTICAL, false)
+            adapter = notificationAdapter
+        }
     }
 
     private fun initListener() = with(viewModel) {
         communityList.observe(viewLifecycleOwner) {
             hotList = it
             hotAdapter.submitList(hotList.toMutableList())
+        }
+        // 알람 실시간 탐지 -> 시간순으로
+        notificationViewModel.notifications.observe(viewLifecycleOwner) {
+            notificationList = it.toMutableList()
+            notificationAdapter.submitList(notificationList.take(3))
         }
     }
 

@@ -2,16 +2,20 @@ package com.ssafy.world.config
 
 import android.app.Application
 import android.util.Log
+import androidx.room.Room
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.util.Utility
 import com.ssafy.world.R
+import com.ssafy.world.data.local.NotificationDatabase
 import com.ssafy.world.data.remote.NotificationAPI
 import com.ssafy.world.data.repository.CommunityRepository
 import com.ssafy.world.data.repository.UserRepository
+import com.ssafy.world.data.repository.local.NotificationRepository
 import com.ssafy.world.data.service.FCMService
+import com.ssafy.world.utils.Constants
 import com.ssafy.world.utils.Constants.BASE_URL
 import com.ssafy.world.utils.SharedPreferencesUtil
 import okhttp3.OkHttpClient
@@ -46,9 +50,13 @@ class ApplicationClass : Application() {
         lateinit var retrofit: Retrofit
         val userRepository = UserRepository
         val communityRepository = CommunityRepository
+        val notificationRepository = NotificationRepository
 
         // FCM Service
         val messagingService = FCMService
+        // Room Database
+        lateinit var database: NotificationDatabase
+
     }
 
     // 앱이 처음 생성되는 순간, SP를 새로 만들어주고, 레트로핏 인스턴스를 생성합니다.
@@ -60,7 +68,17 @@ class ApplicationClass : Application() {
         KakaoSdk.init(this, getString(R.string.kakao_native_app_key))
         // 레트로핏 인스턴스 생성
         initRetrofitInstance()
+        // RoomDatabase 초기화
+        initRoomDatabase()
         // repository 초기화
+    }
+
+    private fun initRoomDatabase() {
+        database = Room.databaseBuilder(
+            applicationContext,
+            NotificationDatabase::class.java,
+            Constants.DATABASE_NAME
+        ).build()
     }
 
     // 레트로핏 인스턴스를 생성하고, 레트로핏에 각종 설정값들을 지정해줍니다.
