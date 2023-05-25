@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/background_mypage_profile"
+
+    android:gravity="center"
+
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/_20sdp">
+
+    <ImageButton
+        android:id="@+id/closeBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="@dimen/_56sdp"
+        android:layout_height="@dimen/_56sdp"
+        android:layout_gravity="top|end"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:layout_marginEnd="@dimen/_16sdp"
+        android:background="@drawable/ic_close_48_48"
+        android:paddingTop="@dimen/_30sdp" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="@dimen/_100sdp">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
+            app:cardCornerRadius="@dimen/_100sdp"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="@dimen/_100sdp">
+
+            <ImageView
+                android:id="@+id/profileImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/default_profile_image"/>
+        </androidx.cardview.widget.CardView>
+
+        <ImageButton
+            android:id="@+id/imageAddBtn"
+            app:layout_constraintCircle="@id/cardView"
+            app:layout_constraintCircleAngle="135"
+            app:layout_constraintCircleRadius="@dimen/_50sdp"
+            app:layout_constraintStart_toStartOf="@+id/cardView"
+            app:layout_constraintTop_toTopOf="@+id/cardView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="87dp"
+            android:background="@drawable/ic_image_add" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:text="이름"
+        android:textSize="@dimen/_16ssp"/>
+
+    <EditText
+        android:id="@+id/userNameEditText"
+        tools:text="홍길동동동"
+        android:layout_width="@dimen/_120sdp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:imeOptions="actionNext"
+        android:maxLength="5"
+        android:nextFocusForward="@id/userNickNameEditText"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_24sdp"
+        android:textStyle="bold" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:text="닉네임"
+            android:textSize="@dimen/_16ssp"/>
+    <EditText
+        android:id="@+id/userNickNameEditText"
+        tools:text="닉네임닉네임닉네임"
+        android:layout_width="@dimen/_140sdp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:gravity="center"
+        android:imeOptions="actionDone"
+        android:maxLength="9"
+        android:nextFocusForward="@id/update_user_btn"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_14sdp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/update_user_btn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_48sdp"
+        android:layout_marginHorizontal="@dimen/_16sdp"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:text="@string/account_tv_modify"
+        android:backgroundTint="@color/light_gray"
+        android:textColor="@color/dark_gray"
+        app:cornerRadius="@dimen/_10sdp" />
+</LinearLayout>

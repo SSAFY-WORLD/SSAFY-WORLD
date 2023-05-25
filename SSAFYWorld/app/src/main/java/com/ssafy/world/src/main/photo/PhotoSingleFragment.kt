@@ -1,29 +1,30 @@
 package com.ssafy.world.src.main.photo
 
+import android.content.Context
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
-import com.google.gson.Gson
 import com.ssafy.world.R
 import com.ssafy.world.config.BaseFragment
 import com.ssafy.world.data.model.Photo
 import com.ssafy.world.databinding.FragmentPhotoBinding
+import com.ssafy.world.databinding.ItemPhotoCheckboxBinding
 
 private const val TAG = "PhotoFragment_싸피"
 
 class PhotoSingleFragment :
 	BaseFragment<FragmentPhotoBinding>(FragmentPhotoBinding::bind, R.layout.fragment_photo) {
 	private val images: MutableList<Photo> = mutableListOf()
-	private var profilePhoto: Photo? = null
+	private var profilePhoto: String? = null
+	private var currentBinding: ItemPhotoCheckboxBinding? = null
 	private val myAdapter: PhotoGridAdapter by lazy {
 		PhotoGridAdapter(myContext)
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-
 		loadPhotos()
 		initView()
 	}
@@ -37,11 +38,12 @@ class PhotoSingleFragment :
 
 
 		myAdapter.checkBoxClickListener = object : PhotoGridAdapter.CheckBoxClickListener {
-			override fun onClick(data: Photo) {
-				profilePhoto?.let {
-					it.isSelected = false
+			override fun onClick(binding: ItemPhotoCheckboxBinding, data: Photo) {
+				currentBinding?.let {
+					it.checkbox.isChecked = false
 				}
-				profilePhoto = data
+				currentBinding = binding
+				profilePhoto = data.url
 				myAdapter.submitList(images.toMutableList())
 			}
 		}
@@ -53,11 +55,14 @@ class PhotoSingleFragment :
 		}
 
 		photoBtnComplete.setOnClickListener {
-			val bundle = Bundle()
-			bundle.putString("profilePhoto", profilePhoto?.url ?: "default")
-			bundle.putString("name", arguments?.getString("name") ?: "")
-			bundle.putString("nickName", arguments?.getString("nickName") ?: "")
-			navController.navigate(R.id.action_photoSingleFragment_to_mypageFragment, bundle)
+			profilePhoto?.let { photo ->
+				val bundle = Bundle().apply {
+					putString("name", arguments?.getString("name"))
+					putString("nickname", arguments?.getString("nickname"))
+					putString("photo", photo)
+				}
+				navController.navigate(R.id.action_photoSingleFragment_to_mypageFragment, bundle)
+			}
 		}
 	}
 

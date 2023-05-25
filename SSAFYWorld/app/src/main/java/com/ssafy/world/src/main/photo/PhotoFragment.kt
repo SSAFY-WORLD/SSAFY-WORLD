@@ -11,6 +11,7 @@ import com.ssafy.world.R
 import com.ssafy.world.config.BaseFragment
 import com.ssafy.world.data.model.Photo
 import com.ssafy.world.databinding.FragmentPhotoBinding
+import com.ssafy.world.databinding.ItemPhotoCheckboxBinding
 import com.ssafy.world.src.main.MainActivityViewModel
 
 private const val TAG = "PhotoFragment_싸피"
@@ -42,7 +43,7 @@ class PhotoFragment :
 
 
         myAdapter.checkBoxClickListener = object : PhotoGridAdapter.CheckBoxClickListener {
-            override fun onClick(data: Photo) {
+            override fun onClick(binding: ItemPhotoCheckboxBinding, data: Photo) {
                 imageCount += if (data.isSelected) 1 else -1
                 photoTvCount.visibility = if (imageCount > 0) View.VISIBLE else View.GONE
                 photoTvCount.text = imageCount.toString()

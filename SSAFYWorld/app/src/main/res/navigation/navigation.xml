@@ -486,4 +486,12 @@
             android:id="@+id/action_notificationFragment_to_communityDetailFragment"
             app:destination="@id/communityDetailFragment" />
     </fragment>
+    <dialog
+        android:id="@+id/profileUpdateBottomSheetFragment"
+        android:name="com.ssafy.world.src.main.mypage.ProfileUpdateBottomSheetFragment"
+        android:label="ProfileUpdateBottomSheetFragment" >
+        <action
+            android:id="@+id/action_profileUpdateBottomSheetFragment_to_photoSingleFragment"
+            app:destination="@id/photoSingleFragment" />
+    </dialog>
 </navigation>

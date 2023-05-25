@@ -141,7 +141,7 @@ object UserRepository {
                 val updatedFields = mutableMapOf<String, Any>()
                 updatedFields["name"] = updateUser.name
                 updatedFields["nickname"] = updateUser.nickname
-                if (updateUser.profilePhoto.isNotEmpty()) {
+                if (updateUser.profilePhoto.isNotEmpty() && updateUser.profilePhoto != user.profilePhoto) {
                     // 이미지 업로드
                     val imageFile = File(updateUser.profilePhoto)
                     val imageRef = getUserImageRef()
