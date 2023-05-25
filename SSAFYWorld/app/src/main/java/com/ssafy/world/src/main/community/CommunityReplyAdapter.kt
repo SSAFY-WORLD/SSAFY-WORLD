@@ -48,6 +48,11 @@ class CommunityReplyAdapter(val mContext: Context) :
     }
     lateinit var replyItemClickListener: ReplyItemClickListener
 
+    interface ProfileClickListener {
+        fun onClick(view: View, data: Comment, position: Int)
+    }
+    lateinit var profileClickListener: ProfileClickListener
+
     inner class MyViewHolder(private val binding: ItemCommunityCommentBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -62,7 +67,10 @@ class CommunityReplyAdapter(val mContext: Context) :
                 commentMore.setOnClickListener {
                     replyItemClickListener.onClick(commentMore, data, layoutPosition)
                 }
-
+            } else {
+                profileImage.setOnClickListener {
+                    profileClickListener.onClick(binding.root, data, layoutPosition)
+                }
             }
             replyBtnShow.visibility = View.GONE
             username.text = data.userNickname

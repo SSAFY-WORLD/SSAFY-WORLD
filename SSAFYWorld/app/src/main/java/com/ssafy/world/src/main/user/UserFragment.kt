@@ -36,7 +36,7 @@ class UserFragment : BaseFragment<FragmentUserBinding>(FragmentUserBinding::bind
 
             userListAdapter.itemClickListener = object : UserListAdapter.ItemClickListener {
                 override fun onClick(view: View, user: User, position: Int) {
-                    val bottomSheetDialogFragment = UserInfoBottomSheetFragment(user)
+                    val bottomSheetDialogFragment = UserInfoBottomSheetFragment(user, "user")
                     // 유저 정보 보여주기
                     bottomSheetDialogFragment.show(childFragmentManager, bottomSheetDialogFragment.tag)
                 }

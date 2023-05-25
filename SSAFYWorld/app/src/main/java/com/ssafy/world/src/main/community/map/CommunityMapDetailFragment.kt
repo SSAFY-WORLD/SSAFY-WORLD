@@ -28,15 +28,21 @@ import com.ssafy.world.config.BaseFragment
 import com.ssafy.world.data.model.Comment
 import com.ssafy.world.data.model.Community
 import com.ssafy.world.data.model.NotificationData
+import com.ssafy.world.data.model.User
 import com.ssafy.world.data.service.FCMService
 import com.ssafy.world.databinding.FragmentCommunityMapDetailBinding
 import com.ssafy.world.databinding.ItemCommunityCommentBinding
 import com.ssafy.world.src.main.MainActivity
 import com.ssafy.world.src.main.MainActivityViewModel
-import com.ssafy.world.src.main.community.*
+import com.ssafy.world.src.main.community.CommunityDetailCommentAdapter
+import com.ssafy.world.src.main.community.CommunityDetailFragmentArgs
+import com.ssafy.world.src.main.community.CommunityDetailPhotoAdapter
+import com.ssafy.world.src.main.community.CommunityViewModel
 import com.ssafy.world.src.main.photo.PhotoFullDialog
+import com.ssafy.world.src.main.user.UserInfoBottomSheetFragment
 
 private const val TAG = "CommunityMapDetailFragm"
+
 class CommunityMapDetailFragment : BaseFragment<FragmentCommunityMapDetailBinding>(
     FragmentCommunityMapDetailBinding::bind,
     R.layout.fragment_community_map_detail
@@ -58,7 +64,7 @@ class CommunityMapDetailFragment : BaseFragment<FragmentCommunityMapDetailBindin
         CommunityDetailPhotoAdapter(myContext)
     }
     private val commentAdapter: CommunityDetailCommentAdapter by lazy {
-        CommunityDetailCommentAdapter(myContext, communityViewModel)
+        CommunityDetailCommentAdapter(myContext, communityViewModel, childFragmentManager, "map")
     }
     private var commentList = arrayListOf<Comment>()
 
@@ -174,11 +180,25 @@ class CommunityMapDetailFragment : BaseFragment<FragmentCommunityMapDetailBindin
                     imm.showSoftInput(commentInput, InputMethodManager.SHOW_IMPLICIT)
                     isReply = data.id
 
-                    val commentItemView = commentRecyclerview.layoutManager?.findViewByPosition(position)
+                    val commentItemView =
+                        commentRecyclerview.layoutManager?.findViewByPosition(position)
                     val scrollY = commentItemView?.top ?: 0
                     scrollView.smoothScrollTo(0, scrollY)
                 }
             }
+        commentAdapter.profileClickListener = object : CommunityDetailCommentAdapter.ProfileClickListener {
+            override fun onClick(view: ItemCommunityCommentBinding, data: Comment, position: Int) {
+                val user = User().apply {
+                    id = data.userId
+                    nickname = data.userNickname
+                    profilePhoto = data.userProfile
+                    email = data.userEmail
+                    name = data.userName
+                }
+                val bottomSheetDialogFragment = UserInfoBottomSheetFragment(user, "map")
+                bottomSheetDialogFragment.show(childFragmentManager, bottomSheetDialogFragment.tag)
+            }
+        }
         communityViewModel.getCommentsByCommunityId(community.id)
     }
 
@@ -189,6 +209,8 @@ class CommunityMapDetailFragment : BaseFragment<FragmentCommunityMapDetailBindin
                 userId = curUser!!.email
                 userNickname = curUser!!.nickname
                 userProfile = curUser!!.profilePhoto
+                userName = curUser!!.name
+                userEmail = curUser!!.email
                 comment = commentInput.text.toString()
                 time = System.currentTimeMillis()
                 communityId = community.id
@@ -202,8 +224,12 @@ class CommunityMapDetailFragment : BaseFragment<FragmentCommunityMapDetailBindin
                     community,
                     cur
                 )
-                if(replyComment.userId != curUser!!.id) {
-                    val noti = NotificationData("커뮤니티-${activityViewModel.entryCommunityCollection}-${cur.id}", "싸피월드", "${curUser!!.nickname} 님이 답글을 남겼습니다.")
+                if (replyComment.userId != curUser!!.id) {
+                    val noti = NotificationData(
+                        "커뮤니티-${activityViewModel.entryCommunityCollection}-${cur.id}",
+                        activityViewModel.getCommunityTitle(),
+                        "${curUser!!.nickname} 님이 답글을 남겼습니다."
+                    )
                     sendRemoteNotification(noti, replyComment.fcmToken)
                 }
             } else {
@@ -214,8 +240,12 @@ class CommunityMapDetailFragment : BaseFragment<FragmentCommunityMapDetailBindin
                 )
             }
 
-            if(community.userId != curUser!!.id) {
-                val noti = NotificationData("커뮤니티-${activityViewModel.entryCommunityCollection}-${community.id}", "싸피월드", "${curUser!!.nickname} 님이 댓글을 남겼습니다.")
+            if (community.userId != curUser!!.id) {
+                val noti = NotificationData(
+                    "커뮤니티-${activityViewModel.entryCommunityCollection}-${community.id}",
+                    activityViewModel.getCommunityTitle(),
+                    "${curUser!!.nickname} 님이 댓글을 남겼습니다."
+                )
                 FCMService.sendRemoteNotification(noti, community.fcmToken)
             }
             (activity as MainActivity).hideKeyboard()
@@ -251,7 +281,7 @@ class CommunityMapDetailFragment : BaseFragment<FragmentCommunityMapDetailBindin
         communityViewModel.comments.observe(viewLifecycleOwner) {
             commentList = it
             commentAdapter.submitList(commentList.toMutableList())
-            if(isNew) {
+            if (isNew) {
                 Handler().postDelayed({
                     binding.scrollView.fullScroll(View.FOCUS_DOWN)
                 }, 100)
@@ -315,10 +345,6 @@ class CommunityMapDetailFragment : BaseFragment<FragmentCommunityMapDetailBindin
         // 메뉴 아이템 클릭 리스너 설정
         popupMenu.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.menu_chat -> {
-                    //TODO: 채팅 바로가기
-                    true
-                }
                 R.id.menu_delete -> {
                     showCommentDeleteConfirmationDialog(comment)
                     true

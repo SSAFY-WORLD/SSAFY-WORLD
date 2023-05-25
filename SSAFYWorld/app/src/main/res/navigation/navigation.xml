@@ -95,6 +95,13 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:popUpTo="@id/communityListFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_communityDetailFragment_to_inChatFragment"
+            app:destination="@id/inChatFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/communityListFragment"
@@ -301,6 +308,8 @@
                 android:name="UserFromProfile"
                 app:argType="com.ssafy.world.data.model.User" />
         </action>
+
+
     </fragment>
 
     <dialog
@@ -474,6 +483,13 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popUpTo="@id/communityMapFragment"
             app:popUpToInclusive="true"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_communityMapDetail_to_inChatFragment"
+            app:destination="@id/inChatFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>

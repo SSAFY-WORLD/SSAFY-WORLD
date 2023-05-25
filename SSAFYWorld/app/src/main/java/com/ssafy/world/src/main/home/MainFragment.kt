@@ -37,7 +37,8 @@ class MainFragment :
 
     companion object {
         val signUrl = "https://dydwkd486.github.io/ssafy-sign/"
-        val signUploadUrl = "https://drive.google.com/drive/folders/1JrMoL6xU4Jv1wcFmwxVQyZfA9FLgy9uA"
+        val signUploadUrl =
+            "https://drive.google.com/drive/folders/1JrMoL6xU4Jv1wcFmwxVQyZfA9FLgy9uA"
         val eduUrl = "https://edu.ssafy.com/edu/main/index.do"
         val gitUrl = "https://github.com/Kim-JuYong"
     }
@@ -101,7 +102,7 @@ class MainFragment :
             openUrlInExternalBrowser(gitUrl)
         }
         // 알림 클릭시 해당 Community화면으로 이동
-        notificationAdapter.itemClickListener = object: NotificationListAdapter.ItemClickListener {
+        notificationAdapter.itemClickListener = object : NotificationListAdapter.ItemClickListener {
             override fun onClick(view: View, data: NotificationEntity) {
                 val destination = data.destination.split("-")
                 activityViewModel.entryCommunityCollection = destination[1]
@@ -113,6 +114,7 @@ class MainFragment :
             }
         }
     }
+
     fun openUrlInExternalBrowser(url: String) {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivity(intent)

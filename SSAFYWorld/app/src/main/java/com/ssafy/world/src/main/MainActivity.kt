@@ -68,7 +68,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             Constants.COMMUNITY -> {
                 activityViewModel.entryCommunityCollection = cur[1]
                 val bundle = bundleOf("communityId" to cur[2])
-                setTitle(activityViewModel.communityTitle)
                 navController.navigate(R.id.communityDetailFragment, bundle)
             }
             else -> hideBottomNav()
@@ -118,9 +117,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     hideToolbar()
                 }
                 R.id.communityListFragment, R.id.communityMapFragment -> {
+                    hideToolbar()
                     hideBottomNav()
                     unblockBackPressed()
-                    hideToolbar()
                 }
                 R.id.chatFragment -> {
                     setTitle(getString(R.string.nav_chat_title))
@@ -148,7 +147,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 R.id.communityDetailFragment, R.id.communityMapDetail -> {
                     hideBottomNav()
                     unblockBackPressed()
-                    setTitle("커뮤니티")
+                    setTitle(activityViewModel.getCommunityTitle())
                 }
                 R.id.photoFragment, R.id.photoFullFragment, R.id.photoSingleFragment -> {
                     hideToolbar()

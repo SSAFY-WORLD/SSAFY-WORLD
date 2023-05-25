@@ -4,16 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ssafy.world.R
 import com.ssafy.world.data.model.User
 import com.ssafy.world.databinding.BottomUserInfoBinding
+import com.ssafy.world.src.main.community.CommunityDetailFragmentDirections
+import com.ssafy.world.src.main.community.map.CommunityMapDetailFragmentDirections
 
 class UserInfoBottomSheetFragment(
-    private val user: User
-): BottomSheetDialogFragment() {
+    private val user: User,
+    private val from: String
+) : BottomSheetDialogFragment() {
     private var _binding: BottomUserInfoBinding? = null
     private val binding get() = _binding!!
 
@@ -34,8 +38,17 @@ class UserInfoBottomSheetFragment(
         super.onViewCreated(view, savedInstanceState)
         initView()
         binding.sendMessageBtn.setOnClickListener {
-            val action = UserFragmentDirections.actionUserFragmentToInChatFragment(UserFromProfile = user)
-            findNavController().navigate(action)
+            var action: NavDirections? = null
+            when (from) {
+                "community" -> action =
+                    CommunityDetailFragmentDirections.actionCommunityDetailFragmentToInChatFragment(UserFromProfile = user, user = null)
+                "user" -> action =
+                    UserFragmentDirections.actionUserFragmentToInChatFragment(UserFromProfile = user, user = null)
+                "map" -> action =
+                    CommunityMapDetailFragmentDirections.actionCommunityMapDetailToInChatFragment(UserFromProfile = user, user = null)
+
+            }
+            findNavController().navigate(action!!)
             dismiss()
         }
     }
