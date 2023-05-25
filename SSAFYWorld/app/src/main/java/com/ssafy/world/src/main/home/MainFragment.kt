@@ -106,7 +106,7 @@ class MainFragment :
                 val destination = data.destination.split("-")
                 activityViewModel.entryCommunityCollection = destination[1]
                 val bundle = Bundle().apply {
-                    "communityId" to destination[2]
+                    putString("communityId", destination[2])
                 }
                 navController.navigate(R.id.action_mainFragment_to_communityDetailFragment, bundle)
                 notificationViewModel.deleteNotification(data)

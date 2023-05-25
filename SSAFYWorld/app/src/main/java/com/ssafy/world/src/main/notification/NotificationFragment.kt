@@ -43,7 +43,7 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(FragmentN
                     val destination = data.destination.split("-")
                     activityViewModel.entryCommunityCollection = destination[1]
                     val bundle = Bundle().apply {
-                        "communityId" to destination[2]
+                        putString("communityId", destination[2])
                     }
                     navController.navigate(R.id.action_notificationFragment_to_communityDetailFragment, bundle)
                     // 클릭된 알람은 database에서 삭제
