@@ -26,32 +26,26 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(
 
         communityFree.setOnClickListener {
             activityViewModel.entryCommunityCollection = "free"
-            activityViewModel.communityTitle = "자유 게시판"
             navController.navigate(R.id.action_communityFragment_to_communityListFragment)
         }
         communityQuestion.setOnClickListener {
             activityViewModel.entryCommunityCollection = "question"
-            activityViewModel.communityTitle = "질문 게시판"
             navController.navigate(R.id.action_communityFragment_to_communityListFragment)
         }
         communityMarket.setOnClickListener {
-            activityViewModel.communityTitle = "장터 게시판"
             activityViewModel.entryCommunityCollection = "market"
             navController.navigate(R.id.action_communityFragment_to_communityListFragment)
         }
 
         communiyCompany.setOnClickListener {
-            activityViewModel.communityTitle = "취업 게시판"
             activityViewModel.entryCommunityCollection = "company"
             navController.navigate(R.id.action_communityFragment_to_communityListFragment)
         }
         communityStore.setOnClickListener {
-            activityViewModel.communityTitle = "맛집 게시판"
             activityViewModel.entryCommunityCollection = "store"
             navController.navigate(R.id.action_communityFragment_to_communityMapFragment)
         }
         communityRoom.setOnClickListener {
-            activityViewModel.communityTitle = "부동산 게시판"
             activityViewModel.entryCommunityCollection = "room"
             navController.navigate(R.id.action_communityFragment_to_communityListFragment)
         }

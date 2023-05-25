@@ -7,6 +7,7 @@ import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.activityViewModels
@@ -22,12 +23,14 @@ import com.ssafy.world.config.BaseFragment
 import com.ssafy.world.data.model.Comment
 import com.ssafy.world.data.model.Community
 import com.ssafy.world.data.model.NotificationData
+import com.ssafy.world.data.model.User
 import com.ssafy.world.data.service.FCMService
 import com.ssafy.world.databinding.FragmentCommunityDetailBinding
 import com.ssafy.world.databinding.ItemCommunityCommentBinding
 import com.ssafy.world.src.main.MainActivity
 import com.ssafy.world.src.main.MainActivityViewModel
 import com.ssafy.world.src.main.photo.PhotoFullDialog
+import com.ssafy.world.src.main.user.UserInfoBottomSheetFragment
 
 private const val TAG = "CommunityDetailFragment"
 
@@ -50,7 +53,7 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
         CommunityDetailPhotoAdapter(myContext)
     }
     private val commentAdapter: CommunityDetailCommentAdapter by lazy {
-        CommunityDetailCommentAdapter(myContext, communityViewModel)
+        CommunityDetailCommentAdapter(myContext, communityViewModel, childFragmentManager, "community")
     }
     private var commentList = arrayListOf<Comment>()
 
@@ -152,11 +155,25 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
                     imm.showSoftInput(commentInput, InputMethodManager.SHOW_IMPLICIT)
                     isReply = data.id
 
-                    val commentItemView = commentRecyclerview.layoutManager?.findViewByPosition(position)
+                    val commentItemView =
+                        commentRecyclerview.layoutManager?.findViewByPosition(position)
                     val scrollY = commentItemView?.top ?: 0
                     scrollView.smoothScrollTo(0, scrollY)
                 }
             }
+        commentAdapter.profileClickListener = object : CommunityDetailCommentAdapter.ProfileClickListener {
+            override fun onClick(view: ItemCommunityCommentBinding, data: Comment, position: Int) {
+                val user = User().apply {
+                    id = data.userId
+                    nickname = data.userNickname
+                    profilePhoto = data.userProfile
+                    email = data.userEmail
+                    name = data.userName
+                }
+                val bottomSheetDialogFragment = UserInfoBottomSheetFragment(user, "community")
+                bottomSheetDialogFragment.show(childFragmentManager, bottomSheetDialogFragment.tag)
+            }
+        }
         communityViewModel.getCommentsByCommunityId(community.id)
     }
 
@@ -167,6 +184,8 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
                 userId = curUser!!.email
                 userNickname = curUser!!.nickname
                 userProfile = curUser!!.profilePhoto
+                userName = curUser!!.name
+                userEmail = curUser!!.email
                 comment = commentInput.text.toString()
                 time = System.currentTimeMillis()
                 communityId = community.id
@@ -180,8 +199,12 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
                     community,
                     cur
                 )
-                if(replyComment.userId != curUser!!.id) {
-                    val noti = NotificationData("커뮤니티-${activityViewModel.entryCommunityCollection}-${cur.id}", "싸피월드", "${curUser!!.nickname} 님이 답글을 남겼습니다.")
+                if (replyComment.userId != curUser!!.id) {
+                    val noti = NotificationData(
+                        "커뮤니티-${activityViewModel.entryCommunityCollection}-${community.id}",
+                        activityViewModel.getCommunityTitle(),
+                        "${curUser!!.nickname} 님이 답글을 남겼습니다."
+                    )
                     sendRemoteNotification(noti, replyComment.fcmToken)
                 }
             } else {
@@ -191,8 +214,12 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
                     cur
                 )
             }
-            if(community.userId != curUser!!.id) {
-                val noti = NotificationData("커뮤니티-${activityViewModel.entryCommunityCollection}-${community.id}", "싸피월드", "${curUser!!.nickname} 님이 댓글을 남겼습니다.")
+            if (community.userId != curUser!!.id) {
+                val noti = NotificationData(
+                    "커뮤니티-${activityViewModel.entryCommunityCollection}-${community.id}",
+                    activityViewModel.getCommunityTitle(),
+                    "${curUser!!.nickname} 님이 댓글을 남겼습니다."
+                )
                 FCMService.sendRemoteNotification(noti, community.fcmToken)
             }
 
@@ -230,7 +257,7 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
             commentList = it
             commentAdapter.submitList(commentList.toMutableList())
 
-            if(isNew) {
+            if (isNew) {
                 Handler().postDelayed({
                     binding.scrollView.fullScroll(View.FOCUS_DOWN)
                 }, 100)
@@ -308,10 +335,6 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
         // 메뉴 아이템 클릭 리스너 설정
         popupMenu.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.menu_chat -> {
-                    // TODO: 채팅 바로가기 구현
-                    true
-                }
                 R.id.menu_delete -> {
                     isNew = false
                     showCommentDeleteConfirmationDialog(comment, position)
@@ -375,4 +398,6 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
             }
         }
     }
+
+
 }

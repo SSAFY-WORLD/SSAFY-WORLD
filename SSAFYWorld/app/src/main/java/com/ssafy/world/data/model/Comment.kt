@@ -12,12 +12,14 @@ data class Comment(
     var userId: String,
     var userNickname: String,
     var userProfile: String,
+    var userName: String,
+    var userEmail: String,
     var comment: String,
     var time: Long,
     var fcmToken: String,
     var replies: ArrayList<Comment> = ArrayList()
 ) : Parcelable {
 
-    constructor() : this("", "", "", "", "", "", "", 0, "")
+    constructor() : this("", "", "", "", "", "", "", "", "", 0, "")
 
 }

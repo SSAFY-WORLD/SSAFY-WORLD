@@ -45,11 +45,12 @@ class CommunityMapFragment : BaseFragment<FragmentCommunityMapListBinding>(
     private fun initView() = with(binding) {
         swipeLayout.setOnRefreshListener(this@CommunityMapFragment) // SwipeRefreshLayout에 리스너 설정
 
+        toolbarText.text = activityViewModel.getCommunityTitle()
         mapBtn.setOnClickListener {
             navController.navigate(R.id.action_communityMapFragment_to_mapFragment)
         }
         searchBtn.setOnClickListener {
-            navController.navigate(R.id.action_communityMapFragment_to_communitySearchFragment)
+            navController.navigate(R.id.action_communityMapFragment_to_communityMapSearchFragment)
         }
         communityFab.setOnClickListener {
             navController.navigate(R.id.action_communityMapFragment_to_communityMapSearchFragment)

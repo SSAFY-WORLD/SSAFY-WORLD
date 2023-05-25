@@ -69,6 +69,7 @@ class CommunityListFragment : BaseFragment<FragmentCommunityListBinding>(Fragmen
     }
 
     private fun initButton() = with(binding) {
+        toolbarText.text = activityViewModel.getCommunityTitle()
         communityFab.setOnClickListener {
             val action = CommunityListFragmentDirections.actionCommunityListFragmentToCommunityWriteFragment(
                 communityId = "", communityName = "")

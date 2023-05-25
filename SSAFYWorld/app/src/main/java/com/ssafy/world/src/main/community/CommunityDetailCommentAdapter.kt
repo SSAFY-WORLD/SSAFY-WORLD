@@ -4,8 +4,10 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.PopupMenu
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
@@ -18,11 +20,18 @@ import com.ssafy.world.R
 import com.ssafy.world.config.ApplicationClass
 import com.ssafy.world.data.model.Comment
 import com.ssafy.world.data.model.Community
+import com.ssafy.world.data.model.User
 import com.ssafy.world.databinding.FragmentCommunityDetailBinding
 import com.ssafy.world.databinding.ItemCommunityCommentBinding
+import com.ssafy.world.src.main.user.UserInfoBottomSheetFragment
 import com.ssafy.world.utils.getFormattedTime
 
-class CommunityDetailCommentAdapter(val mContext: Context, val viewModel: CommunityViewModel) :
+class CommunityDetailCommentAdapter(
+    val mContext: Context,
+    val viewModel: CommunityViewModel,
+    val manager: FragmentManager,
+    val from: String
+) :
     ListAdapter<Comment, CommunityDetailCommentAdapter.MyViewHolder>(ItemComparator) {
     val replyAdapters: ArrayList<CommunityReplyAdapter> = arrayListOf()
 
@@ -67,6 +76,15 @@ class CommunityDetailCommentAdapter(val mContext: Context, val viewModel: Commun
     }
 
     lateinit var replyShowClickListener: ReplyShowClickListener
+
+
+    interface ProfileClickListener {
+        fun onClick(view: ItemCommunityCommentBinding, data: Comment, position: Int)
+    }
+
+    lateinit var profileClickListener: ProfileClickListener
+
+
     inner class MyViewHolder(private val binding: ItemCommunityCommentBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -81,6 +99,10 @@ class CommunityDetailCommentAdapter(val mContext: Context, val viewModel: Commun
                 commentMore.setOnClickListener {
                     itemClickListener.onClick(commentMore, data, layoutPosition)
                 }
+            } else {
+                profileImage.setOnClickListener {
+                    profileClickListener.onClick(binding, data, layoutPosition)
+                }
             }
             val replyAdapter = CommunityReplyAdapter(mContext)
             replyAdapter.submitList(arrayListOf())
@@ -92,6 +114,21 @@ class CommunityDetailCommentAdapter(val mContext: Context, val viewModel: Commun
                 object : CommunityReplyAdapter.ReplyItemClickListener {
                     override fun onClick(view: View, data: Comment, position: Int) {
                         showCommunityOptionView(view, data)
+                    }
+                }
+            replyAdapter.profileClickListener =
+                object : CommunityReplyAdapter.ProfileClickListener {
+                    override fun onClick(view: View, data: Comment, position: Int) {
+                        val user = User().apply {
+                            id = data.userId
+                            nickname = data.userNickname
+                            profilePhoto = data.userProfile
+                            email = data.userEmail
+                            name = data.userName
+                        }
+                        val bottomSheetDialogFragment =
+                            UserInfoBottomSheetFragment(user, from)
+                        bottomSheetDialogFragment.show(manager, bottomSheetDialogFragment.tag)
                     }
                 }
             replyAdapters.add(replyAdapter)
@@ -129,10 +166,6 @@ class CommunityDetailCommentAdapter(val mContext: Context, val viewModel: Commun
         // 메뉴 아이템 클릭 리스너 설정
         popupMenu.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.menu_chat -> {
-                    //TODO: 채팅방 바로가기 구현
-                    true
-                }
                 R.id.menu_delete -> {
                     showAlertDialog(mContext, "댓글을 삭제할까요?", data.id, data.commentId)
                     true
