@@ -1,9 +1,11 @@
 package com.ssafy.world.src.main.home
 
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
 import android.os.Build
@@ -12,6 +14,8 @@ import android.provider.CalendarContract
 import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -64,7 +68,13 @@ class MainFragment :
         super.onViewCreated(view, savedInstanceState)
 
         // 삼성 캘린더 API를 사용하여 일정 가져오기
-        //fetchCalendarEvents(getCalendarId("juyong4190@gmail.com"))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (hasPermissionCalendar()) {
+                fetchCalendarEvents(getCalendarId("juyong4190@gmail.com"))
+            } else {
+                showCustomToast("[마이페이지] > [권한 설정] 에서 권한을 설정해주세요.")
+            }
+        }
         initView()
         initRecycler()
         initListener()
@@ -86,7 +96,12 @@ class MainFragment :
         }
         // 알림 전체 보기
         showAlarmBtn.setOnClickListener {
-            navController.navigate(R.id.action_mainFragment_to_notificationFragment)
+            // 권한이 있을때
+            if (hasPermissionNotification()) {
+                navController.navigate(R.id.action_mainFragment_to_notificationFragment)
+            } else {
+                showCustomToast("[마이페이지] > [권한 설정] 에서 알림을 설정해주세요.")
+            }
         }
 
         goSign.setOnClickListener {
@@ -273,6 +288,23 @@ class MainFragment :
     override fun onPause() {
         super.onPause()
         calendarList.clear()
+    }
+
+    private fun hasPermissionNotification(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+        } else {
+            true
+        }
+    }
+
+    private fun hasPermissionCalendar(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED &&
+                    ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED
+        } else {
+            true
+        }
     }
 }
 
