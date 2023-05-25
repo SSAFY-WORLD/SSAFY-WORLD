@@ -21,6 +21,10 @@ class SharedPreferencesUtil(context: Context) {
         editor.apply()
     }
 
+    fun setUserToken(token: String) {
+        preferences.edit().putString("token", token).apply()
+    }
+
     fun getUserCookie(): MutableSet<String>? {
         return preferences.getStringSet(ApplicationClass.COOKIES_KEY_NAME, HashSet())
     }

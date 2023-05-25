@@ -19,22 +19,10 @@
             android:layout_gravity="center"
             android:layout_marginHorizontal="@dimen/_32sdp"
             android:layout_marginTop="@dimen/_32sdp"
-
+            android:paddingTop="@dimen/_32sdp"
             android:paddingBottom="@dimen/_20sdp"
             android:gravity="center">
 
-            <ImageButton
-                android:id="@+id/closeBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/_16sdp"
-                android:layout_marginTop="@dimen/_16sdp"
-                android:layout_gravity="top|end"
-                android:paddingTop="@dimen/_30sdp"
-                android:visibility="invisible"
-                android:background="@drawable/ic_close_48_48"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="@dimen/_100sdp"
@@ -58,19 +46,6 @@
                         android:scaleType="centerCrop"/>
                 </androidx.cardview.widget.CardView>
 
-                <ImageButton
-                    android:id="@+id/imageAddBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="87dp"
-                    android:background="@drawable/ic_image_add"
-                    android:visibility="invisible"
-                    app:layout_constraintCircle="@id/cardView"
-                    app:layout_constraintCircleAngle="135"
-                    app:layout_constraintCircleRadius="@dimen/_50sdp"
-                    app:layout_constraintStart_toStartOf="@+id/cardView"
-                    app:layout_constraintTop_toTopOf="@+id/cardView" />
-
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
@@ -84,22 +59,6 @@
                 android:textStyle="bold"
                 tools:text="홍길동" />
 
-            <EditText
-                android:id="@+id/userNameEditText"
-                android:layout_width="@dimen/_120sdp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:maxLength="5"
-                android:imeOptions="actionNext"
-                tools:visibility="visible"
-                android:nextFocusForward="@id/userNickNameEditText"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_24sdp"
-                android:textStyle="bold"
-                android:visibility="gone"
-                tools:text="홍길동동동"/>
-
             <TextView
                 android:id="@+id/userNickName"
                 android:layout_width="wrap_content"
@@ -108,21 +67,6 @@
                 android:textSize="@dimen/_14sdp"
                 android:textColor="@color/black"
                 tools:text="닉네임"/>
-
-            <EditText
-                android:id="@+id/userNickNameEditText"
-                android:layout_width="@dimen/_140sdp"
-                android:layout_height="wrap_content"
-                android:maxLength="9"
-                android:gravity="center"
-                android:imeOptions="actionDone"
-                tools:visibility="visible"
-                android:nextFocusForward="@id/update_user_btn"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:textSize="@dimen/_14sdp"
-                android:textColor="@color/black"
-                android:visibility="gone"
-                tools:text="닉네임닉네임닉네임"/>
 
             <TextView
                 android:id="@+id/userEmail"
@@ -274,29 +218,6 @@
                 android:textColor="@color/dark_gray"
                 android:layout_marginBottom="@dimen/_8sdp"
                 android:textSize="@dimen/_12ssp"/>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingVertical="@dimen/_8sdp"
-                android:gravity="center">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/app_version"
-                    android:textSize="@dimen/_14sdp"
-                    android:textColor="@color/black"/>
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    tools:text="1.00"/>
-            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/validation_ll"
@@ -305,7 +226,8 @@
                 android:orientation="horizontal"
                 android:paddingVertical="@dimen/_8sdp"
                 android:gravity="center"
-                android:visibility="gone">
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -334,19 +256,18 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/app_licence"
+                    android:text="@string/app_version"
                     android:textSize="@dimen/_14sdp"
                     android:textColor="@color/black"/>
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_weight="1"/>
-                <ImageButton
-                    android:id="@+id/licence_btn"
+                <TextView
+                    android:id="@+id/version_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/ic_arrow"
-                    android:backgroundTint="@color/dark_gray"/>
+                    android:layout_marginEnd="@dimen/_10sdp" />
             </LinearLayout>
         </LinearLayout>
 

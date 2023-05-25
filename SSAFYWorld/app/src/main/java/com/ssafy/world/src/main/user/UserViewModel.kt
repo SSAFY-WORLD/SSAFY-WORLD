@@ -19,7 +19,7 @@ class UserViewModel: ViewModel() {
     val userList: LiveData<ArrayList<User>> = _userList
 
     private val _updateUserSuccess = MutableLiveData<Boolean>()
-    val updateUserPwdSuccess: LiveData<Boolean>
+    val updateUserSuccess: LiveData<Boolean>
         get() = _updateUserSuccess
 
     fun getUser(id: String) = viewModelScope.launch {
