@@ -85,7 +85,7 @@ class MainFragment :
         }
         // 알림 전체 보기
         showAlarmBtn.setOnClickListener {
-            navController.navigate(R.id.action_mainFragment_to_communityDetailFragment)
+            navController.navigate(R.id.action_mainFragment_to_notificationFragment)
         }
 
         goSign.setOnClickListener {
@@ -103,11 +103,13 @@ class MainFragment :
         // 알림 클릭시 해당 Community화면으로 이동
         notificationAdapter.itemClickListener = object: NotificationListAdapter.ItemClickListener {
             override fun onClick(view: View, data: NotificationEntity) {
-                val destination = data.id.split("-")[0]
+                val destination = data.destination.split("-")
+                activityViewModel.entryCommunityCollection = destination[1]
                 val bundle = Bundle().apply {
-                    "communityId" to destination
+                    "communityId" to destination[2]
                 }
                 navController.navigate(R.id.action_mainFragment_to_communityDetailFragment, bundle)
+                notificationViewModel.deleteNotification(data)
             }
         }
     }

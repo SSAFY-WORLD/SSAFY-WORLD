@@ -30,4 +30,9 @@ class NotificationViewModel : ViewModel() {
                 }
             }
     }
+
+    fun deleteNotification(notification: NotificationEntity) = viewModelScope.launch {
+        repository.deleteNotification(notification)
+    }
+
 }
