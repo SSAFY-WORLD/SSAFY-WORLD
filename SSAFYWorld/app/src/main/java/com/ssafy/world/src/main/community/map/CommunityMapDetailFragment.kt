@@ -293,6 +293,9 @@ class CommunityMapDetailFragment : BaseFragment<FragmentCommunityMapDetailBindin
         // 메뉴 아이템 클릭 리스너 설정
         popupMenu.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
+                R.id.menu_edit -> {
+                    true
+                }
                 R.id.menu_delete -> {
                     showDeleteConfirmationDialog()
                     true
@@ -312,6 +315,10 @@ class CommunityMapDetailFragment : BaseFragment<FragmentCommunityMapDetailBindin
         // 메뉴 아이템 클릭 리스너 설정
         popupMenu.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
+                R.id.menu_chat -> {
+                    //TODO: 채팅 바로가기
+                    true
+                }
                 R.id.menu_delete -> {
                     showCommentDeleteConfirmationDialog(comment)
                     true

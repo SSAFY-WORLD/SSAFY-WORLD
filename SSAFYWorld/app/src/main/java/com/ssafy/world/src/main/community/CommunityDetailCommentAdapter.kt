@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
@@ -13,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.ssafy.world.R
 import com.ssafy.world.config.ApplicationClass
 import com.ssafy.world.data.model.Comment
 import com.ssafy.world.data.model.Community
@@ -89,7 +91,7 @@ class CommunityDetailCommentAdapter(val mContext: Context, val viewModel: Commun
             replyAdapter.replyItemClickListener =
                 object : CommunityReplyAdapter.ReplyItemClickListener {
                     override fun onClick(view: View, data: Comment, position: Int) {
-                        showAlertDialog(mContext, "댓글을 삭제할까요?", data.id, data.commentId)
+                        showCommunityOptionView(view, data)
                     }
                 }
             replyAdapters.add(replyAdapter)
@@ -120,4 +122,26 @@ class CommunityDetailCommentAdapter(val mContext: Context, val viewModel: Commun
         alertDialog.show()
     }
 
+    private fun showCommunityOptionView(anchorView: View, data: Comment) {
+        val popupMenu = PopupMenu(mContext, anchorView)
+        popupMenu.inflate(R.menu.comment_option_view) // option_menu는 메뉴 아이템을 정의한 리소스 파일입니다.
+
+        // 메뉴 아이템 클릭 리스너 설정
+        popupMenu.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.menu_chat -> {
+                    //TODO: 채팅방 바로가기 구현
+                    true
+                }
+                R.id.menu_delete -> {
+                    showAlertDialog(mContext, "댓글을 삭제할까요?", data.id, data.commentId)
+                    true
+                }
+                else -> false
+            }
+        }
+
+        // 옵션 뷰 보이기
+        popupMenu.show()
+    }
 }

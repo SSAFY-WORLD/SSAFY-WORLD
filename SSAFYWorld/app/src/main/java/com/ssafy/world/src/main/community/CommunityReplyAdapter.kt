@@ -58,7 +58,6 @@ class CommunityReplyAdapter(val mContext: Context) :
                 .circleCrop()
                 .into(binding.profileImage)
             if(data.userId == ApplicationClass.sharedPreferences.getUser()!!.email) {
-                commentMore.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_close_gray))
                 commentMore.visibility = View.VISIBLE
                 commentMore.setOnClickListener {
                     replyItemClickListener.onClick(commentMore, data, layoutPosition)
@@ -71,4 +70,6 @@ class CommunityReplyAdapter(val mContext: Context) :
             time.text = getFormattedTime(data.time)
         }
     }
+
+
 }

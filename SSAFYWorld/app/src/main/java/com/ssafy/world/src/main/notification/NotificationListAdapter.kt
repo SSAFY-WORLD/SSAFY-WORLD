@@ -48,7 +48,7 @@ class NotificationListAdapter:
             title.text = data.title
             message.text = data.message
             notificationTime.text = getFormattedTime(data.receiveTime)
-            notificationDestination.text = data.destination.split("-")[0]
+            //notificationDestination.text = data.destination.split("-")[0]
             itemView.setOnClickListener {
                 itemClickListener.onClick(it, data)
             }

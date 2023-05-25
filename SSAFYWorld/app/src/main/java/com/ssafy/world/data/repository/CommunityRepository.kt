@@ -100,8 +100,6 @@ object CommunityRepository {
     }
 
     suspend fun updateCommunity(collection: String, community: Community): Boolean {
-        Log.d(TAG, "updateCommunity: $collection")
-        Log.d(TAG, "updateCommunity: $community")
         val communityRef = firestore.collection(collection).document(community.id)
         return try {
             // 커뮤니티 업데이트
@@ -210,18 +208,17 @@ object CommunityRepository {
             firestore.collection("question"),
             firestore.collection("company"),
             firestore.collection("market"),
-            firestore.collection("store")
+            firestore.collection("store"),
+            firestore.collection("room")
         )
 
         val communityList = arrayListOf<Community>()
 
         try {
             for (collectionRef in collectionRefs) {
-                Log.d(TAG, "getHotCommunities: ")
                 val querySnapshot = collectionRef.whereGreaterThan("likeCount", 0).get().await()
                 for (document in querySnapshot) {
                     val community = document.toObject(Community::class.java)
-                    Log.d(TAG, "getHotCommunities: $community")
                     communityList.add(community)
                 }
             }
