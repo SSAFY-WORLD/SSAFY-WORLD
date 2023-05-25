@@ -147,6 +147,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 }
                 R.id.communityDetailFragment, R.id.communityMapDetail -> {
                     hideBottomNav()
+                    unblockBackPressed()
                     setTitle("커뮤니티")
                 }
                 R.id.photoFragment, R.id.photoFullFragment, R.id.photoSingleFragment -> {

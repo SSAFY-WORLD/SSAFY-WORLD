@@ -13,6 +13,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.ssafy.world.R
 import com.ssafy.world.data.model.Comment
 import com.ssafy.world.data.model.Photo
 import com.ssafy.world.databinding.ItemCommunityDetailPhotoBinding
@@ -65,6 +67,8 @@ class CommunityDetailPhotoAdapter(val mContext: Context) : ListAdapter<String, C
         fun bind(data: String) = with(binding) {
             Glide.with(mContext)
                 .load(data)
+                .placeholder(R.drawable.background_image)
+                .transition(DrawableTransitionOptions.withCrossFade())
                 .transform(CenterCrop(), RoundedCorners(30))
                 .into(binding.image)
 
