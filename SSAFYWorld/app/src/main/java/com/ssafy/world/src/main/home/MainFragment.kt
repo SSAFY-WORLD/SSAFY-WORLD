@@ -68,13 +68,11 @@ class MainFragment :
         super.onViewCreated(view, savedInstanceState)
 
         // 삼성 캘린더 API를 사용하여 일정 가져오기
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (hasPermissionCalendar()) {
-                fetchCalendarEvents(getCalendarId("juyong4190@gmail.com"))
-            } else {
-                showCustomToast("[마이페이지] > [권한 설정] 에서 권한을 설정해주세요.")
-            }
+
+        if (hasPermissionCalendar()) {
+            fetchCalendarEvents(getCalendarId("juyong4190@gmail.com"))
         }
+
         initView()
         initRecycler()
         initListener()
@@ -86,9 +84,17 @@ class MainFragment :
         binding.mainHomeHello.text = "안녕하세요\n${nickname}님!"
 
         showCalendarBtn.setOnClickListener {
+            if (!hasPermissionCalendar()) {
+                showCustomToast("[마이페이지] > [권한 설정] 에서 권한을 설정해주세요.")
+                return@setOnClickListener
+            }
             openCalendarApp()
         }
         addCalendarBtn.setOnClickListener {
+            if (!hasPermissionCalendar()) {
+                showCustomToast("[마이페이지] > [권한 설정] 에서 권한을 설정해주세요.")
+                return@setOnClickListener
+            }
             openCalendarAppAdd()
         }
         showHotBtn.setOnClickListener {

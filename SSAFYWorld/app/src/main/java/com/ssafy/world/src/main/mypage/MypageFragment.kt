@@ -57,7 +57,7 @@ class MypageFragment :
     private fun initView() = with(binding) {
         user = ApplicationClass.sharedPreferences.getUser()!!
         initUserProfile()
-        if (user.email == "manager") {
+        if (user.email == "ssafy@gmail.com") {
             validationLl.visibility = View.VISIBLE
         }
         versionName.text = BuildConfig.VERSION_NAME

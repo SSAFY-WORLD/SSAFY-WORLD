@@ -165,6 +165,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     hideBottomNav()
                 }
                 else -> {
+                    hideToolbar()
                     hideBottomNav()
                     unblockBackPressed()
                 }

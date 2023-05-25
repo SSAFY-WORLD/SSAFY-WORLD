@@ -1,6 +1,7 @@
 package com.ssafy.world.src.main.community
 
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -69,9 +70,24 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding>(
 
     private fun initButton() = with(binding) {
         writeBtnImage.setOnClickListener {
-            if(ContextCompat.checkSelfPermission(myContext, android.Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
-                showCustomToast(getString(R.string.app_permission))
-                return@setOnClickListener
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                if (ContextCompat.checkSelfPermission(
+                        myContext,
+                        android.Manifest.permission.READ_MEDIA_IMAGES
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    showCustomToast(getString(R.string.app_permission))
+                    return@setOnClickListener
+                }
+            } else {
+                if (ContextCompat.checkSelfPermission(
+                        myContext,
+                        android.Manifest.permission.READ_EXTERNAL_STORAGE
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    showCustomToast(getString(R.string.app_permission))
+                    return@setOnClickListener
+                }
             }
             activityViewModel.title = titleEditTextView.text.toString()
             activityViewModel.content = contentEditTextView.text.toString()
