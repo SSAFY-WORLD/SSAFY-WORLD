@@ -51,18 +51,14 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
     private var isReply = ""
     private var isNew = false
     private var replyComment = Comment()
+    private var replyList = arrayListOf<Comment>()
 
     private val myAdapter: CommunityDetailPhotoAdapter by lazy {
         CommunityDetailPhotoAdapter(myContext)
     }
-    private val commentAdapter: CommunityDetailCommentAdapter by lazy {
-        CommunityDetailCommentAdapter(
-            myContext,
-            communityViewModel,
-            childFragmentManager,
-            "community"
-        )
-    }
+    private lateinit var commentAdapter : CommunityDetailCommentAdapter
+
+
     private var commentList = arrayListOf<Comment>()
 
     private var commentPosition = 0;
@@ -78,6 +74,12 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
         }
         communityViewModel.fetchCommunityById(curBoard, curId)
 
+        commentAdapter = CommunityDetailCommentAdapter(
+            myContext,
+            communityViewModel,
+            childFragmentManager,
+            "community"
+        )
         initButton()
         initListener()
         initWatcher()
@@ -198,7 +200,7 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
 
     private fun initButton() = with(binding) {
         commentBtnWrite.setOnClickListener {
-            if(commentInput.text.toString().trim() == "") {
+            if (commentInput.text.toString().trim() == "") {
                 commentInput.error = "내용을 입력해주세요."
                 commentBtnWrite.isEnabled = false
                 return@setOnClickListener;
@@ -315,7 +317,9 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
         }
 
         communityViewModel.replies.observe(viewLifecycleOwner) { it ->
-            commentAdapter.replyAdapters[commentPosition].submitList(it.toMutableList())
+            commentAdapter.replyList[commentPosition] = it
+            commentAdapter.replyAdapters[commentPosition].submitList(commentAdapter.replyList[commentPosition].toMutableList())
+            Log.d(TAG, "initListener: ${commentAdapter.replyAdapters[commentPosition].currentList}")
         }
 
         communityViewModel.likeCount.observe(viewLifecycleOwner) {
@@ -325,7 +329,7 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
 
     private fun initWatcher() = with(binding) {
         commentInput.addTextChangedListener {
-            if(commentInput.lineCount > 3) {
+            if (commentInput.lineCount > 3) {
                 commentInput.error = "2줄까지 허용됩니다."
                 commentBtnWrite.isEnabled = false
             } else {
@@ -333,8 +337,8 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
                 commentBtnWrite.isEnabled = true
             }
         }
-        commentInput.onFocusChangeListener =  View.OnFocusChangeListener { v, hasFocus ->
-            if(!hasFocus) {
+        commentInput.onFocusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) {
                 commentInput.setText("")
                 commentInput.error = null
                 commentBtnWrite.isEnabled = false
@@ -428,6 +432,12 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
 
     override fun onRefresh() {
         // 새로고침을 수행할 동작을 여기에 작성하십시오.
+        commentAdapter = CommunityDetailCommentAdapter(
+            myContext,
+            communityViewModel,
+            childFragmentManager,
+            "community"
+        )
         communityViewModel.fetchCommunityById(curBoard, curId)
         communityViewModel.getCommentsByCommunityId(community.id)
         binding.swipeRefreshLayout.isRefreshing = false

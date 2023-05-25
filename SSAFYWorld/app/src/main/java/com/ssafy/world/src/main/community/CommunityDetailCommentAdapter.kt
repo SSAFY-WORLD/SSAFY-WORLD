@@ -35,6 +35,7 @@ class CommunityDetailCommentAdapter(
 ) :
     ListAdapter<Comment, CommunityDetailCommentAdapter.MyViewHolder>(ItemComparator) {
     val replyAdapters: ArrayList<CommunityReplyAdapter> = arrayListOf()
+    val replyList: ArrayList<ArrayList<Comment>> = arrayListOf()
 
     companion object ItemComparator : DiffUtil.ItemCallback<Comment>() {
         override fun areItemsTheSame(oldItem: Comment, newItem: Comment): Boolean {
@@ -106,7 +107,9 @@ class CommunityDetailCommentAdapter(
                 }
             }
             val replyAdapter = CommunityReplyAdapter(mContext)
-            replyAdapter.submitList(arrayListOf())
+            val cur = arrayListOf<Comment>()
+            replyAdapter.submitList(cur.toMutableList())
+            replyList.add(cur)
             replyRecyclerView.apply {
                 layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
                 adapter = replyAdapter

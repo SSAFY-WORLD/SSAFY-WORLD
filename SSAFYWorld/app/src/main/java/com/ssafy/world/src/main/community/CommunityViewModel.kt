@@ -160,5 +160,9 @@ class CommunityViewModel : ViewModel() {
         _communityList.value = repository.searchCommunitiesInCollection(collection, keyword)
     }
 
+    fun clearReplies() {
+        _replies.postValue(arrayListOf())
+    }
+
 
 }
