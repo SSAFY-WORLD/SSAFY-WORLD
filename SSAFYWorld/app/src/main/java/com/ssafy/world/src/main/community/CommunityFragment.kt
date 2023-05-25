@@ -1,8 +1,10 @@
 package com.ssafy.world.src.main.community
 
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import com.ssafy.world.R
 import com.ssafy.world.config.BaseFragment
@@ -42,6 +44,14 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding>(
             navController.navigate(R.id.action_communityFragment_to_communityListFragment)
         }
         communityStore.setOnClickListener {
+            if(ContextCompat.checkSelfPermission(myContext, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                showCustomToast(getString(R.string.app_permission))
+                return@setOnClickListener
+            }
+            if(ContextCompat.checkSelfPermission(myContext, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                showCustomToast(getString(R.string.app_permission))
+                return@setOnClickListener
+            }
             activityViewModel.entryCommunityCollection = "store"
             navController.navigate(R.id.action_communityFragment_to_communityMapFragment)
         }

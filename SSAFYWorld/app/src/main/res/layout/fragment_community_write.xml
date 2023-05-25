@@ -16,7 +16,7 @@
         android:layout_marginTop="@dimen/_8sdp">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/idTextField"
+            android:id="@+id/titleTextField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/community_title"
@@ -31,7 +31,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/pwdTextField"
+            android:id="@+id/contentTextField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
