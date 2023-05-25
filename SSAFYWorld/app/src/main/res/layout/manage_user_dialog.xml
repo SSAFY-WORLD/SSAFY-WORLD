@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:gravity="center|top"
+    android:background="@drawable/rounded_dialog_background"
+    android:paddingHorizontal="@dimen/_16sdp"
+    android:paddingVertical="@dimen/_16sdp">
+
+
+    <TextView
+        android:id="@+id/title_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="@string/withdrawal_text"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_14sdp"
+        android:padding="@dimen/_6sdp"
+        android:textStyle="bold"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/confirmBtn"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="@dimen/_48sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:text="@string/community_yes"
+            android:textStyle="bold"
+            android:backgroundTint="@color/light_blue"
+            android:textColor="@color/white"
+            app:cornerRadius="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_4sdp"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/cancelBtn"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="@dimen/_48sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:text="@string/community_cancel"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:backgroundTint="@color/light_gray"
+            android:textColor="@color/black"
+            app:cornerRadius="@dimen/_10sdp" />
+    </LinearLayout>
+</LinearLayout>

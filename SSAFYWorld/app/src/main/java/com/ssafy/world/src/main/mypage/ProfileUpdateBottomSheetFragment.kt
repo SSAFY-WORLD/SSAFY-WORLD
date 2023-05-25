@@ -1,6 +1,8 @@
 package com.ssafy.world.src.main.mypage
 
+import android.app.Dialog
 import android.content.Context
+import android.content.DialogInterface
 import android.graphics.Point
 import android.os.Bundle
 import android.view.*
@@ -10,6 +12,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ssafy.world.R
 import com.ssafy.world.config.ApplicationClass
@@ -17,6 +20,7 @@ import com.ssafy.world.data.model.User
 import com.ssafy.world.databinding.DialogUserUpdateBinding
 import com.ssafy.world.databinding.FragmentMypageBinding
 import com.ssafy.world.src.main.user.UserViewModel
+import com.ssafy.world.utils.hideKeyboard
 
 class ProfileUpdateBottomSheetFragment(
 	private val parent: MypageFragment,
@@ -35,6 +39,17 @@ class ProfileUpdateBottomSheetFragment(
 	override fun onAttach(context: Context) {
 		super.onAttach(context)
 		mContext = context
+	}
+
+	override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+		val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+		dialog.setCancelable(true)
+		dialog.setCanceledOnTouchOutside(false)
+		return dialog
+	}
+
+	override fun onCancel(dialog: DialogInterface) {
+		hideFocusKeyboard()
 	}
 
 	override fun onCreateView(
@@ -97,6 +112,7 @@ class ProfileUpdateBottomSheetFragment(
 
 	private fun setListener() = with(binding) {
 		closeBtn.setOnClickListener {
+			hideFocusKeyboard()
 			super.dismiss()
 		}
 		val profile = if (currentUser.profilePhoto == user.profilePhoto) "" else user.profilePhoto
@@ -138,6 +154,11 @@ class ProfileUpdateBottomSheetFragment(
 				userViewModel.getUser(user.id)
 			}
 		}
+	}
+
+	private fun hideFocusKeyboard() {
+		this@ProfileUpdateBottomSheetFragment.hideKeyboard(requireContext(), binding.userNameEditText)
+		this@ProfileUpdateBottomSheetFragment.hideKeyboard(requireContext(), binding.userNickNameEditText)
 	}
 
 	override fun onDestroyView() {

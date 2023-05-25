@@ -1,10 +1,12 @@
 package com.ssafy.world.src.main.mypage
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.view.View
+import androidx.annotation.StringRes
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.ssafy.world.BuildConfig
@@ -15,7 +17,7 @@ import com.ssafy.world.data.model.User
 import com.ssafy.world.databinding.FragmentMypageBinding
 import com.ssafy.world.src.main.auth.AuthViewModel
 import com.ssafy.world.src.main.user.UserViewModel
-import com.ssafy.world.utils.CustomAlertDialog
+import com.ssafy.world.utils.ManageUserAlertDialog
 import com.ssafy.world.utils.ValidationAlertDialog
 
 private const val TAG = "MypageFragment"
@@ -26,6 +28,7 @@ class MypageFragment :
     lateinit var user: User
 
     private lateinit var validationDialog: ValidationAlertDialog
+    private lateinit var mangerUserDialog: ManageUserAlertDialog
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -71,8 +74,8 @@ class MypageFragment :
 
     private fun initButton() = with(binding) {
         logoutBtn.setOnClickListener {
-            showAlertDialog(R.string.logout_text, myContext)
-            mCustomDialog.listener = object: CustomAlertDialog.DialogClickedListener {
+            showManageUserDialog(R.string.logout_text, myContext)
+            mangerUserDialog.listener = object: ManageUserAlertDialog.DialogClickedListener {
                 override fun onConfirmClick() {
                     val token = user.token
                     ApplicationClass.sharedPreferences.clearUser()
@@ -83,8 +86,8 @@ class MypageFragment :
             }
         }
         withdrawalBtn.setOnClickListener {
-            showAlertDialog(R.string.withdrawal_text, myContext)
-            mCustomDialog.listener = object: CustomAlertDialog.DialogClickedListener {
+            showManageUserDialog(R.string.withdrawal_text, myContext)
+            mangerUserDialog.listener = object: ManageUserAlertDialog.DialogClickedListener {
                 override fun onConfirmClick() {
                     showLoadingDialog(myContext)
                     authViewModel.deleteUser(user.id)
@@ -175,6 +178,17 @@ class MypageFragment :
         return (1..codeLength)
             .map { charPool.random() }
             .joinToString("")
+    }
+
+    private fun showManageUserDialog(@StringRes title: Int, context: Context) {
+        mangerUserDialog = ManageUserAlertDialog(title, context)
+        mangerUserDialog.show()
+    }
+
+    fun dismissManageUserDialog() {
+        if (mangerUserDialog.isShowing) {
+            mangerUserDialog.dismiss()
+        }
     }
 
     override fun onDestroyView() {

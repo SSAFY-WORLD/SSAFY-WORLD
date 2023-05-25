@@ -106,6 +106,7 @@
                 android:textSize="@dimen/_12ssp"/>
 
             <LinearLayout
+                android:id="@+id/permission_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -123,13 +124,13 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"/>
                 <ImageButton
-                    android:id="@+id/permission_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/ic_arrow"
                     android:backgroundTint="@color/dark_gray"/>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/change_pwd_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -147,13 +148,13 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"/>
                 <ImageButton
-                    android:id="@+id/change_pwd_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/ic_arrow"
                     android:backgroundTint="@color/dark_gray"/>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/logout_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -171,7 +172,6 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"/>
                 <ImageButton
-                    android:id="@+id/logout_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/ic_arrow"
@@ -179,6 +179,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/withdrawal_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -196,7 +197,6 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"/>
                 <ImageButton
-                    android:id="@+id/withdrawal_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/ic_arrow"
