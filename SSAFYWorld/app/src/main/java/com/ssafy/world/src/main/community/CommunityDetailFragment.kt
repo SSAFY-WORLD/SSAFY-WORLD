@@ -138,7 +138,7 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
         commentAdapter.replyClickListener =
             object : CommunityDetailCommentAdapter.ReplyClickListener {
                 override fun onClick(view: View, data: Comment, position: Int) {
-                    replyComment.fcmToken = data.fcmToken
+                    replyComment = data
                     commentPosition = position
 //                    replyTvMessage.visibility = View.VISIBLE
                     //replyTvMessage.text = "${data.userNickname} 님에게 답글 남기는 중.."
@@ -181,7 +181,7 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
                     cur
                 )
                 if(replyComment.userId != curUser!!.id) {
-                    val noti = NotificationData("커뮤니티-${cur.id}", "싸피월드", "${curUser!!.nickname} 님이 답글을 남겼습니다.")
+                    val noti = NotificationData("커뮤니티-${activityViewModel.entryCommunityCollection}-${cur.id}", "싸피월드", "${curUser!!.nickname} 님이 답글을 남겼습니다.")
                     sendRemoteNotification(noti, replyComment.fcmToken)
                 }
             } else {
@@ -192,7 +192,7 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
                 )
             }
             if(community.userId != curUser!!.id) {
-                val noti = NotificationData("커뮤니티-${community.id}", "싸피월드", "${curUser!!.nickname} 님이 댓글을 남겼습니다.")
+                val noti = NotificationData("커뮤니티-${activityViewModel.entryCommunityCollection}-${community.id}", "싸피월드", "${curUser!!.nickname} 님이 댓글을 남겼습니다.")
                 FCMService.sendRemoteNotification(noti, community.fcmToken)
             }
 

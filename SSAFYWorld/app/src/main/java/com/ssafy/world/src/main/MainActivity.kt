@@ -66,7 +66,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 navController.navigate(R.id.chatFragment)
             }
             Constants.COMMUNITY -> {
-                val bundle = bundleOf("communityId" to cur[1])
+                activityViewModel.entryCommunityCollection = cur[1]
+                val bundle = bundleOf("communityId" to cur[2])
                 setTitle(activityViewModel.communityTitle)
                 navController.navigate(R.id.communityDetailFragment, bundle)
             }
