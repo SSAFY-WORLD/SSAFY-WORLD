@@ -179,7 +179,7 @@ class MainFragment :
 
     private fun initListener() = with(viewModel) {
         communityList.observe(viewLifecycleOwner) {
-            hotList = it
+            hotList = it.take(3) as ArrayList<Community>
             hotAdapter.submitList(hotList.toMutableList())
         }
         // 알람 실시간 탐지 -> 시간순으로

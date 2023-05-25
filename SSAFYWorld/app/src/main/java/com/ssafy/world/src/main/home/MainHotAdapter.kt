@@ -41,11 +41,6 @@ class MainHotAdapter(val mContext: Context) : ListAdapter<Community, MainHotAdap
         }
     }
 
-    override fun getItemCount(): Int {
-        // 최신 아이템 위에 3개만 보여주기 위해 아이템 개수를 조정
-        return minOf(super.getItemCount(), 3)
-    }
-
     interface ItemClickListener {
         fun onClick(data: Community)
     }
