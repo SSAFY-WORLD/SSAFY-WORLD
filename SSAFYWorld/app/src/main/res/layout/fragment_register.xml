@@ -9,6 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginTop="@dimen/_44sdp"
         app:layout_constraintBottom_toTopOf="@id/register_ll_inform"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,7 +23,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
+            android:layout_marginLeft="@dimen/_4sdp"
             android:text="@string/login_tv_title"
             android:textSize="24sp" />
     </LinearLayout>
@@ -32,7 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="@dimen/_44sdp"
+        android:layout_marginTop="@dimen/_22sdp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/login_ll_bottom"
         app:layout_constraintEnd_toEndOf="parent"
@@ -63,12 +64,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
-
-            <Button
-                android:id="@+id/authButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="인증" />
         </LinearLayout>
 
 
