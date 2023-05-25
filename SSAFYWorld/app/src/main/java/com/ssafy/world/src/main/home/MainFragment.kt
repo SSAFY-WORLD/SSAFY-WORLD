@@ -64,7 +64,7 @@ class MainFragment :
         super.onViewCreated(view, savedInstanceState)
 
         // 삼성 캘린더 API를 사용하여 일정 가져오기
-        fetchCalendarEvents(getCalendarId("juyong4190@gmail.com"))
+        //fetchCalendarEvents(getCalendarId("juyong4190@gmail.com"))
         initView()
         initRecycler()
         initListener()

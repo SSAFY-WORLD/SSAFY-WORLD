@@ -24,6 +24,7 @@ import com.ssafy.world.data.model.User
 import com.ssafy.world.databinding.FragmentCommunityDetailBinding
 import com.ssafy.world.databinding.ItemCommunityCommentBinding
 import com.ssafy.world.src.main.user.UserInfoBottomSheetFragment
+import com.ssafy.world.utils.CustomAlertDialog
 import com.ssafy.world.utils.getFormattedTime
 
 class CommunityDetailCommentAdapter(
@@ -146,19 +147,6 @@ class CommunityDetailCommentAdapter(
         }
     }
 
-
-    // 다이어로그를 보여주는 함수
-    fun showAlertDialog(context: Context, message: String, replyId: String, commentId: String) {
-        val alertDialogBuilder = AlertDialog.Builder(context)
-        alertDialogBuilder.setMessage(message)
-            .setPositiveButton("확인") { dialog, _ ->
-                viewModel.deleteReplyById(replyId, commentId)
-                dialog.dismiss()
-            }
-        val alertDialog = alertDialogBuilder.create()
-        alertDialog.show()
-    }
-
     private fun showCommunityOptionView(anchorView: View, data: Comment) {
         val popupMenu = PopupMenu(mContext, anchorView)
         popupMenu.inflate(R.menu.comment_option_view) // option_menu는 메뉴 아이템을 정의한 리소스 파일입니다.
@@ -167,7 +155,14 @@ class CommunityDetailCommentAdapter(
         popupMenu.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.menu_delete -> {
-                    showAlertDialog(mContext, "댓글을 삭제할까요?", data.id, data.commentId)
+                    val mDialog = CustomAlertDialog(R.string.delete_text, mContext)
+                    mDialog.listener = object : CustomAlertDialog.DialogClickedListener {
+                        override fun onConfirmClick() {
+                            viewModel.deleteReplyById(data.id, data.commentId)
+                            Toast.makeText(mContext, "댓글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    mDialog.show()
                     true
                 }
                 else -> false

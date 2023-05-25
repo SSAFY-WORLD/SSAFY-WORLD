@@ -1,9 +1,12 @@
 package com.ssafy.world.src.main.community
 
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -54,6 +57,7 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding>(
         initRecyclerView()
         initButton()
         initPhoto()
+        initTextView()
     }
 
     private fun initView() = with(binding) {
@@ -65,6 +69,10 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding>(
 
     private fun initButton() = with(binding) {
         writeBtnImage.setOnClickListener {
+            if(ContextCompat.checkSelfPermission(myContext, android.Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
+                showCustomToast(getString(R.string.app_permission))
+                return@setOnClickListener
+            }
             activityViewModel.title = titleEditTextView.text.toString()
             activityViewModel.content = contentEditTextView.text.toString()
             navController.navigate(R.id.action_communityWriteFragment_to_photoFragment)
@@ -110,6 +118,18 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding>(
                     activityViewModel.entryCommunityCollection,
                     curPost
                 )
+            }
+        }
+    }
+
+    private fun initTextView() = with(binding) {
+        titleEditTextView.addTextChangedListener {
+            if(titleEditTextView.lineCount > 2) {
+                titleEditTextView.error = "2줄까지 허용됩니다."
+                writeBtnComplete.isEnabled = false
+            } else {
+                titleEditTextView.error = null
+                writeBtnComplete.isEnabled = true
             }
         }
     }

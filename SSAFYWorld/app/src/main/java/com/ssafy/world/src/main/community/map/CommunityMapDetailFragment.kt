@@ -13,6 +13,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -46,7 +47,7 @@ private const val TAG = "CommunityMapDetailFragm"
 class CommunityMapDetailFragment : BaseFragment<FragmentCommunityMapDetailBinding>(
     FragmentCommunityMapDetailBinding::bind,
     R.layout.fragment_community_map_detail
-), OnMapReadyCallback {
+), OnMapReadyCallback,  SwipeRefreshLayout.OnRefreshListener {
 
     val args: CommunityDetailFragmentArgs by navArgs()
     private val activityViewModel: MainActivityViewModel by activityViewModels()
@@ -76,6 +77,7 @@ class CommunityMapDetailFragment : BaseFragment<FragmentCommunityMapDetailBindin
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.swipeRefreshLayout.setOnRefreshListener(this)
 
         curId = arguments?.getString("communityId") ?: ""
         curBoard = activityViewModel.entryCommunityCollection
@@ -427,5 +429,12 @@ class CommunityMapDetailFragment : BaseFragment<FragmentCommunityMapDetailBindin
     override fun onDestroy() {
         super.onDestroy()
         mapView.onDestroy()
+    }
+
+    override fun onRefresh() {
+        // 새로고침을 수행할 동작을 여기에 작성하십시오.
+        communityViewModel.fetchCommunityById(curBoard, curId)
+        communityViewModel.getCommentsByCommunityId(community.id)
+        binding.swipeRefreshLayout.isRefreshing = false
     }
 }

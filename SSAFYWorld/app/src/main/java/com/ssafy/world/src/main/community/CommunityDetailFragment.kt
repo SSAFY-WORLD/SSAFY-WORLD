@@ -10,11 +10,13 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.ssafy.world.R
@@ -31,13 +33,14 @@ import com.ssafy.world.src.main.MainActivity
 import com.ssafy.world.src.main.MainActivityViewModel
 import com.ssafy.world.src.main.photo.PhotoFullDialog
 import com.ssafy.world.src.main.user.UserInfoBottomSheetFragment
+import com.ssafy.world.utils.CustomAlertDialog
 
 private const val TAG = "CommunityDetailFragment"
 
 class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
     FragmentCommunityDetailBinding::bind,
     R.layout.fragment_community_detail
-) {
+), SwipeRefreshLayout.OnRefreshListener {
     val args: CommunityDetailFragmentArgs by navArgs()
     private val activityViewModel: MainActivityViewModel by activityViewModels()
     private val communityViewModel: CommunityViewModel by viewModels()
@@ -53,7 +56,12 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
         CommunityDetailPhotoAdapter(myContext)
     }
     private val commentAdapter: CommunityDetailCommentAdapter by lazy {
-        CommunityDetailCommentAdapter(myContext, communityViewModel, childFragmentManager, "community")
+        CommunityDetailCommentAdapter(
+            myContext,
+            communityViewModel,
+            childFragmentManager,
+            "community"
+        )
     }
     private var commentList = arrayListOf<Comment>()
 
@@ -61,6 +69,7 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.swipeRefreshLayout.setOnRefreshListener(this)
 
         curId = arguments?.getString("communityId") ?: ""
         curBoard = activityViewModel.entryCommunityCollection
@@ -71,6 +80,7 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
 
         initButton()
         initListener()
+        initWatcher()
         detectKeyboard()
     }
 
@@ -161,25 +171,38 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
                     scrollView.smoothScrollTo(0, scrollY)
                 }
             }
-        commentAdapter.profileClickListener = object : CommunityDetailCommentAdapter.ProfileClickListener {
-            override fun onClick(view: ItemCommunityCommentBinding, data: Comment, position: Int) {
-                val user = User().apply {
-                    id = data.userId
-                    nickname = data.userNickname
-                    profilePhoto = data.userProfile
-                    email = data.userEmail
-                    name = data.userName
+        commentAdapter.profileClickListener =
+            object : CommunityDetailCommentAdapter.ProfileClickListener {
+                override fun onClick(
+                    view: ItemCommunityCommentBinding,
+                    data: Comment,
+                    position: Int
+                ) {
+                    val user = User().apply {
+                        id = data.userId
+                        nickname = data.userNickname
+                        profilePhoto = data.userProfile
+                        email = data.userEmail
+                        name = data.userName
+                    }
+                    val bottomSheetDialogFragment = UserInfoBottomSheetFragment(user, "community")
+                    bottomSheetDialogFragment.show(
+                        childFragmentManager,
+                        bottomSheetDialogFragment.tag
+                    )
                 }
-                val bottomSheetDialogFragment = UserInfoBottomSheetFragment(user, "community")
-                bottomSheetDialogFragment.show(childFragmentManager, bottomSheetDialogFragment.tag)
             }
-        }
         communityViewModel.getCommentsByCommunityId(community.id)
     }
 
 
     private fun initButton() = with(binding) {
         commentBtnWrite.setOnClickListener {
+            if(commentInput.text.toString().trim() == "") {
+                commentInput.error = "내용을 입력해주세요."
+                commentBtnWrite.isEnabled = false
+                return@setOnClickListener;
+            }
             val cur = Comment().apply {
                 userId = curUser!!.email
                 userNickname = curUser!!.nickname
@@ -199,7 +222,7 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
                     community,
                     cur
                 )
-                if (replyComment.userId != curUser!!.id) {
+                if (replyComment.userId != curUser!!.email) {
                     val noti = NotificationData(
                         "커뮤니티-${activityViewModel.entryCommunityCollection}-${community.id}",
                         activityViewModel.getCommunityTitle(),
@@ -214,7 +237,7 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
                     cur
                 )
             }
-            if (community.userId != curUser!!.id) {
+            if (community.userId != curUser!!.email) {
                 val noti = NotificationData(
                     "커뮤니티-${activityViewModel.entryCommunityCollection}-${community.id}",
                     activityViewModel.getCommunityTitle(),
@@ -300,6 +323,25 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
         }
     }
 
+    private fun initWatcher() = with(binding) {
+        commentInput.addTextChangedListener {
+            if(commentInput.lineCount > 3) {
+                commentInput.error = "2줄까지 허용됩니다."
+                commentBtnWrite.isEnabled = false
+            } else {
+                commentInput.error = null
+                commentBtnWrite.isEnabled = true
+            }
+        }
+        commentInput.onFocusChangeListener =  View.OnFocusChangeListener { v, hasFocus ->
+            if(!hasFocus) {
+                commentInput.setText("")
+                commentInput.error = null
+                commentBtnWrite.isEnabled = false
+            }
+        }
+    }
+
     private fun showCommunityOptionView(anchorView: View) {
         val popupMenu = PopupMenu(myContext, anchorView)
         popupMenu.inflate(R.menu.more_option_view) // option_menu는 메뉴 아이템을 정의한 리소스 파일입니다.
@@ -317,7 +359,12 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
                     true
                 }
                 R.id.menu_delete -> {
-                    showDeleteConfirmationDialog()
+                    showAlertDialog(R.string.delete_text, myContext)
+                    mCustomDialog.listener = object : CustomAlertDialog.DialogClickedListener {
+                        override fun onConfirmClick() {
+                            communityViewModel.deleteCommunity(curBoard, community.id)
+                        }
+                    }
                     true
                 }
                 else -> false
@@ -337,7 +384,12 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
             when (menuItem.itemId) {
                 R.id.menu_delete -> {
                     isNew = false
-                    showCommentDeleteConfirmationDialog(comment, position)
+                    showAlertDialog(R.string.delete_text, myContext)
+                    mCustomDialog.listener = object : CustomAlertDialog.DialogClickedListener {
+                        override fun onConfirmClick() {
+                            communityViewModel.deleteComment(curBoard, community, comment.id)
+                        }
+                    }
                     true
                 }
                 else -> false
@@ -347,32 +399,6 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
         // 옵션 뷰 보이기
         popupMenu.show()
     }
-
-    private fun showDeleteConfirmationDialog() {
-        val dialog = AlertDialog.Builder(requireContext())
-            .setMessage("정말 삭제하시겠습니까?")
-            .setPositiveButton("확인") { _, _ ->
-                communityViewModel.deleteCommunity(curBoard, community.id)
-            }
-            .setNegativeButton("취소", null)
-            .create()
-
-        dialog.show()
-    }
-
-    private fun showCommentDeleteConfirmationDialog(comment: Comment, position: Int) {
-        val dialog = AlertDialog.Builder(requireContext())
-            .setMessage("정말 삭제하시겠습니까?")
-            .setPositiveButton("확인") { _, _ ->
-                communityViewModel.deleteComment(curBoard, community, comment.id)
-                binding.commentRecyclerview.scrollToPosition(commentPosition)
-            }
-            .setNegativeButton("취소", null)
-            .create()
-
-        dialog.show()
-    }
-
 
     private fun detectKeyboard() {
         val rootView = requireActivity().window.decorView.rootView
@@ -400,4 +426,10 @@ class CommunityDetailFragment : BaseFragment<FragmentCommunityDetailBinding>(
     }
 
 
+    override fun onRefresh() {
+        // 새로고침을 수행할 동작을 여기에 작성하십시오.
+        communityViewModel.fetchCommunityById(curBoard, curId)
+        communityViewModel.getCommentsByCommunityId(community.id)
+        binding.swipeRefreshLayout.isRefreshing = false
+    }
 }
