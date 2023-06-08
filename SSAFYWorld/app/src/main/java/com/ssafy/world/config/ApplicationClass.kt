@@ -1,19 +1,15 @@
 package com.ssafy.world.config
 
 import android.app.Application
-import android.util.Log
 import androidx.room.Room
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.kakao.sdk.common.KakaoSdk
-import com.kakao.sdk.common.util.Utility
 import com.ssafy.world.R
 import com.ssafy.world.data.local.NotificationDatabase
-import com.ssafy.world.data.remote.NotificationAPI
-import com.ssafy.world.data.repository.CommunityRepository
-import com.ssafy.world.data.repository.UserRepository
-import com.ssafy.world.data.repository.local.NotificationRepository
+import com.ssafy.world.data.repository.community.CommunityRepository
+import com.ssafy.world.data.repository.user.UserRepository
+import com.ssafy.world.data.repository.notification.NotificationRepository
 import com.ssafy.world.data.service.FCMService
 import com.ssafy.world.utils.Constants
 import com.ssafy.world.utils.Constants.BASE_URL

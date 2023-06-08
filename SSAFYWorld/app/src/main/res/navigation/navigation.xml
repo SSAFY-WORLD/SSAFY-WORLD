@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/chatFragment"
-        android:name="com.ssafy.world.src.main.chat.ChatFragment"
+        android:name="com.ssafy.world.ui.main.chat.ChatFragment"
         android:label="fragment_chat"
         tools:layout="@layout/fragment_chat">
         <action
@@ -25,7 +25,7 @@
 
     <fragment
         android:id="@+id/inChatFragment"
-        android:name="com.ssafy.world.src.main.chat.InChatFragment"
+        android:name="com.ssafy.world.ui.main.chat.InChatFragment"
         android:label="InChatFragment"
         tools:layout="@layout/fragment_in_chat">
         <argument
@@ -46,7 +46,7 @@
     <!-- Community -->
     <fragment
         android:id="@+id/communityFragment"
-        android:name="com.ssafy.world.src.main.community.CommunityFragment"
+        android:name="com.ssafy.world.ui.main.community.CommunityFragment"
         android:label="fragment_community"
         tools:layout="@layout/fragment_community">
         <action
@@ -74,7 +74,7 @@
 
     <fragment
         android:id="@+id/communityDetailFragment"
-        android:name="com.ssafy.world.src.main.community.CommunityDetailFragment"
+        android:name="com.ssafy.world.ui.main.community.CommunityDetailFragment"
         android:label="CommunityDetailFragment">
         <argument
             android:name="communityId"
@@ -105,7 +105,7 @@
     </fragment>
     <fragment
         android:id="@+id/communityListFragment"
-        android:name="com.ssafy.world.src.main.community.CommunityListFragment"
+        android:name="com.ssafy.world.ui.main.community.CommunityListFragment"
         android:label="CommunityListFragment"
         tools:layout="@layout/fragment_community_list">
         <argument
@@ -135,7 +135,7 @@
     </fragment>
     <fragment
         android:id="@+id/communityWriteFragment"
-        android:name="com.ssafy.world.src.main.community.CommunityWriteFragment"
+        android:name="com.ssafy.world.ui.main.community.CommunityWriteFragment"
         android:label="CommunityWriteFragment"
         tools:layout="@layout/fragment_community_write">
         <argument
@@ -176,7 +176,7 @@
     <!-- Main -->
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.ssafy.world.src.main.home.MainFragment"
+        android:name="com.ssafy.world.ui.main.home.MainFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_main">
 
@@ -204,7 +204,7 @@
 
     <fragment
         android:id="@+id/mypageFragment"
-        android:name="com.ssafy.world.src.main.mypage.MypageFragment"
+        android:name="com.ssafy.world.ui.main.mypage.MypageFragment"
         android:label="fragment_mypage"
         tools:layout="@layout/fragment_mypage">
         <action
@@ -220,7 +220,7 @@
     <!-- Auth -->
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.ssafy.world.src.main.auth.LoginFragment"
+        android:name="com.ssafy.world.ui.main.auth.LoginFragment"
         android:label="LoginFragment"
         tools:layout="@layout/fragment_login">
         <action
@@ -243,7 +243,7 @@
 
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.ssafy.world.src.main.auth.RegisterFragment"
+        android:name="com.ssafy.world.ui.main.auth.RegisterFragment"
         android:label="RegisterFragment"
         tools:layout="@layout/fragment_register">
         <action
@@ -259,7 +259,7 @@
     <!-- photo -->
     <fragment
         android:id="@+id/photoFragment"
-        android:name="com.ssafy.world.src.main.photo.PhotoFragment"
+        android:name="com.ssafy.world.ui.main.photo.PhotoFragment"
         android:label="PhotoFragment"
         tools:layout="@layout/fragment_photo">
 
@@ -289,14 +289,14 @@
 
     <dialog
         android:id="@+id/photoFullFragment"
-        android:name="com.ssafy.world.src.main.photo.PhotoFullDialog"
+        android:name="com.ssafy.world.ui.main.photo.PhotoFullDialog"
         android:label="PhotoFullFragment">
 
     </dialog>
 
     <fragment
         android:id="@+id/userFragment"
-        android:name="com.ssafy.world.src.main.user.UserFragment"
+        android:name="com.ssafy.world.ui.main.user.UserFragment"
         android:label="UserFragment"
         tools:layout="@layout/fragment_user">
         <action
@@ -314,12 +314,12 @@
 
     <dialog
         android:id="@+id/userInfoBottomSheetFragment"
-        android:name="com.ssafy.world.src.main.user.UserInfoBottomSheetFragment"
+        android:name="com.ssafy.world.ui.main.user.UserInfoBottomSheetFragment"
         android:label="UserInfoBottomSheetFragment"
         tools:layout="@layout/bottom_user_info"></dialog>
     <dialog
         android:id="@+id/registerBottomSheetFragment"
-        android:name="com.ssafy.world.src.main.auth.RegisterBottomSheetFragment"
+        android:name="com.ssafy.world.ui.main.auth.RegisterBottomSheetFragment"
         android:label="RegisterBottomSheetFragment"
         tools:layout="@layout/bottom_register">
 
@@ -329,7 +329,7 @@
     </dialog>
     <fragment
         android:id="@+id/mainHotFragment"
-        android:name="com.ssafy.world.src.main.home.MainHotFragment"
+        android:name="com.ssafy.world.ui.main.home.MainHotFragment"
         android:label="MainHotCommunityList">
 
         <action
@@ -342,7 +342,7 @@
     </fragment>
     <fragment
         android:id="@+id/communitySearchFragment"
-        android:name="com.ssafy.world.src.main.community.CommunitySearchFragment"
+        android:name="com.ssafy.world.ui.main.community.CommunitySearchFragment"
         android:label="CommunitySearchFragment">
         <action
             android:id="@+id/action_communitySearchFragment_to_communityDetailFragment"
@@ -356,7 +356,7 @@
     </fragment>
     <dialog
         android:id="@+id/changePwdBottomSheetFragment"
-        android:name="com.ssafy.world.src.main.mypage.ChangePwdBottomSheetFragment"
+        android:name="com.ssafy.world.ui.main.mypage.ChangePwdBottomSheetFragment"
         android:label="ChangePwdBottomSheetFragment"
         tools:layout="@layout/bottom_change_pwd">
         <action
@@ -371,7 +371,7 @@
     </dialog>
     <fragment
         android:id="@+id/validationFragment"
-        android:name="com.ssafy.world.src.main.auth.ValidationFragment"
+        android:name="com.ssafy.world.ui.main.auth.ValidationFragment"
         android:label="ValidationFragment">
 
         <action
@@ -380,7 +380,7 @@
     </fragment>
     <fragment
         android:id="@+id/photoSingleFragment"
-        android:name="com.ssafy.world.src.main.photo.PhotoSingleFragment"
+        android:name="com.ssafy.world.ui.main.photo.PhotoSingleFragment"
         android:label="PhotoSingleFragment">
         <action
             android:id="@+id/action_photoSingleFragment_to_mypageFragment"
@@ -390,7 +390,7 @@
     </fragment>
     <fragment
         android:id="@+id/communityMapFragment"
-        android:name="com.ssafy.world.src.main.community.map.CommunityMapFragment"
+        android:name="com.ssafy.world.ui.main.community.map.CommunityMapFragment"
         android:label="CommunityMapFragment">
 
         <action
@@ -424,13 +424,13 @@
     </fragment>
     <fragment
         android:id="@+id/mapFragment"
-        android:name="com.ssafy.world.src.main.community.map.MapFragment"
+        android:name="com.ssafy.world.ui.main.community.map.MapFragment"
         android:label="MapFragment">
 
     </fragment>
     <fragment
         android:id="@+id/communityMapSearchFragment"
-        android:name="com.ssafy.world.src.main.community.map.CommunityMapSearchFragment"
+        android:name="com.ssafy.world.ui.main.community.map.CommunityMapSearchFragment"
         android:label="CommunityMapSearchFragment">
 
         <action
@@ -443,7 +443,7 @@
     </fragment>
     <fragment
         android:id="@+id/communityMapWriteFragment"
-        android:name="com.ssafy.world.src.main.community.map.CommunityMapWriteFragment"
+        android:name="com.ssafy.world.ui.main.community.map.CommunityMapWriteFragment"
         android:label="CommunityMapWriteFragment">
 
         <argument
@@ -470,7 +470,7 @@
     </fragment>
     <fragment
         android:id="@+id/communityMapDetail"
-        android:name="com.ssafy.world.src.main.community.map.CommunityMapDetailFragment"
+        android:name="com.ssafy.world.ui.main.community.map.CommunityMapDetailFragment"
         android:label="CommunityMapDetail">
 
         <argument
@@ -495,7 +495,7 @@
     </fragment>
     <fragment
         android:id="@+id/notificationFragment"
-        android:name="com.ssafy.world.src.main.notification.NotificationFragment"
+        android:name="com.ssafy.world.ui.main.notification.NotificationFragment"
         android:label="NotificationFragment"
         tools:layout="@layout/fragment_notification">
         <action
@@ -504,7 +504,7 @@
     </fragment>
     <dialog
         android:id="@+id/profileUpdateBottomSheetFragment"
-        android:name="com.ssafy.world.src.main.mypage.ProfileUpdateBottomSheetFragment"
+        android:name="com.ssafy.world.ui.main.mypage.ProfileUpdateBottomSheetFragment"
         android:label="ProfileUpdateBottomSheetFragment" >
         <action
             android:id="@+id/action_profileUpdateBottomSheetFragment_to_photoSingleFragment"

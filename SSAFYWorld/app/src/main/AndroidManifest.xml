@@ -31,7 +31,7 @@
         </service>
 
         <activity
-            android:name=".src.main.MainActivity"
+            android:name=".ui.main.MainActivity"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:exported="true">
             <intent-filter>
