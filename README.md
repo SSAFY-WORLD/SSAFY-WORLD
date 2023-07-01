@@ -43,4 +43,4 @@ SSAFY에서 소통할 수 있도록 사용하는 애플리케이션에서는 같
 | 김주용 | 박준후 |
 | ------ | ------ |
 | <a href="https://github.com/Kim-JuYong"><img src="https://avatars.githubusercontent.com/u/68934392?v=4" alt="jyo_ong" width="100" height="100"></a> | <a href="https://github.com/ppeper"><img src="https://avatars.githubusercontent.com/u/63226023?v=4" alt="ppeper" width="100" height="100"></a> |
-| 디자인<br>안드로이드<br>홈<br>커뮤니티 | 디자인<br>안드로이드<br>마이페이지 & FCM<br>채팅 |
+| 디자인<br>안드로이드<br>홈<br>커뮤니티<br>로그인&회원가입 | 디자인<br>안드로이드<br>마이페이지 & FCM<br>채팅 |
